@@ -39,28 +39,36 @@ function create_zapsign_document(array $proposal, array $settings): array
         ];
     }
 
-    $endpoint = $baseUrl . '/api/v1/docs/';
-    $allowInsecureTls = str_contains(mb_strtolower($baseUrl, 'UTF-8'), 'sandbox.api.zapsign.com.br');
-    $strategies = [];
-
+    $endpoints = zapsign_doc_endpoints($baseUrl);
+    $apiTokens = zapsign_token_candidates($apiKey);
     $printUrl = proposal_print_url($proposal);
-    if ($printUrl !== null && zapsign_is_public_url($printUrl)) {
+    $strategies = [];
+    $hasPublicPrintUrl = $printUrl !== null && zapsign_is_public_url($printUrl);
+    $printHost = mb_strtolower(trim((string) parse_url((string) $printUrl, PHP_URL_HOST)), 'UTF-8');
+    $isLocalPrintHost = in_array($printHost, ['localhost', '127.0.0.1', '::1'], true);
+    if ($hasPublicPrintUrl) {
+        // Prioriza o mesmo documento do "Baixar PDF" para manter fidelidade visual.
         $strategies[] = [
             'mode' => 'url_pdf',
             'payload' => ['url_pdf' => $printUrl],
         ];
+    } elseif ($isLocalPrintHost || $printUrl === null) {
+        // Fallback somente quando nao existe URL publica do print (ex.: localhost/desenvolvimento).
+        $strategies[] = [
+            'mode' => 'markdown_text',
+            'payload' => ['markdown_text' => zapsign_markdown_from_proposal($proposal, $proposalPayload)],
+        ];
+    } else {
+        return [
+            'ok' => false,
+            'message' => 'Nao foi possivel enviar o PDF da proposta ao ZapSign. Configure a URL base publica em Configuracoes para usar o mesmo arquivo do botao "Baixar PDF".',
+        ];
     }
-
-    // Fallback para ambiente local (localhost) e quando a URL publica de PDF nao estiver acessivel.
-    $strategies[] = [
-        'mode' => 'markdown_text',
-        'payload' => ['markdown_text' => zapsign_markdown_from_proposal($proposal, $proposalPayload)],
-    ];
 
     $errors = [];
     foreach ($strategies as $strategy) {
         $requestPayload = array_replace($basePayload, $strategy['payload']);
-        $response = zapsign_post_json($endpoint, $apiKey, $requestPayload, $allowInsecureTls);
+        $response = zapsign_post_json($endpoints, $apiTokens, $requestPayload);
 
         if ($response['ok']) {
             $json = $response['json'];
@@ -93,64 +101,76 @@ function create_zapsign_document(array $proposal, array $settings): array
         }
     }
 
+    $errors = array_values(array_unique(array_filter(array_map('trim', $errors))));
+
+    if ($hasPublicPrintUrl && $errors === []) {
+        $errors[] = 'Falha ao enviar PDF via URL publica da proposta.';
+    }
+
     return [
         'ok' => false,
         'message' => 'Nao foi possivel criar o documento no ZapSign. ' . implode(' | ', $errors),
     ];
 }
 
-function zapsign_post_json(string $endpoint, string $apiKey, array $payload, bool $allowInsecureTls = false): array
+function zapsign_post_json(array $endpoints, array $apiTokens, array $payload): array
 {
-    $attempts = [
-        [
-            'name' => 'bearer',
-            'endpoint' => $endpoint,
-            'headers' => [
-                'Content-Type: application/json',
-                'Authorization: Bearer ' . $apiKey,
-            ],
-        ],
-        [
-            'name' => 'token',
-            'endpoint' => $endpoint,
-            'headers' => [
-                'Content-Type: application/json',
-                'Authorization: Token ' . $apiKey,
-            ],
-        ],
-        [
-            'name' => 'query_api_token',
-            'endpoint' => zapsign_append_query($endpoint, ['api_token' => $apiKey]),
-            'headers' => [
-                'Content-Type: application/json',
-            ],
-        ],
-    ];
+    $lastAuthError = null;
+    foreach ($endpoints as $endpoint) {
+        $allowInsecureTls = str_contains(mb_strtolower((string) $endpoint, 'UTF-8'), 'sandbox.api.zapsign.com.br');
+        foreach ($apiTokens as $apiToken) {
+            $attempts = [
+                [
+                    'name' => 'bearer',
+                    'endpoint' => (string) $endpoint,
+                    'headers' => [
+                        'Content-Type: application/json',
+                        'Authorization: Bearer ' . $apiToken,
+                    ],
+                ],
+                [
+                    'name' => 'query_api_token',
+                    'endpoint' => zapsign_append_query((string) $endpoint, ['api_token' => $apiToken]),
+                    'headers' => [
+                        'Content-Type: application/json',
+                    ],
+                ],
+                [
+                    'name' => 'token',
+                    'endpoint' => (string) $endpoint,
+                    'headers' => [
+                        'Content-Type: application/json',
+                        'Authorization: Token ' . $apiToken,
+                    ],
+                ],
+            ];
 
-    $lastError = null;
-    foreach ($attempts as $attempt) {
-        $result = zapsign_single_post(
-            (string) $attempt['endpoint'],
-            (array) $attempt['headers'],
-            $payload,
-            $allowInsecureTls
-        );
+            foreach ($attempts as $attempt) {
+                $result = zapsign_single_post(
+                    (string) $attempt['endpoint'],
+                    (array) $attempt['headers'],
+                    $payload,
+                    $allowInsecureTls
+                );
 
-        if (($result['ok'] ?? false) === true) {
-            return $result;
-        }
+                if (($result['ok'] ?? false) === true) {
+                    return $result;
+                }
 
-        $lastError = $result;
-        if (!zapsign_is_auth_error($result)) {
-            return $result;
+                if (!zapsign_is_auth_error($result)) {
+                    return $result;
+                }
+
+                $lastAuthError = $result;
+            }
         }
     }
 
-    if (is_array($lastError)) {
+    if (is_array($lastAuthError)) {
         return [
             'ok' => false,
             'message' => 'Token ZapSign invalido, expirado ou sem permissao no ambiente selecionado.',
-            'raw' => $lastError['raw'] ?? null,
+            'raw' => $lastAuthError['raw'] ?? null,
         ];
     }
 
@@ -217,6 +237,48 @@ function zapsign_append_query(string $url, array $params): string
 {
     $separator = str_contains($url, '?') ? '&' : '?';
     return $url . $separator . http_build_query($params);
+}
+
+function zapsign_doc_endpoints(string $baseUrl): array
+{
+    $baseUrl = rtrim(trim($baseUrl), '/');
+    if ($baseUrl === '') {
+        $baseUrl = 'https://sandbox.api.zapsign.com.br';
+    }
+
+    $hosts = [$baseUrl];
+    $lower = mb_strtolower($baseUrl, 'UTF-8');
+    if (str_contains($lower, 'sandbox.api.zapsign.com.br')) {
+        $hosts[] = 'https://api.zapsign.com.br';
+    } elseif (str_contains($lower, 'api.zapsign.com.br')) {
+        $hosts[] = 'https://sandbox.api.zapsign.com.br';
+    }
+
+    $endpoints = [];
+    foreach (array_unique($hosts) as $host) {
+        $endpoints[] = rtrim($host, '/') . '/api/v1/docs/';
+    }
+
+    return $endpoints;
+}
+
+function zapsign_token_candidates(string $rawToken): array
+{
+    $rawToken = trim($rawToken);
+    if ($rawToken === '') {
+        return [];
+    }
+
+    $tokens = [$rawToken];
+    if (preg_match_all('/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/i', $rawToken, $matches)) {
+        foreach (($matches[0] ?? []) as $candidate) {
+            if (is_string($candidate) && trim($candidate) !== '') {
+                $tokens[] = trim($candidate);
+            }
+        }
+    }
+
+    return array_values(array_unique($tokens));
 }
 
 function zapsign_is_auth_error(array $response): bool

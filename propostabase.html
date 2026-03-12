@@ -1205,6 +1205,56 @@
       border-left: 5px solid var(--teal-accent);
     }
 
+    .payment-methods {
+      margin-top: 0;
+    }
+
+    .payment-method-switch {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.85rem;
+      padding: 0.35rem;
+      border: 1px solid rgba(31, 184, 160, 0.3);
+      border-radius: 999px;
+      background: rgba(232, 246, 245, 0.8);
+    }
+
+    .payment-method-tab {
+      border: none;
+      background: transparent;
+      color: var(--teal-dark);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border-radius: 999px;
+      padding: 0.42rem 0.85rem;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .payment-method-tab.is-active {
+      background: linear-gradient(135deg, var(--teal-dark), var(--teal-medium));
+      color: var(--white);
+      box-shadow: 0 4px 12px rgba(11, 85, 99, 0.28);
+    }
+
+    .payment-method-tab[data-enabled="0"] {
+      display: none;
+    }
+
+    .payment-method-card {
+      display: none;
+    }
+
+    .payment-method-card.is-active {
+      display: block;
+    }
+
+    .payment-method-card[data-enabled="0"] {
+      display: none !important;
+    }
+
     .bank-card h4 {
       font-size: 1rem;
       font-weight: 700;
@@ -1242,6 +1292,13 @@
       background: var(--teal-accent);
       color: var(--white);
       transform: translateY(-2px);
+    }
+
+    .payment-method-desc {
+      margin-top: 0.5rem;
+      color: var(--gray-700);
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
     /* === Considerations === */
@@ -2660,19 +2717,43 @@
           </div>
         </div>
 
-        <p class="payment-note">Os valores deverão ser depositados na conta abaixo:</p>
+        <p class="payment-note">Selecione abaixo a forma de pagamento desejada:</p>
       </div>
 
-      <div class="bank-card fade-in">
-        <h4>🏦 DADOS BANCÁRIOS</h4>
-        <p class="bank-line"><strong>Banco:</strong> Banco Inter (077)</p>
-        <p class="bank-line"><strong>Agência:</strong> 0001 — <strong>C/C:</strong> 3375106-4</p>
-        <p class="bank-line"><strong>Favorecido:</strong> Complementare Projetos de Instalações LTDA-EPP</p>
-        <p class="bank-line"><strong>CNPJ:</strong> 23.012.176/0001-69</p>
-        <p class="bank-line"><strong>Chave PIX (CNPJ):</strong> 23.012.176/0001-69</p>
-        <button class="pix-button" onclick="copyPix()">
-          📱 Copiar Chave PIX (CNPJ)
-        </button>
+      <div class="payment-methods fade-in" id="payment-methods">
+        <div class="payment-method-switch" role="tablist" aria-label="Forma de pagamento">
+          <button class="payment-method-tab is-active" type="button" data-method="pix">PIX</button>
+          <button class="payment-method-tab" type="button" data-method="cartao" data-enabled="{{PAYMENT_CARD_ENABLED}}">Cartão</button>
+          <button class="payment-method-tab" type="button" data-method="boleto" data-enabled="{{PAYMENT_BOLETO_ENABLED}}">Boleto</button>
+        </div>
+
+        <div class="bank-card payment-method-card is-active" data-method="pix">
+          <h4>🏦 DADOS BANCÁRIOS</h4>
+          <p class="bank-line"><strong>Banco:</strong> {{BANK_NAME}}</p>
+          <p class="bank-line"><strong>Agência:</strong> {{BANK_AGENCY}} — <strong>C/C:</strong> {{BANK_ACCOUNT}}</p>
+          <p class="bank-line"><strong>Favorecido:</strong> {{BANK_FAVORED}}</p>
+          <p class="bank-line"><strong>CNPJ:</strong> {{BANK_CNPJ}}</p>
+          <p class="bank-line"><strong>Chave PIX ({{BANK_PIX_KEY_TYPE}}):</strong> {{BANK_PIX_KEY}}</p>
+          <button class="pix-button pix-copy-button" data-pix-key="{{BANK_PIX_KEY}}" onclick="copyPix()">
+            📱 {{BANK_PIX_COPY_LABEL}}
+          </button>
+        </div>
+
+        <div class="bank-card payment-method-card" data-method="cartao" data-enabled="{{PAYMENT_CARD_ENABLED}}" data-link="{{PAYMENT_CARD_LINK}}">
+          <h4>💳 {{PAYMENT_CARD_TITLE}}</h4>
+          <p class="payment-method-desc">{{PAYMENT_CARD_DESC}}</p>
+          <a class="pix-button" href="{{PAYMENT_CARD_LINK}}" target="_blank" rel="noopener noreferrer">
+            🔗 {{PAYMENT_CARD_BUTTON}}
+          </a>
+        </div>
+
+        <div class="bank-card payment-method-card" data-method="boleto" data-enabled="{{PAYMENT_BOLETO_ENABLED}}" data-link="{{PAYMENT_BOLETO_LINK}}">
+          <h4>🧾 {{PAYMENT_BOLETO_TITLE}}</h4>
+          <p class="payment-method-desc">{{PAYMENT_BOLETO_DESC}}</p>
+          <a class="pix-button" href="{{PAYMENT_BOLETO_LINK}}" target="_blank" rel="noopener noreferrer">
+            🔗 {{PAYMENT_BOLETO_BUTTON}}
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -2898,7 +2979,7 @@
     <tr><td>5.1.5.</td><td>🔥</td><td>Projeto de gás canalizado</td><td>{{PRECO_GAS}}</td></tr>
   </table>
 
-  <p class="contract-clause lvl1"><span class="contract-num">5.2.</span> Forma de pagamento → o pagamento poderá ser realizado por transferência eletrônica (“PIX”), por meio da chave 23.012.176/0001-69 (CNPJ), endereçada ao Banco Inter S/A (077), agência 0001, conta corrente n.º 3375106-4, com as seguintes condições de pagamento:</p>
+  <p class="contract-clause lvl1"><span class="contract-num">5.2.</span> Forma de pagamento → {{FORMA_PAGAMENTO_BASE}}. {{FORMA_PAGAMENTO_EXTRA}} Com as seguintes condições de pagamento:</p>
 
   <table class="contract-table">
     <tr><td><b>ITEM</b></td><td><b>SERVIÇO</b></td><td><b>PERCENTUAL</b></td><td><b>PREÇO (EM R$)</b></td></tr>
@@ -3099,7 +3180,11 @@
 
     // Copy PIX
     function copyPix() {
-      const pixKey = '23.012.176/0001-69';
+      const pixButton = document.querySelector('.pix-copy-button');
+      const pixKey = pixButton ? (pixButton.getAttribute('data-pix-key') || '').trim() : '';
+      if (!pixKey) {
+        return;
+      }
       navigator.clipboard.writeText(pixKey).then(() => {
         alert('Chave PIX copiada!');
       });

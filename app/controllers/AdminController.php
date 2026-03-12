@@ -192,13 +192,20 @@ function admin_save_settings_action(): void
         'zapsign_enabled' => isset($_POST['zapsign_enabled']) ? 1 : 0,
         'zapsign_api_key' => trim((string) ($_POST['zapsign_api_key'] ?? '')),
         'zapsign_webhook_secret' => trim((string) ($_POST['zapsign_webhook_secret'] ?? '')),
-        'zapsign_base_url' => trim((string) ($_POST['zapsign_base_url'] ?? 'https://api.zapsign.com.br')),
+        'zapsign_base_url' => trim((string) ($_POST['zapsign_base_url'] ?? 'https://sandbox.api.zapsign.com.br')),
         'base_url' => trim((string) ($_POST['base_url'] ?? '')),
         'company_name' => trim((string) ($_POST['company_name'] ?? '')),
         'company_phone' => trim((string) ($_POST['company_phone'] ?? '')),
         'company_website' => trim((string) ($_POST['company_website'] ?? '')),
         'company_instagram' => trim((string) ($_POST['company_instagram'] ?? '')),
         'company_address' => trim((string) ($_POST['company_address'] ?? '')),
+        'company_bank_name' => trim((string) ($_POST['company_bank_name'] ?? '')),
+        'company_bank_agency' => trim((string) ($_POST['company_bank_agency'] ?? '')),
+        'company_bank_account' => trim((string) ($_POST['company_bank_account'] ?? '')),
+        'company_bank_favored' => trim((string) ($_POST['company_bank_favored'] ?? '')),
+        'company_bank_cnpj' => trim((string) ($_POST['company_bank_cnpj'] ?? '')),
+        'company_bank_pix_key' => trim((string) ($_POST['company_bank_pix_key'] ?? '')),
+        'company_bank_pix_key_type' => trim((string) ($_POST['company_bank_pix_key_type'] ?? '')),
         'accept_terms_title' => trim((string) ($_POST['accept_terms_title'] ?? '')),
         'accept_terms_html' => trim((string) ($_POST['accept_terms_html'] ?? '')),
         'accept_terms_checkbox_text' => trim((string) ($_POST['accept_terms_checkbox_text'] ?? '')),
@@ -235,7 +242,13 @@ function admin_send_to_zapsign_action(int $proposalId): void
         'updated_at' => now_iso(),
     ]);
 
-    flash('success', 'Proposta enviada para assinatura no ZapSign.');
+    $mode = trim((string) ($result['mode'] ?? ''));
+    $modeLabel = match ($mode) {
+        'url_pdf' => 'PDF da proposta',
+        'markdown_text' => 'Resumo em texto',
+        default => 'Integracao padrao',
+    };
+    flash('success', 'Proposta enviada para assinatura no ZapSign. Documento usado: ' . $modeLabel . '.');
     redirect('/admin/proposals/' . $proposalId . '/edit');
 }
 

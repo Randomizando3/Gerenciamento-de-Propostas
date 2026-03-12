@@ -55,7 +55,7 @@ $acceptTermsVariables = is_array($acceptTermsVariables ?? null) ? $acceptTermsVa
     </label>
     <label class="field">
       <span>Base URL ZapSign</span>
-      <input type="url" name="zapsign_base_url" value="<?= h((string) ($settings['zapsign_base_url'] ?? 'https://api.zapsign.com.br')) ?>">
+      <input type="url" name="zapsign_base_url" value="<?= h((string) ($settings['zapsign_base_url'] ?? 'https://sandbox.api.zapsign.com.br')) ?>">
     </label>
     <label class="field">
       <span>API Key</span>
@@ -65,7 +65,7 @@ $acceptTermsVariables = is_array($acceptTermsVariables ?? null) ? $acceptTermsVa
       <span>Webhook Secret (opcional)</span>
       <input type="text" name="zapsign_webhook_secret" value="<?= h((string) ($settings['zapsign_webhook_secret'] ?? '')) ?>">
     </label>
-    <p class="muted">Webhook pronto em: <code>/webhooks/zapsign</code></p>
+    <p class="muted">Webhook pronto em: <code>/webhook/zapsign</code> (compatibilidade: <code>/webhooks/zapsign</code>)</p>
   </section>
 
   <section class="panel settings-pane" data-tab-pane="company">
@@ -93,6 +93,44 @@ $acceptTermsVariables = is_array($acceptTermsVariables ?? null) ? $acceptTermsVa
     <label class="field">
       <span>Endereço</span>
       <textarea name="company_address" rows="4"><?= h((string) ($settings['company_address'] ?? '')) ?></textarea>
+    </label>
+
+    <hr class="settings-separator">
+
+    <h2>Dados bancários (PIX)</h2>
+    <div class="grid cols-2">
+      <label class="field">
+        <span>Banco</span>
+        <input type="text" name="company_bank_name" value="<?= h((string) ($settings['company_bank_name'] ?? '')) ?>" placeholder="Banco Inter (077)">
+      </label>
+      <label class="field">
+        <span>Agência</span>
+        <input type="text" name="company_bank_agency" value="<?= h((string) ($settings['company_bank_agency'] ?? '')) ?>" placeholder="0001">
+      </label>
+    </div>
+    <div class="grid cols-2">
+      <label class="field">
+        <span>Conta corrente</span>
+        <input type="text" name="company_bank_account" value="<?= h((string) ($settings['company_bank_account'] ?? '')) ?>" placeholder="3375106-4">
+      </label>
+      <label class="field">
+        <span>Favorecido</span>
+        <input type="text" name="company_bank_favored" value="<?= h((string) ($settings['company_bank_favored'] ?? '')) ?>" placeholder="Nome da empresa favorecida">
+      </label>
+    </div>
+    <div class="grid cols-2">
+      <label class="field">
+        <span>CNPJ</span>
+        <input type="text" name="company_bank_cnpj" value="<?= h((string) ($settings['company_bank_cnpj'] ?? '')) ?>" placeholder="00.000.000/0001-00">
+      </label>
+      <label class="field">
+        <span>Tipo da chave PIX</span>
+        <input type="text" name="company_bank_pix_key_type" value="<?= h((string) ($settings['company_bank_pix_key_type'] ?? 'CNPJ')) ?>" placeholder="CNPJ / E-mail / Telefone">
+      </label>
+    </div>
+    <label class="field">
+      <span>Chave PIX</span>
+      <input type="text" name="company_bank_pix_key" value="<?= h((string) ($settings['company_bank_pix_key'] ?? '')) ?>" placeholder="23.012.176/0001-69">
     </label>
   </section>
 

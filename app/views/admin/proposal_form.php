@@ -394,6 +394,59 @@ if (!is_array($stageRows) || $stageRows === []) {
   </section>
 
   <section class="panel">
+    <h2>Opcoes de pagamento complementares</h2>
+    <p class="muted">Se ativar, a proposta exibe seletor no card para PIX, cartao e/ou boleto.</p>
+    <div class="grid cols-2">
+      <label class="checkbox-inline">
+        <input type="checkbox" name="pagamento_cartao_ativo" value="1" <?= !empty($payload['pagamento_cartao_ativo']) ? 'checked' : '' ?>>
+        Habilitar pagamento por cartao
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" name="pagamento_boleto_ativo" value="1" <?= !empty($payload['pagamento_boleto_ativo']) ? 'checked' : '' ?>>
+        Habilitar pagamento por boleto
+      </label>
+    </div>
+
+    <div class="grid cols-2">
+      <label class="field">
+        <span>Titulo (cartao)</span>
+        <input type="text" name="pagamento_cartao_titulo" value="<?= h((string) ($payload['pagamento_cartao_titulo'] ?? 'Pagamento por cartao')) ?>">
+      </label>
+      <label class="field">
+        <span>Botao (cartao)</span>
+        <input type="text" name="pagamento_cartao_botao" value="<?= h((string) ($payload['pagamento_cartao_botao'] ?? 'Pagar no cartao')) ?>">
+      </label>
+    </div>
+    <label class="field">
+      <span>Descricao (cartao)</span>
+      <input type="text" name="pagamento_cartao_descricao" value="<?= h((string) ($payload['pagamento_cartao_descricao'] ?? '')) ?>">
+    </label>
+    <label class="field">
+      <span>Link de pagamento (cartao)</span>
+      <input type="url" name="pagamento_cartao_link" value="<?= h((string) ($payload['pagamento_cartao_link'] ?? '')) ?>" placeholder="https://...">
+    </label>
+
+    <div class="grid cols-2">
+      <label class="field">
+        <span>Titulo (boleto)</span>
+        <input type="text" name="pagamento_boleto_titulo" value="<?= h((string) ($payload['pagamento_boleto_titulo'] ?? 'Pagamento por boleto')) ?>">
+      </label>
+      <label class="field">
+        <span>Botao (boleto)</span>
+        <input type="text" name="pagamento_boleto_botao" value="<?= h((string) ($payload['pagamento_boleto_botao'] ?? 'Abrir boleto')) ?>">
+      </label>
+    </div>
+    <label class="field">
+      <span>Descricao (boleto)</span>
+      <input type="text" name="pagamento_boleto_descricao" value="<?= h((string) ($payload['pagamento_boleto_descricao'] ?? '')) ?>">
+    </label>
+    <label class="field">
+      <span>Link do boleto</span>
+      <input type="url" name="pagamento_boleto_link" value="<?= h((string) ($payload['pagamento_boleto_link'] ?? '')) ?>" placeholder="https://...">
+    </label>
+  </section>
+
+  <section class="panel">
     <h2>Observacoes e exclusoes</h2>
     <div class="grid cols-2">
       <label class="field">

@@ -10,6 +10,10 @@ if (is_string($path)) {
     $filePath = realpath($publicDir . DIRECTORY_SEPARATOR . ltrim($path, '/'));
     if ($filePath !== false && str_starts_with($filePath, realpath($publicDir)) && is_file($filePath)) {
         $extension = mb_strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION), 'UTF-8');
+        if ($extension === 'php') {
+            require $filePath;
+            return true;
+        }
         $mimeTypes = [
             'css' => 'text/css; charset=UTF-8',
             'js' => 'application/javascript; charset=UTF-8',

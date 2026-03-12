@@ -116,7 +116,7 @@ if ($path === '/api/tracking/event' && $method === 'POST') {
     return;
 }
 
-if ($path === '/webhooks/zapsign' && $method === 'POST') {
+if (($path === '/webhooks/zapsign' || $path === '/webhook/zapsign') && $method === 'POST') {
     webhook_zapsign();
     return;
 }
