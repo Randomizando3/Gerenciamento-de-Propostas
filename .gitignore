@@ -1,0 +1,32 @@
+﻿# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Runtime logs and temporary files
+storage/logs/*
+!storage/logs/.gitkeep
+storage/backups/*
+!storage/backups/.gitkeep
+
+# User uploads
+public/uploads/*
+!public/uploads/.gitkeep
+!public/uploads/disciplinas/
+public/uploads/disciplinas/*
+!public/uploads/disciplinas/.gitkeep
+
+# Environment/local overrides
+.env
+.env.*
+*.local
+
+# Dependency folders (if used)
+vendor/
+node_modules/

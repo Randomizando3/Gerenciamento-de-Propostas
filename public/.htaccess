@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Serve existing files/directories directly.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Forward all other requests to index.php (front controller).
+RewriteRule ^ index.php [QSA,L]
+

@@ -1,0 +1,220 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentacao - Gerenciamento de Propostas</title>
+  <style>
+    :root {
+      --bg: #f2f7f8;
+      --card: #ffffff;
+      --line: #d7e4e8;
+      --text: #0f2631;
+      --muted: #5a7480;
+      --teal: #0d8a98;
+      --teal-dark: #063d4b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+      display: grid;
+      gap: 14px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #094454, #0e7f8f);
+      color: #fff;
+      border-radius: 14px;
+      padding: 22px;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .hero h1 { margin: 0 0 8px; font-size: 28px; }
+    .hero p { margin: 0; color: rgba(255,255,255,.92); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: var(--teal-dark);
+    }
+    h3 {
+      margin: 16px 0 8px;
+      font-size: 16px;
+      color: var(--teal-dark);
+    }
+    p { margin: 0 0 10px; }
+    ul, ol { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; }
+    code {
+      background: #edf4f6;
+      border: 1px solid #d6e5ea;
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+    }
+    .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .kpi {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fbfefe;
+    }
+    .kpi strong { display: block; margin-bottom: 4px; }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+    .table th, .table td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .table th { background: #f5fafb; }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>Gerenciamento de Propostas - Documentacao de Uso</h1>
+      <p>Guia rapido para operacao do sistema (admin, propostas publicas, tracking, Clarity e ZapSign).</p>
+    </section>
+
+    <section class="card">
+      <h2>1) Acesso inicial</h2>
+      <ul>
+        <li>Painel admin: <code>/admin/login</code></li>
+        <li>Credencial padrao inicial: <code>admin@local</code> / <code>admin123</code></li>
+        <li>Recomendacao: trocar usuario/senha apos o primeiro acesso.</li>
+      </ul>
+      <p class="muted">Em producao, publique o sistema em HTTPS e restrinja acesso ao painel.</p>
+    </section>
+
+    <section class="card">
+      <h2>2) Estrutura do painel</h2>
+      <div class="grid">
+        <div class="kpi">
+          <strong>Dashboard</strong>
+          <span>Visao geral (totais, publicadas, assinadas, views e scroll medio).</span>
+        </div>
+        <div class="kpi">
+          <strong>Propostas</strong>
+          <span>Lista completa, status, links, editar, preview, analytics e duplicar.</span>
+        </div>
+        <div class="kpi">
+          <strong>Nova proposta</strong>
+          <span>Formulario completo com disciplinas, etapas, arquivos e exclusoes.</span>
+        </div>
+        <div class="kpi">
+          <strong>Configuracoes</strong>
+          <span>Clarity, ZapSign, dados da empresa e termos de aceite editaveis.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3) Fluxo recomendado de operacao</h2>
+      <ol>
+        <li>Criar proposta em <code>Nova proposta</code>.</li>
+        <li>Salvar e abrir <code>Preview</code> para revisar layout.</li>
+        <li>Publicar proposta para gerar token/link publico.</li>
+        <li>Enviar para assinatura (ZapSign) quando desejar assinatura digital.</li>
+        <li>Acompanhar leitura, funil e dispositivos em <code>Analytics</code>.</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>4) Configuracoes importantes</h2>
+      <h3>Clarity</h3>
+      <ul>
+        <li>Ativar script nas propostas publicas.</li>
+        <li>Informar <code>Project ID</code>.</li>
+        <li>Campos de export (<code>endpoint</code> e <code>token</code>) ficam prontos para evolucao de relatorios.</li>
+      </ul>
+
+      <h3>ZapSign</h3>
+      <ul>
+        <li>Preencher <code>Base URL</code> e <code>API Key</code>.</li>
+        <li>Se o token estiver invalido/expirado, o sistema exibe erro claro no admin e no link publico.</li>
+        <li>Webhook pronto em: <code>/webhooks/zapsign</code>.</li>
+      </ul>
+
+      <h3>Termos de aceite</h3>
+      <ul>
+        <li>Edite titulo, texto e checkbox no painel.</li>
+        <li>Voce pode usar variaveis como <code>{{PROPOSTA_NUM}}</code>, <code>{{NOME_CLIENTE}}</code>, <code>{{VALOR_TOTAL}}</code>.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>5) Regras automaticas do template</h2>
+      <ul>
+        <li>Revisao <code>00</code> nao e exibida nos blocos publicos.</li>
+        <li>Itens de exclusao vazios nao aparecem na proposta.</li>
+        <li>Disciplinas nao selecionadas nao aparecem no escopo/valores.</li>
+        <li>Arquivos recebidos aceitam link e icone de acesso em nova guia.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>6) Estrutura de dados e persistencia</h2>
+      <table class="table">
+        <thead>
+          <tr><th>Item</th><th>Descricao</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>storage/database.json</code></td><td>Base principal (admins, configuracoes, propostas, tracking).</td></tr>
+          <tr><td><code>storage/backups/</code></td><td>Snapshots automaticos do banco JSON a cada escrita.</td></tr>
+          <tr><td><code>storage/logs/</code></td><td>Logs de execucao local.</td></tr>
+          <tr><td><code>public/uploads/</code></td><td>Arquivos enviados pelo admin (ex: icones customizados).</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>7) Publicacao (Apache/Nginx)</h2>
+      <ul>
+        <li>Apontar Document Root para <code>public/</code>.</li>
+        <li>Garantir PHP 8.1+ com extensao cURL habilitada.</li>
+        <li>Liberar escrita em <code>storage/</code> e <code>public/uploads/</code>.</li>
+        <li>Definir URL publica em <code>Configuracoes</code> (campo Base URL), quando aplicavel.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>8) Checklist rapido de entrega</h2>
+      <ol>
+        <li>Login admin funcionando.</li>
+        <li>Criar/editar/publicar proposta funcionando.</li>
+        <li>Link publico responsivo e com tracking ativo.</li>
+        <li>PDF e aceite funcionando.</li>
+        <li>ZapSign validado com token correto.</li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>

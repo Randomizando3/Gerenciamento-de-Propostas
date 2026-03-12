@@ -1,0 +1,3134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposta Comercial - Complementare | {{CODIGO_BASE}}{{REVISAO_TITULO}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vuev12yagy");
+</script>
+<style>
+    /* Custom Fonts - Ethnocentric & Conthrax */
+    @font-face {
+      font-family: 'Ethnocentric';
+      src: url('fonts/Ethnocentric-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    
+    @font-face {
+      font-family: 'Conthrax';
+      src: url('fonts/Conthrax-SemiBold.otf') format('opentype');
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    :root {
+      /* Cores extraídas do PDF Complementare */
+      --teal-dark: #0B5563;
+      --teal-medium: #14919B;
+      --teal-accent: #1FB8A0;
+      --teal-light: #E8F6F5;
+      --gray-900: #1E3A40;
+      --gray-700: #3D5A5E;
+      --gray-500: #6B8A8E;
+      --gray-300: #B4CCCF;
+      --gray-100: #F5F9F9;
+      --white: #FFFFFF;
+      --black: #0a0a0a;
+      
+      /* Tipografia */
+      --font-main: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-brand: 'Ethnocentric', 'Archivo', sans-serif;
+      --font-subtitle: 'Conthrax', 'Archivo', sans-serif;
+      
+      /* Espaçamentos */
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 2rem;
+      --space-lg: 4rem;
+      --space-xl: 6rem;
+      --space-2xl: 8rem;
+      
+      /* Outros */
+      --radius: 12px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --shadow-sm: 0 2px 8px rgba(11, 85, 99, 0.08);
+      --shadow-md: 0 8px 32px rgba(11, 85, 99, 0.12);
+      --shadow-lg: 0 24px 64px rgba(11, 85, 99, 0.16);
+      --shadow-glow: 0 0 60px rgba(31, 184, 160, 0.3);
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-main);
+      color: var(--gray-900);
+      background: var(--white);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* === Progress Bar === */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal-accent), var(--teal-medium), var(--teal-accent));
+      background-size: 200% 100%;
+      animation: shimmer 2s linear infinite;
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* === Nav === */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      border-bottom: 1px solid transparent;
+      transition: var(--transition);
+    }
+
+    nav.scrolled {
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom-color: rgba(180, 204, 207, 0.3);
+      box-shadow: 0 4px 30px rgba(11, 85, 99, 0.08);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-logo img {
+      height: 70px;
+      width: auto;
+    }
+
+    .nav-logo-main {
+      font-family: var(--font-brand);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--teal-dark);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .nav-logo-sub {
+      font-family: var(--font-subtitle);
+      font-size: 0.55rem;
+      color: var(--teal-medium);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-cta-text {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-main);
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: var(--transition);
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--teal-dark), var(--teal-medium));
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(11, 85, 99, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(11, 85, 99, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--teal-dark);
+      border: 2px solid var(--teal-dark);
+    }
+
+    .btn-secondary:hover {
+      background: var(--teal-dark);
+      color: var(--white);
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, var(--teal-accent), var(--teal-medium));
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(31, 184, 160, 0.3);
+    }
+
+    .btn-accent:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(31, 184, 160, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .nav-cta-text {
+        display: none;
+      }
+      .nav-logo img {
+        height: 56px;
+      }
+    }
+
+    /* === Hero === */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(165deg, rgba(0, 11, 18, 0.82) 0%, rgba(5, 36, 45, 0.65) 45%, rgba(6, 69, 82, 0.6) 100%),
+        url('/assets/img/hero-image8.png') center/cover no-repeat;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(31, 184, 160, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(20, 145, 155, 0.1) 0%, transparent 50%);
+    }
+
+    /* Sophisticated grid pattern */
+    .hero-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+    }
+
+    /* Animated gradient orbs */
+    .hero-orb {
+      position: absolute;
+      border-radius: 18px;
+      filter: blur(80px);
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .hero-orb-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(31, 184, 160, 0.2) 0%, transparent 70%);
+      top: -200px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+
+    .hero-orb-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(20, 145, 155, 0.15) 0%, transparent 70%);
+      bottom: -100px;
+      left: -100px;
+      animation-delay: -10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -30px) scale(1.05); }
+      50% { transform: translate(0, 20px) scale(0.95); }
+      75% { transform: translate(-30px, -10px) scale(1.02); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      width: 100%;
+    }
+
+    .hero-left {
+      color: var(--white);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      padding: 0.6rem 1.25rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      margin-bottom: 2.5rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--teal-accent);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--teal-accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.2); }
+    }
+
+    .hero-brand {
+      margin-bottom: 3rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .hero-brand-logo {
+      width: min(430px, 78vw);
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .hero-title-group {
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-main);
+      font-size: 5.5rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -2px;
+      color: var(--white);
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-main);
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 2px;
+      margin-top: 0.5rem;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.8;
+      max-width: 500px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-right {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      color: var(--white);
+      border: 2px solid var(--teal-accent);
+      box-shadow: 
+        0 32px 64px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .hero-info-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--teal-accent);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-info-label::before {
+      content: '';
+      width: 12px;
+      height: 2px;
+      background: var(--teal-accent);
+    }
+
+    .hero-info-value {
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 1.75rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .hero-info-value strong {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .hero-meta-item {
+      flex: 1;
+      text-align: center;
+      padding: 1rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: var(--transition);
+    }
+
+    .hero-meta-item:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(31, 184, 160, 0.3);
+    }
+
+    .hero-meta-item span {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 4px;
+    }
+
+    .hero-meta-item strong {
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 6rem;
+      }
+
+      .hero-title {
+        font-size: 3rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.5rem;
+      }
+
+      .hero-logo-text {
+        font-size: 2.2rem;
+      }
+
+      .hero-description {
+        margin: 0 auto 2rem;
+      }
+
+      .hero-right {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+    }
+
+    /* === Sections === */
+    .section {
+      padding: var(--space-xl) var(--space-md);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-full {
+      padding: var(--space-xl) 0;
+    }
+
+    .section-teal {
+      background: linear-gradient(180deg, var(--teal-light) 0%, var(--white) 100%);
+    }
+
+    .section-dark {
+      background: linear-gradient(180deg, var(--teal-dark) 0%, #0d2830 100%);
+      color: var(--white);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto var(--space-lg);
+    }
+
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--teal-accent);
+      letter-spacing: 3px;
+      margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+      background: rgba(31, 184, 160, 0.1);
+      border-radius: 100px;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--teal-dark);
+      letter-spacing: -0.5px;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-dark .section-title {
+      color: var(--white);
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--gray-500);
+      line-height: 1.8;
+    }
+
+    .section-dark .section-subtitle {
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* === Intro Section === */
+    .intro-section {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 4rem;
+      padding: var(--space-xl) var(--space-md);
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    .intro-left {
+      position: sticky;
+      top: 120px;
+    }
+
+    .intro-image {
+      width: 100%;
+      max-width: 280px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+
+    .intro-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .intro-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(11, 85, 99, 0.1) 100%);
+      pointer-events: none;
+    }
+
+    .intro-right h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.4;
+      margin-bottom: 1.5rem;
+    }
+
+    .intro-right p {
+      font-size: 1.05rem;
+      color: var(--gray-700);
+      line-height: 1.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .intro-highlight {
+      background: linear-gradient(135deg, rgba(31, 184, 160, 0.1), rgba(20, 145, 155, 0.05));
+      border-left: 4px solid var(--teal-accent);
+      padding: 1.5rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-top: 2rem;
+    }
+
+    .intro-highlight p {
+      margin: 0;
+      font-weight: 600;
+      color: var(--teal-dark);
+    }
+
+    @media (max-width: 768px) {
+      .intro-section {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .intro-left {
+        position: static;
+      }
+
+      .intro-image {
+        max-width: 100%;
+        margin: 0 auto;
+      }
+    }
+
+    /* === Scope Section === */
+    .scope-header {
+      text-align: center;
+      padding: var(--space-lg) var(--space-md);
+      background: linear-gradient(180deg, var(--gray-100) 0%, var(--white) 100%);
+      border-top: 1px solid var(--gray-300);
+    }
+
+    .scope-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 3rem;
+      padding: var(--space-lg) var(--space-md);
+      max-width: 1000px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--gray-300);
+      align-items: start;
+      transition: var(--transition);
+    }
+
+    .scope-item:hover {
+      background: rgba(232, 246, 245, 0.5);
+    }
+
+    .scope-item:last-child {
+      border-bottom: none;
+    }
+
+    .scope-icon {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, var(--teal-light), var(--white));
+      border: 2px solid var(--teal-accent);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: var(--teal-dark);
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(31, 184, 160, 0.15);
+      transition: var(--transition);
+    }
+
+    .scope-icon img {
+      width: 62px;
+      height: 62px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .scope-item:hover .scope-icon {
+      transform: scale(1.05);
+      box-shadow: 0 12px 32px rgba(31, 184, 160, 0.25);
+    }
+
+    .scope-content h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--teal-dark);
+      letter-spacing: -0.5px;
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .scope-content h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.75rem;
+    }
+
+    .scope-content ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .scope-content li {
+      position: relative;
+      padding: 0.6rem 0 0.6rem 1.75rem;
+      font-size: 1rem;
+      color: var(--gray-700);
+      line-height: 1.7;
+    }
+
+    .scope-content li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.1rem;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, var(--teal-accent), var(--teal-medium));
+      border-radius: 50%;
+    }
+
+    @media (max-width: 768px) {
+      .scope-item {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .scope-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+      }
+    }
+
+    /* === General Guidelines === */
+    .guidelines-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: var(--space-md);
+    }
+
+    .guideline-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      border: 1px solid rgba(180, 204, 207, 0.3);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .guideline-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--teal-accent), var(--teal-medium));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: var(--transition);
+    }
+
+    .guideline-card:hover {
+      border-color: var(--teal-accent);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+
+    .guideline-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .guideline-icon {
+      width: 56px;
+      height: 56px;
+      margin-bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(31, 184, 160, 0.08);
+      border: 1px solid rgba(31, 184, 160, 0.25);
+    }
+
+    .guideline-icon img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .guideline-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--teal-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .guideline-card p {
+      font-size: 0.9rem;
+      color: var(--gray-500);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1024px) {
+      .guidelines-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .guidelines-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+                /* === Timeline === */
+    .timeline-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-md) 0;
+    }
+
+    .timeline-horizontal {
+      display: grid;
+      grid-template-columns: repeat(var(--timeline-count, 4), minmax(0, 1fr));
+      gap: 0;
+      position: relative;
+      align-items: start;
+      padding: 0;
+    }
+
+    .timeline-step {
+      text-align: center;
+      position: relative;
+      padding: 0;
+      z-index: 1;
+      margin-left: -1px;
+    }
+
+    .timeline-step:first-child {
+      margin-left: 0;
+    }
+
+    .timeline-marker {
+      width: 100%;
+      height: 116px;
+      margin: 0 auto 0.8rem;
+      position: relative;
+      display: block;
+      background: none;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      transition: var(--transition);
+    }
+
+    .timeline-shape {
+      width: 100%;
+      height: 116px;
+      display: block;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .timeline-shape path {
+      fill: none;
+      stroke: var(--teal-medium);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .timeline-step:hover .timeline-marker {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .timeline-marker-inner {
+      position: absolute;
+      top: 42px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--teal-dark);
+      text-shadow: none;
+      line-height: 1;
+      z-index: 3;
+    }
+
+    .timeline-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--teal-accent), var(--teal-medium));
+      color: var(--white);
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 4px 12px rgba(31, 184, 160, 0.3);
+    }
+
+    .timeline-step h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--teal-dark);
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-step p {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      line-height: 1.6;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-horizontal {
+        grid-template-columns: 1fr;
+        gap: 1.4rem;
+      }
+
+      .timeline-step {
+        text-align: center;
+        padding: 0;
+      }
+
+      .timeline-marker {
+        width: min(480px, 100%);
+        margin: 0 auto 0.8rem;
+      }
+
+      .timeline-step p {
+        max-width: none;
+      }
+    }
+    /* === Investment === */
+    .quote-section {
+      background: linear-gradient(180deg, var(--gray-100) 0%, var(--white) 100%);
+      padding: var(--space-xl) var(--space-md);
+    }
+
+    .quote-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .quote-total {
+      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-medium) 50%, var(--teal-accent) 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+      color: var(--white);
+      padding: 3.5rem;
+      border-radius: var(--radius-xl);
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(11, 85, 99, 0.3);
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .quote-total::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    }
+
+    .quote-total-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      opacity: 0.9;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .quote-total-value {
+      font-size: 4.5rem;
+      font-weight: 800;
+      letter-spacing: -2px;
+      position: relative;
+    }
+
+    .quote-total-sub {
+      font-size: 1rem;
+      opacity: 0.8;
+      margin-top: 0.5rem;
+      position: relative;
+    }
+
+    .quote-breakdown {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 2rem;
+      border: 1px solid rgba(180, 204, 207, 0.3);
+    }
+
+    .quote-breakdown-header {
+      background: linear-gradient(135deg, var(--teal-dark), var(--teal-medium));
+      color: var(--white);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .quote-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--gray-100);
+      transition: var(--transition-fast);
+    }
+
+    .quote-row:hover {
+      background: rgba(232, 246, 245, 0.5);
+    }
+
+    .quote-row:last-child {
+      border-bottom: none;
+    }
+
+    .quote-row-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .quote-row-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--teal-light), var(--white));
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(31, 184, 160, 0.2);
+    }
+
+    .quote-row-icon img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .quote-row-label {
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .quote-row-value {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--teal-dark);
+    }
+
+    .payment-schedule {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+      border: 1px solid rgba(180, 204, 207, 0.3);
+    }
+
+    .payment-schedule h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--teal-dark);
+      letter-spacing: 0.5px;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid var(--teal-accent);
+      display: inline-block;
+    }
+
+    .payment-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .payment-group-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+    }
+
+    .payment-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .payment-item:last-child {
+      border-bottom: none;
+    }
+
+    .payment-item-label {
+      color: var(--gray-700);
+    }
+
+    .payment-item-value {
+      font-weight: 700;
+      color: var(--teal-dark);
+    }
+
+    .bank-card {
+      background: linear-gradient(135deg, var(--white), var(--teal-light));
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      border-left: 5px solid var(--teal-accent);
+    }
+
+    .bank-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--teal-dark);
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .bank-card p {
+      font-size: 0.95rem;
+      color: var(--gray-700);
+      margin: 0.25rem 0;
+    }
+
+    .pix-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--white);
+      color: var(--teal-dark);
+      padding: 0.85rem 1.5rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      border: 2px solid var(--teal-accent);
+      transition: var(--transition);
+    }
+
+    .pix-button:hover {
+      background: var(--teal-accent);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* === Considerations === */
+    .considerations-list {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0;
+      list-style: none;
+    }
+
+    .considerations-list li {
+      position: relative;
+      padding: 1.25rem 0 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      font-size: 1rem;
+      color: var(--gray-700);
+      line-height: 1.8;
+      transition: var(--transition-fast);
+    }
+
+    .considerations-list li:hover {
+      padding-left: 3rem;
+      background: rgba(232, 246, 245, 0.3);
+    }
+
+    .considerations-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      top: 1.25rem;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, var(--teal-accent), var(--teal-medium));
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .considerations-list li:last-child {
+      border-bottom: none;
+    }
+
+    /* === Exclusions === */
+    .exclusions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .exclusion-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem;
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      transition: var(--transition);
+    }
+
+    .exclusion-item:hover {
+      border-color: var(--teal-accent);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .exclusion-badge {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--teal-dark), var(--teal-medium));
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .exclusion-text {
+      font-size: 0.95rem;
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .exclusions-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* === Table === */
+    .table-container {
+      overflow-x: auto;
+      margin: var(--space-md) auto;
+      max-width: 900px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+    }
+
+    thead {
+      background: linear-gradient(135deg, var(--teal-dark), var(--teal-medium));
+      color: var(--white);
+    }
+
+    th, td {
+      padding: 1.25rem 1.5rem;
+      text-align: left;
+    }
+
+    th {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+    }
+
+    td {
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr {
+      transition: var(--transition-fast);
+    }
+
+    tbody tr:hover {
+      background: rgba(232, 246, 245, 0.5);
+    }
+
+        
+    .arquivo-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid var(--teal-medium);
+      color: var(--teal-dark);
+      text-decoration: none;
+      font-size: 0.92rem;
+      background: rgba(232, 246, 245, 0.7);
+      transition: var(--transition-fast);
+    }
+
+    .arquivo-link:hover {
+      background: var(--teal-medium);
+      color: var(--white);
+    }
+/* === Accept Section === */
+    .accept-section {
+      background: url('/assets/img/accept-bg.png') center/cover no-repeat;
+      padding: var(--space-2xl) var(--space-md);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .accept-container {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      box-shadow: 0 18px 48px rgba(6, 56, 68, 0.18);
+    }
+
+    .accept-title {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--teal-dark);
+      margin: 0 0 0.9rem;
+      line-height: 1.12;
+    }
+
+    .accept-subtitle {
+      max-width: 620px;
+      margin: 0 auto 1.5rem;
+      font-size: 1.05rem;
+      color: var(--gray-700);
+      line-height: 1.65;
+    }
+
+    .accept-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+
+    .accept-button,
+    .download-button {
+      appearance: none;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      min-height: 46px;
+      padding: 0 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .accept-button {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--teal-accent), var(--teal-medium));
+      box-shadow: 0 8px 22px rgba(20, 145, 155, 0.26);
+    }
+
+    .accept-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(20, 145, 155, 0.34);
+    }
+
+    .download-button {
+      border: 2px solid var(--teal-medium);
+      color: var(--teal-dark);
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    .download-button:hover {
+      color: var(--white);
+      background: var(--teal-medium);
+      border-color: var(--teal-medium);
+    }
+
+    @media (max-width: 640px) {
+      .accept-buttons {
+        flex-direction: column;
+      }
+
+      .accept-button,
+      .download-button {
+        width: 100%;
+      }
+    }
+    /* === Modal === */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 9998;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      max-width: 840px;
+      width: 100%;
+      max-height: 90vh;
+
+      /* IMPORTANT: scroll only inside body (like the original) */
+      overflow: hidden;
+
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.3);
+      animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal-header {
+      /* Match original: fixed header bar with green gradient */
+      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-medium) 55%, var(--teal-accent) 100%);
+      color: var(--white);
+      padding: 1.35rem 2rem 1.25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 5;
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    }
+
+    .modal-header h2 {
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.25;
+      margin: 0;
+      padding: 0 3.2rem;
+      color: var(--white);
+      text-shadow: 0 1px 0 rgba(0,0,0,0.10);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: var(--white);
+      font-size: 1.15rem;
+      cursor: pointer;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+      z-index: 6;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-close:hover {
+      background: rgba(255,255,255,0.26);
+      transform: translateY(-1px);
+    }
+
+    .modal-body {
+      padding: 2rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex: 1 1 auto;
+      min-height: 0;
+      background: var(--white);
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+/* Scrollbar styling (closer to original) */
+.modal-body::-webkit-scrollbar {
+  width: 10px;
+}
+.modal-body::-webkit-scrollbar-track {
+  background: rgba(180, 204, 207, 0.35);
+  border-radius: 12px;
+}
+.modal-body::-webkit-scrollbar-thumb {
+  background: rgba(61, 90, 94, 0.35);
+  border-radius: 12px;
+}
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(61, 90, 94, 0.55);
+}
+
+    .contract-content {
+      font-size: 0.9rem;
+      color: var(--gray-700);
+      line-height: 1.8;
+    }
+
+    .contract-content h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--teal-dark);
+      margin: 1.5rem 0 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    .contract-content p {
+      margin-bottom: 1rem;
+    }
+
+    .contract-content ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+    }
+
+    .contract-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-footer {
+      padding: 1.5rem 2rem;
+      background: var(--gray-100);
+      border-top: 1px solid var(--gray-300);
+    }
+
+    .modal-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .modal-checkbox input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      accent-color: var(--teal-accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .modal-checkbox label {
+      font-size: 0.95rem;
+      color: var(--gray-700);
+      cursor: pointer;
+      line-height: 1.6;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    .modal-btn {
+      padding: 1rem 2rem;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: var(--font-main);
+      border: none;
+    }
+
+    .modal-btn-cancel {
+      background: transparent;
+      color: var(--gray-500);
+      border: 2px solid var(--gray-300);
+    }
+
+    .modal-btn-cancel:hover {
+      border-color: var(--gray-500);
+      color: var(--gray-700);
+    }
+
+    .modal-btn-confirm {
+      background: linear-gradient(135deg, var(--teal-accent), var(--teal-medium));
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(31, 184, 160, 0.3);
+    }
+
+    .modal-btn-confirm:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(31, 184, 160, 0.4);
+    }
+
+    .modal-btn-confirm:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* === WhatsApp Button === */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 100px;
+      right: 32px;
+      width: 60px;
+      height: 60px;
+      background: #25D366;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 24px rgba(37, 211, 102, 0.4);
+      cursor: pointer;
+      z-index: 999;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .whatsapp-float svg {
+      width: 32px;
+      height: 32px;
+      fill: white;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.08) translateY(-3px);
+      box-shadow: 0 8px 32px rgba(37, 211, 102, 0.5);
+      background: #20BA5C;
+    }
+
+    .whatsapp-tooltip {
+      position: absolute;
+      right: 70px;
+      background: var(--gray-900);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .whatsapp-tooltip::after {
+      content: '';
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 6px solid transparent;
+      border-left-color: var(--gray-900);
+    }
+
+    .whatsapp-float:hover .whatsapp-tooltip {
+      opacity: 1;
+    }
+
+        /* === Footer === */
+    footer {
+      background: linear-gradient(100deg, #083744 0%, #0a4a58 52%, #0d5f6f 100%);
+      color: var(--white);
+      padding: var(--space-lg) var(--space-md);
+      position: relative;
+      overflow: hidden;
+      line-height: normal;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, rgba(4, 45, 56, 0.35) 0%, rgba(4, 45, 56, 0.2) 100%);
+    }
+
+    .footer-image {
+      display: none;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3rem;
+      position: relative;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .footer-logo-image {
+      width: min(280px, 100%);
+      height: auto;
+      display: block;
+    }
+
+    .footer-logo {
+      font-family: var(--font-brand);
+      font-size: 1.4rem;
+      font-weight: 400;
+      letter-spacing: 3px;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-logo-sub {
+      font-family: var(--font-subtitle);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      opacity: 0.8;
+      text-transform: uppercase;
+    }
+
+    .footer-contact h4 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+
+    .footer-contact p, .footer-contact a {
+      font-size: 0.95rem;
+      color: var(--white);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+      transition: var(--transition);
+      opacity: 0.9;
+    }
+
+    .footer-contact .footer-item {
+      font-size: 0.95rem;
+      color: var(--white);
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+
+/* Footer icon rows */
+    .footer-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .footer-item .footer-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      opacity: 0.9;
+    }
+    .footer-item .footer-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+    .footer-item:hover .footer-icon {
+      opacity: 1;
+    }
+
+    .footer-item-address {
+      align-items: flex-start;
+    }
+
+    .footer-item-address .footer-address {
+      display: inline-block;
+      line-height: 1.4;
+    }
+
+    .footer-contact a:hover {
+      color: var(--teal-accent);
+      opacity: 1;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2.5rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.18);
+      text-align: center;
+      font-size: 0.85rem;
+      opacity: 0.85;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+    /* === Scroll to top === */
+    #scroll-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--teal-accent), var(--teal-medium));
+      color: var(--white);
+      border: none;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      box-shadow: 0 8px 32px rgba(31, 184, 160, 0.3);
+      z-index: 1000;
+    }
+
+    #scroll-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #scroll-top:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(31, 184, 160, 0.4);
+    }
+
+    /* === Animations === */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .slide-in-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .slide-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .slide-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  
+    /* ============================================================
+       MOBILE POLISH (adicionado pela Complementare)
+       - evita estouro no celular
+       - melhora tipografia com clamp
+       - tabelas com scroll horizontal quando necessário
+    ============================================================ */
+    .hero-title{font-size:clamp(2.6rem, 9vw, 5.5rem);}
+    .hero-subtitle{font-size:clamp(1.2rem, 5vw, 2.5rem);}
+    .hero-logo-text{font-size:clamp(1.9rem, 6vw, 3rem);}
+    .quote-total-value{font-size:clamp(2.4rem, 10vw, 4.5rem);}
+
+    @media (max-width: 480px){
+      .nav-container{padding:0.8rem 1rem;}
+      .nav-links{gap:0.9rem;}
+      .nav-links a{font-size:0.7rem; letter-spacing:1.5px;}
+      .nav-cta{gap:0.6rem;}
+      .btn{padding:12px 18px; font-size:0.75rem;}
+      .hero-content{padding:6rem 1rem 3rem; gap:2rem;}
+      .hero-right{padding:1.6rem;}
+      .hero-meta{flex-direction:column; gap:0.6rem;}
+      .section{padding:3.5rem 1rem;}
+      .quote-section{padding:3.5rem 1rem;}
+      .quote-total{padding:2.2rem 1.5rem;}
+      .quote-total-label{letter-spacing:2px;}
+      .quote-row{flex-direction:column; align-items:flex-start; gap:0.6rem;}
+      .quote-row-value{align-self:flex-end;}
+      .table-container{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+      .table-container table{min-width:640px;}
+      .table-container th, .table-container td{white-space:nowrap;}
+      .intro-section{grid-template-columns:1fr !important;}
+    }
+
+    @media (max-width: 360px){
+      .hero-content{padding:5.5rem 0.9rem 2.5rem;}
+      .btn{width:100%; justify-content:center;}
+    }
+
+  
+    /* ===== Complementos (Pagamento / Exclusões / Contrato) ===== */
+    .quote-total-extenso{
+      margin-top:-8px;
+      text-align:right;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .payment-lines{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding-top: 6px;
+    }
+    .payment-line{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      padding:10px 12px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(30,58,64,0.12);
+      border-radius: 12px;
+    }
+    .payment-line-label{
+      font-weight: 700;
+      color: var(--text);
+    }
+    .payment-line-value{
+      font-weight: 800;
+      color: var(--accent);
+      text-align:right;
+      white-space: nowrap;
+    }
+    .payment-subtitle{
+      margin-top: 10px;
+      font-weight: 900;
+      color: var(--accent-dark);
+      text-transform: uppercase;
+      font-size: 0.82rem;
+      letter-spacing: .08em;
+    }
+
+    .bank-line{ margin: 6px 0; }
+
+    .exclusions-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:24px;
+    }
+    .exclusion-line{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      padding:14px 16px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(30,58,64,0.12);
+      border-radius: 14px;
+    }
+    .exclusion-letter{
+      width:34px;
+      height:34px;
+      border-radius:999px;
+      background: var(--accent);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      flex: 0 0 34px;
+    }
+    .exclusion-text{
+      color: var(--text);
+      font-weight: 650;
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .contract-document .contract-header{
+      position: sticky;
+      top: 0;
+      background: #fff;
+      padding: 10px 0 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.10);
+      z-index: 2;
+    }
+    .contract-title-main{
+      margin: 0;
+      font-size: 1.05rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .contract-sub{
+      margin: 6px 0 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .contract-body{
+      padding-top: 10px;
+    }
+    .contract-body p{
+      margin: 0 0 10px;
+      color: #1b1f22;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Contract numbering (manual like 1., 1.1., 1.1.1.) */
+    .contract-clause{margin:0 0 10px;color:#1b1f22;font-size:0.95rem;line-height:1.6;}
+    .contract-num{font-weight:900;color:#0f2f35;}
+    .lvl1{margin-left:0;}
+    .lvl2{margin-left:0.9rem;}
+    .lvl3{margin-left:1.8rem;}
+    .lvl4{margin-left:2.7rem;}
+    .lvl5{margin-left:3.6rem;}
+    .contract-spacer{height:10px;}
+    .contract-body h4.contract-h{
+      margin: 18px 0 10px;
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #0f2f35;
+    }
+    .contract-table{
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px;
+      font-size: 0.92rem;
+    }
+    .contract-table td{
+      border: 1px solid rgba(0,0,0,0.16);
+      padding: 10px;
+      vertical-align: top;
+    }
+    .contract-table tr:first-child td{
+      font-weight: 900;
+      background: rgba(30,58,64,0.06);
+    }
+
+/* ============================================================
+   CONTRATO — CORREÇÃO DE BORDAS EM TABELAS (LINHA INFERIOR)
+   (evita que regras globais removam a borda do último item)
+============================================================ */
+.contract-body table{
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.contract-body th,
+.contract-body td{
+  border: 1px solid rgba(0,0,0,.16) !important;
+  vertical-align: top;
+}
+
+.contract-body thead th{
+  background: rgba(30,58,64,0.06);
+  font-weight: 800;
+}
+
+/* garante a linha inferior no último item, mesmo com regras globais */
+.contract-body tr:last-child td,
+.contract-body tbody tr:last-child td{
+  border-bottom: 1px solid rgba(0,0,0,.16) !important;
+}
+
+</style>
+</head>
+<body>
+  <!--
+    =========================
+    PLACEHOLDERS (EDITAR AQUI)
+    =========================
+    {{NOME_CLIENTE}}
+    {{OBRA}}
+    {{ENDERECO}}
+
+    {{CODIGO_BASE}}                 (ex.: 25.108)
+    {{REVISAO}}                     (ex.: 01)
+    {{DATA_EMISSAO}}                (ex.: 23/01/2026)
+    {{DATA_ARQUIVOS}}               (ex.: 30/05/2025)
+    {{ANO}}                         (ex.: 2026)
+
+    -- ARQUIVOS RECEBIDOS (5 LINHAS)
+    {{ARQUIVO_01}} / {{ARQUIVO_01_REV}}
+    {{ARQUIVO_02}} / {{ARQUIVO_02_REV}}
+    {{ARQUIVO_03}} / {{ARQUIVO_03_REV}}
+    {{ARQUIVO_04}} / {{ARQUIVO_04_REV}}
+    {{ARQUIVO_05}} / {{ARQUIVO_05_REV}}
+
+    {{VALOR_TOTAL}}                 (ex.: R$ 16.000,00)
+    {{VALOR_TOTAL_EXTENSO}}         (ex.: (dezesseis mil reais))
+    {{VALOR_ELETRICA}}
+    {{VALOR_ESPECIAIS}}
+    {{VALOR_HIDRAULICA}}
+    {{VALOR_ESGOTO}}
+    {{VALOR_GAS}}
+
+    -- FORMA DE PAGAMENTO
+    {{PGTO_SINAL}}
+    {{PGTO_BASICO_ELETRICO_ESPECIAIS}}
+    {{PGTO_BASICO_HIDROSSANITARIO}}
+    {{PGTO_BASICO_GAS}}
+    {{PGTO_EXEC_ELETRICO_ESPECIAIS}}
+    {{PGTO_EXEC_HIDROSSANITARIO}}
+    {{PGTO_EXEC_GAS}}
+
+    -- SERVIÇOS EXCLUÍDOS (LISTA)
+    {{EXCLUSAO_A}}
+    {{EXCLUSAO_B}}
+    {{EXCLUSAO_C}}
+    {{EXCLUSAO_D}}
+    {{EXCLUSAO_E}}
+    {{EXCLUSAO_F}}
+    {{EXCLUSAO_G}}
+    {{EXCLUSAO_H}}
+    {{EXCLUSAO_I}}
+    {{EXCLUSAO_J}}
+
+    {{VALIDADE_PROPOSTA}}           (ex.: 30 (trinta) dias)
+
+    Observação (Contrato): o texto completo do contrato está inserido no modal e contém placeholders do próprio documento (ex.: XX/XX/XXXX, xxxxxxxxx, XXXXX).
+  -->
+
+  <!-- Progress Bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <img src="logo-complementare.png" alt="Complementare Projetos de Instalações">
+      </div>
+      <div class="nav-cta">
+        <span class="nav-cta-text">{{CODIGO_BASE}}{{REVISAO_BADGE}}</span>
+        <a href="#aceite" class="btn btn-primary">Aceitar Proposta</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          PROPOSTA {{CODIGO_BASE}}{{REVISAO_BADGE_UPPER}}
+        </div>
+        <div class="hero-brand">
+          <img class="hero-brand-logo" src="/assets/img/logohorizontalbranco.png" alt="Complementare Projetos de Instalações">
+        </div>
+        <div class="hero-title-group">
+          <h1 class="hero-title">PROPOSTA</h1>
+          <p class="hero-subtitle">COMERCIAL</p>
+        </div>
+        <p class="hero-description">Excelência em projetos de instalações prediais com mais de 40 anos de experiência combinada.</p>
+        <a href="#escopo" class="btn btn-accent">Ver Escopo Completo ↓</a>
+      </div>
+      <div class="hero-right slide-in-right">
+        <div class="hero-info-label">CLIENTE</div>
+        <div class="hero-info-value">
+          <strong>{{NOME_CLIENTE}}</strong>
+        </div>
+        
+        <div class="hero-info-label">OBRA</div>
+        <div class="hero-info-value">
+          <strong>{{OBRA}}</strong>
+          {{ENDERECO}}
+        </div>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span>Proposta</span>
+            <strong>{{CODIGO_BASE}}</strong>
+          </div>
+                    <div class="hero-meta-item hero-meta-item-revision">
+            <span>Revisao</span>
+            <strong>{{REVISAO}}</strong>
+          </div>
+          <div class="hero-meta-item">
+            <span>Data</span>
+            <strong>{{DATA_EMISSAO}}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro Section -->
+  <section class="intro-section">
+    <div class="intro-left fade-in">
+      <div class="intro-image">
+        <img src="/assets/img/intro-20240227.jpg" alt="Complementare Projetos de Instalações - Escritório">
+      </div>
+    </div>
+    <div class="intro-right fade-in">
+      <h2>Obrigado pelo convite para desenvolver os projetos de instalações da {{OBRA}}.</h2>
+      <p>A Complementare Projetos é uma empresa fundada em 2014 com a missão de liderar no setor de projetos, supervisão e consultoria de instalações. Com mais de 40 anos de experiência combinada entre seus fundadores, oferecemos serviços de alta qualidade, agilidade e proatividade.</p>
+      <p>Destacamo-nos pela nossa abordagem colaborativa, utilizando tecnologia de ponta e mantendo um diálogo constante com as empresas executoras de instalações. Este compromisso com a colaboração permite-nos resolver possíveis interferências de forma eficiente, garantindo o melhor resultado para cada projeto.</p>
+      <p>Nossa metodologia de trabalho é o resultado de anos de estudo e análise, permitindo-nos otimizar o tempo e reduzir os custos para nossos clientes. Cada projeto é cuidadosamente planejado, com detalhes executivos e orientações claras para minimizar as dúvidas e garantir a eficácia na execução.</p>
+      <div class="intro-highlight">
+        <p>Se estiver de acordo, aceite esta proposta e começaremos o trabalho!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Arquivos Recebidos -->
+  <section class="section section-teal" id="arquivos">
+    <div class="section-header fade-in">
+      <span class="section-number">01 — INTRODUÇÃO</span>
+      <h2 class="section-title">Arquivos Recebidos</h2>
+      <p class="section-subtitle">A presente proposta foi elaborada utilizando arquivos enviados via WhatsApp no dia {{DATA_ARQUIVOS}}</p>
+    </div>
+    <div class="table-container fade-in">
+      <table>
+        <thead>
+          <tr>
+            <th>Arquivo</th>
+            <th style="text-align: center;">Revisão</th>
+            <th style="text-align: center;">Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ARQUIVO_01}}</td>
+            <td style="text-align: center;">{{ARQUIVO_01_REV}}</td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_01_LINK}}" style="text-align: center;"></td>
+          </tr>
+          <tr>
+            <td>{{ARQUIVO_02}}</td>
+            <td style="text-align: center;">{{ARQUIVO_02_REV}}</td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_02_LINK}}" style="text-align: center;"></td>
+          </tr>
+          <tr>
+            <td>{{ARQUIVO_03}}</td>
+            <td style="text-align: center;">{{ARQUIVO_03_REV}}</td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_03_LINK}}" style="text-align: center;"></td>
+          </tr>
+          <tr>
+            <td>{{ARQUIVO_04}}</td>
+            <td style="text-align: center;">{{ARQUIVO_04_REV}}</td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_04_LINK}}" style="text-align: center;"></td>
+          </tr>
+          <tr>
+            <td>{{ARQUIVO_05}}</td>
+            <td style="text-align: center;">{{ARQUIVO_05_REV}}</td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_05_LINK}}" style="text-align: center;"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Escopo Header -->
+  <section class="scope-header" id="escopo">
+    <span class="section-number fade-in">02 — ESCOPO DE TRABALHO</span>
+    <h2 class="section-title fade-in">Escopo de Trabalho</h2>
+    <p class="section-subtitle fade-in">Projetos de instalações prediais de apartamento a ser reformado na cidade do Rio de Janeiro</p>
+  </section>
+
+  <!-- Guidelines -->
+  <section class="section">
+    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--teal-dark); letter-spacing: 0.5px; margin-bottom: 1.5rem; text-align: center;" class="fade-in">Diretrizes Gerais</h3>
+    <div class="guidelines-grid">
+      <div class="guideline-card fade-in">
+        <div class="guideline-icon"><img src="/assets/img/guideline-1.png" alt="Normas e Conformidade"></div>
+        <h4>Normas e Conformidade</h4>
+        <p>Projetos conforme ABNT NBR, NRs e regulamentos das concessionárias do Rio de Janeiro</p>
+      </div>
+      <div class="guideline-card fade-in">
+        <div class="guideline-icon"><img src="/assets/img/guideline-2.png" alt="ART Emitida"></div>
+        <h4>ART Emitida</h4>
+        <p>Anotação de Responsabilidade Técnica dos projetos será emitida</p>
+      </div>
+      <div class="guideline-card fade-in">
+        <div class="guideline-icon"><img src="/assets/img/guideline-3.png" alt="Entrega DWG e PDF"></div>
+        <h4>Entrega DWG e PDF</h4>
+        <p>Projetos executivos cadastrados no gerenciador eletrônico do empreendimento</p>
+      </div>
+      <div class="guideline-card fade-in">
+        <div class="guideline-icon"><img src="/assets/img/guideline-4.png" alt="Checklists de Qualidade"></div>
+        <h4>Checklists de Qualidade</h4>
+        <p>Garantia de atendimento aos padrões de qualidade definidos pela contratante</p>
+      </div>
+      <div class="guideline-card fade-in">
+        <div class="guideline-icon"><img src="/assets/img/guideline-5.png" alt="Reuniões de Coordenação"></div>
+        <h4>Reuniões de Coordenação</h4>
+        <p>Participação ativa para alinhamento técnico e solução de interferências</p>
+      </div>
+      <div class="guideline-card fade-in">
+        <div class="guideline-icon"><img src="/assets/img/guideline-6.png" alt="Metodologia BIM"></div>
+        <h4>Metodologia BIM</h4>
+        <p>Os projetos serão desenvolvidos em metodologia BIM</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scope Items -->
+  <div class="scope-item fade-in">
+    <div class="scope-icon"><img src="/assets/img/scope-eletrica.png" alt="Elétrica"></div>
+    <div class="scope-content">
+      <h3>Projeto Elétrico de Baixa Tensão</h3>
+      <ul>
+        <li>Projeto do sistema de distribuição de força e luz</li>
+        <li>Projetos dos quadros de força, iluminação e tomadas, com apresentação dos diagramas trifilares, conforme padrões e normas brasileiras, em especial a NBR 5410</li>
+        <li>Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="scope-item fade-in">
+    <div class="scope-icon"><img src="/assets/img/scope-especiais.png" alt="Especiais"></div>
+    <div class="scope-content">
+      <h3>Projeto de Especiais</h3>
+      <h4>Rede de dados, Telefonia, CFTV, TV e Som</h4>
+      <ul>
+        <li>Projeto de distribuição e dimensionamento de tubulação seca para rede de telefonia, dados, antena, CFTV e Sonorização</li>
+        <li>Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="scope-item fade-in">
+    <div class="scope-icon"><img src="/assets/img/scope-hidraulica.png" alt="Hidráulica"></div>
+    <div class="scope-content">
+      <h3>Projeto Hidráulico</h3>
+      <ul>
+        <li>Projeto executivo e detalhes; desenvolvimento do projeto conforme NBR 5626 e 8160</li>
+        <li>Detalhamento dos pontos de coleta de esgoto e dos aparelhos em plantas e cortes e detalhes gerais</li>
+        <li>Distribuição da rede interna de água fria e água quente para abastecimento dos pontos de consumo – plantas, vistas e detalhes</li>
+        <li>Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="scope-item fade-in">
+    <div class="scope-icon"><img src="/assets/img/scope-esgoto.png" alt="Esgoto"></div>
+    <div class="scope-content">
+      <h3>Projeto de Esgoto Sanitário</h3>
+      <ul>
+        <li>Projeto executivo e detalhes; desenvolvimento do projeto conforme NBR 5626 e 8160</li>
+        <li>Detalhamento dos pontos de coleta de esgoto e dos aparelhos em plantas e cortes e detalhes gerais</li>
+        <li>Distribuição da rede interna de água fria e água quente para abastecimento dos pontos de consumo – plantas, vistas e detalhes</li>
+        <li>Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="scope-item fade-in">
+    <div class="scope-icon"><img src="/assets/img/scope-gas.png" alt="Gás"></div>
+    <div class="scope-content">
+      <h3>Projeto de Gás Canalizado</h3>
+      <ul>
+        <li>Distribuição interna das instalações de gás e detalhes de execução conforme padrões e normas brasileiras</li>
+        <li>Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Etapas -->
+  <section class="section section-teal" id="etapas">
+    <div class="section-header fade-in">
+      <span class="section-number">03 — ETAPAS DOS PROJETOS</span>
+      <h2 class="section-title">Etapas e Prazos</h2>
+      <p class="section-subtitle">Os projetos serão entregues em arquivo eletrônico via e-mail conforme cronograma</p>
+    </div>
+    
+        <div class="timeline-container">
+      <div class="timeline-horizontal" style="--timeline-count:4;">
+        <div class="timeline-step fade-in">
+          <div class="timeline-marker">
+            <svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M0 72 H120 V38 L188 14 V72 H320" />
+            </svg>
+            <span class="timeline-marker-inner">1&ordf;</span>
+          </div>
+          <span class="timeline-badge">10 dias</span>
+          <h4>Concepção</h4>
+          <p>Reunião inicial no local da obra ou virtualmente para identificar as necessidades</p>
+        </div>
+
+        <div class="timeline-step fade-in">
+          <div class="timeline-marker">
+            <svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M0 72 H120 V38 L188 14 V72 H320" />
+            </svg>
+            <span class="timeline-marker-inner">2&ordf;</span>
+          </div>
+          <span class="timeline-badge">15 dias</span>
+          <h4>Estudo Preliminar</h4>
+          <p>Indicações em planta baixa com memorial preliminar para análise</p>
+        </div>
+
+        <div class="timeline-step fade-in">
+          <div class="timeline-marker">
+            <svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M0 72 H120 V38 L188 14 V72 H320" />
+            </svg>
+            <span class="timeline-marker-inner">3&ordf;</span>
+          </div>
+          <span class="timeline-badge">10 dias</span>
+          <h4>Projeto Básico</h4>
+          <p>Pontos de utilização e tubulações marcados para análise e comentários</p>
+        </div>
+
+        <div class="timeline-step fade-in">
+          <div class="timeline-marker">
+            <svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M0 72 H120 V38 L188 14 V72 H320" />
+            </svg>
+            <span class="timeline-marker-inner">4&ordf;</span>
+          </div>
+          <span class="timeline-badge">Final</span>
+          <h4>Projeto Executivo</h4>
+          <p>Dimensionamentos, detalhes construtivos, diagramas e memorial descritivo</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Investimento -->
+  <section class="quote-section" id="investimento">
+    <div class="quote-container">
+      <div class="section-header fade-in">
+        <span class="section-number">04 — VALOR DA PROPOSTA</span>
+        <h2 class="section-title">VALOR DA PROPOSTA</h2>
+      </div>
+
+      <div class="quote-total fade-in">
+        <div class="quote-total-label">Valor Total</div>
+        <div class="quote-total-value">{{VALOR_TOTAL}}</div>
+      </div>
+
+      <div class="quote-total-extenso fade-in">{{VALOR_TOTAL_EXTENSO}}</div>
+
+      <div class="quote-breakdown fade-in">
+        <div class="quote-breakdown-header">
+          <span>Disciplina</span>
+          <span>Valor</span>
+        </div>
+        <div class="quote-row">
+          <div class="quote-row-left">
+            <div class="quote-row-icon"><img src="/assets/img/scope-eletrica.png" alt="Elétrica"></div>
+            <span class="quote-row-label">Elétrica / Entrada de Energia</span>
+          </div>
+          <span class="quote-row-value">{{VALOR_ELETRICA}}</span>
+        </div>
+        <div class="quote-row">
+          <div class="quote-row-left">
+            <div class="quote-row-icon"><img src="/assets/img/scope-especiais.png" alt="Especiais"></div>
+            <span class="quote-row-label">Especiais</span>
+          </div>
+          <span class="quote-row-value">{{VALOR_ESPECIAIS}}</span>
+        </div>
+        <div class="quote-row">
+          <div class="quote-row-left">
+            <div class="quote-row-icon"><img src="/assets/img/scope-hidraulica.png" alt="Hidráulica"></div>
+            <span class="quote-row-label">Hidráulica</span>
+          </div>
+          <span class="quote-row-value">{{VALOR_HIDRAULICA}}</span>
+        </div>
+        <div class="quote-row">
+          <div class="quote-row-left">
+            <div class="quote-row-icon"><img src="/assets/img/scope-esgoto.png" alt="Esgoto"></div>
+            <span class="quote-row-label">Esgoto Sanitário</span>
+          </div>
+          <span class="quote-row-value">{{VALOR_ESGOTO}}</span>
+        </div>
+        <div class="quote-row">
+          <div class="quote-row-left">
+            <div class="quote-row-icon"><img src="/assets/img/scope-gas.png" alt="Gás"></div>
+            <span class="quote-row-label">Gás Canalizado</span>
+          </div>
+          <span class="quote-row-value">{{VALOR_GAS}}</span>
+        </div>
+      </div>
+
+      <div class="payment-schedule fade-in">
+        <h3>FORMA DE PAGAMENTO</h3>
+
+        <div class="payment-lines">
+          <div class="payment-line">
+            <span class="payment-line-label">Sinal</span>
+            <span class="payment-line-value">{{PGTO_SINAL}}</span>
+          </div>
+
+          <div class="payment-subtitle">Entrega dos Projetos Básicos</div>
+          <div class="payment-line">
+            <span class="payment-line-label">Elétrico/Especiais</span>
+            <span class="payment-line-value">{{PGTO_BASICO_ELETRICO_ESPECIAIS}}</span>
+          </div>
+          <div class="payment-line">
+            <span class="payment-line-label">Hidrossanitário</span>
+            <span class="payment-line-value">{{PGTO_BASICO_HIDROSSANITARIO}}</span>
+          </div>
+          <div class="payment-line">
+            <span class="payment-line-label">Gás canalizado</span>
+            <span class="payment-line-value">{{PGTO_BASICO_GAS}}</span>
+          </div>
+
+          <div class="payment-subtitle">Entrega dos Projetos Executivos</div>
+          <div class="payment-line">
+            <span class="payment-line-label">Elétrico/Especiais</span>
+            <span class="payment-line-value">{{PGTO_EXEC_ELETRICO_ESPECIAIS}}</span>
+          </div>
+          <div class="payment-line">
+            <span class="payment-line-label">Hidrossanitário</span>
+            <span class="payment-line-value">{{PGTO_EXEC_HIDROSSANITARIO}}</span>
+          </div>
+          <div class="payment-line">
+            <span class="payment-line-label">Gás canalizado</span>
+            <span class="payment-line-value">{{PGTO_EXEC_GAS}}</span>
+          </div>
+        </div>
+
+        <p class="payment-note">Os valores deverão ser depositados na conta abaixo:</p>
+      </div>
+
+      <div class="bank-card fade-in">
+        <h4>🏦 DADOS BANCÁRIOS</h4>
+        <p class="bank-line"><strong>Banco:</strong> Banco Inter (077)</p>
+        <p class="bank-line"><strong>Agência:</strong> 0001 — <strong>C/C:</strong> 3375106-4</p>
+        <p class="bank-line"><strong>Favorecido:</strong> Complementare Projetos de Instalações LTDA-EPP</p>
+        <p class="bank-line"><strong>CNPJ:</strong> 23.012.176/0001-69</p>
+        <p class="bank-line"><strong>Chave PIX (CNPJ):</strong> 23.012.176/0001-69</p>
+        <button class="pix-button" onclick="copyPix()">
+          📱 Copiar Chave PIX (CNPJ)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Considerações -->
+  <section class="section" id="consideracoes">
+    <div class="section-header fade-in">
+      <span class="section-number">05 — CONSIDERAÇÕES</span>
+      <h2 class="section-title">Considerações Importantes</h2>
+    </div>
+    
+    <ul class="considerations-list">
+      <li class="fade-in">A validade desta proposta é de {{VALIDADE_PROPOSTA}} a partir da data de emissão</li>
+      <li class="fade-in">Os prazos começam a contar a partir da aprovação formal da proposta e do recebimento do sinal</li>
+      <li class="fade-in">Alterações significativas no escopo podem resultar em ajustes de prazo e valor</li>
+      <li class="fade-in">O cliente deverá fornecer todas as informações técnicas necessárias para o desenvolvimento dos projetos</li>
+      <li class="fade-in">As revisões de projeto estão limitadas a 2 (duas) por disciplina, após a entrega do projeto básico</li>
+      <li class="fade-in">Revisões adicionais serão cobradas separadamente mediante acordo prévio</li>
+    </ul>
+  </section>
+
+  <!-- Exclusões -->
+  <section class="section section-teal" id="exclusoes">
+    <div class="section-header fade-in">
+      <span class="section-number">06 — EXCLUSÕES</span>
+      <h2 class="section-title">ITENS FORA DO ESCOPO</h2>
+    </div>
+    
+    <div class="exclusions-list">
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">A</div>
+        <div class="exclusion-text">{{EXCLUSAO_A}}</div>
+      </div>
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">B</div>
+        <div class="exclusion-text">{{EXCLUSAO_B}}</div>
+      </div>
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">C</div>
+        <div class="exclusion-text">{{EXCLUSAO_C}}</div>
+      </div>
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">D</div>
+        <div class="exclusion-text">{{EXCLUSAO_D}}</div>
+      </div>
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">E</div>
+        <div class="exclusion-text">{{EXCLUSAO_E}}</div>
+      </div>
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">F</div>
+        <div class="exclusion-text">{{EXCLUSAO_F}}</div>
+      </div>
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">G</div>
+        <div class="exclusion-text">{{EXCLUSAO_G}}</div>
+      </div>
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">H</div>
+        <div class="exclusion-text">{{EXCLUSAO_H}}</div>
+      </div>
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">I</div>
+        <div class="exclusion-text">{{EXCLUSAO_I}}</div>
+      </div>
+      <div class="exclusion-line fade-in">
+        <div class="exclusion-letter">J</div>
+        <div class="exclusion-text">{{EXCLUSAO_J}}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Aceite -->
+  <section class="accept-section" id="aceite">
+    <div class="accept-container fade-in">
+      <h2 class="accept-title">Pronto para começar?</h2>
+      <p class="accept-subtitle">Ao aceitar esta proposta, você concorda com os termos e condições apresentados. Entraremos em contato para dar início ao projeto.</p>
+      <div class="accept-buttons">
+        <button class="accept-button" onclick="openModal()">✓ Aceitar Proposta</button>
+        <a href="#" class="download-button">📥 Baixar PDF</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE PROJETOS DE ENGENHARIA</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="contract-content contract-document">
+<div class="contract-body">
+  <p>Instrumento particular de Contrato de Prestação de Serviços de Engenharia que fazem entre si as partes abaixo qualificadas:</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">CONSIDERANDO</span> que a CONTRATADA é uma empresa de notório conhecimento técnico em projetos, supervisão e consultoria de sistemas de sistema de distribuição de força e luz, iluminação.</p>
+  <p class="contract-clause lvl1"><span class="contract-num">CONSIDERANDO</span> que a CONTRATANTE e CONTRATADA declaram que são pessoas jurídica e física paritárias e que este CONTRATO tem disposições simétricas, cujos negócios são objeto de livre estipulação das cláusulas, na forma da Lei de Liberdade Econômica (Código Civil, Art. 421-A), todas representadas por seus Administradores, que tiveram o cuidado e a diligência que todo homem ativo e probo costuma empregar na administração de seus próprios negócios (Cód. Civil, Art. 1.011).</p>
+
+  <table class="contract-table">
+    <tr><td><b>CONTRATANTE</b></td><td>{{CONTRATANTE_RAZAO}}, inscrito no CNPJ sob o n.º {{CONTRATANTE_CNPJ}}, com sede sito na {{CONTRATANTE_ENDERECO}} Município do {{CONTRATANTE_MUNICIPIO}}, Estado do {{CONTRATANTE_UF}}, CEP {{CONTRATANTE_CEP}}, com endereço de e-mail {{CONTRATANTE_EMAIL}}</td></tr>
+    <tr><td><b>CONTRATADA</b></td><td>COMPLEMENTARE PROJETOS DE INSTALACOES LTDA, sociedade empresária limitada, inscrita no CNPJ n.º 23.012.176/0001-69, com sede na Avenida Almirante Julio de Sá Bierrenbach, 200, Blc 1b Salas 1107b e 1108b, Barra da Tijuca, Município do Rio de Janeiro, Estado do Rio de Janeiro, CEP 22.775-028, neste ato representada pelo seu sócio, Wagner Santa Cruz da Silva, com endereço de e-mail wagner@cprojetos.com.br</td></tr>
+    <tr><td><b>OBJETO</b></td><td>Projetos elétricos, de Especiais, hidráulicos, esgoto sanitário/águas pluviais e gás canalizado e respectivas aprovações dos projetos junto aos órgãos públicos, para {{OBJETO_OBRA_DESCRICAO}} a serem construídas pela CONTRATANTE na cidade do {{OBRA_CIDADE}}.</td></tr>
+    <tr><td><b>LOCAL</b></td><td>{{OBRA_ENDERECO_COMPLETO}}</td></tr>
+    <tr><td><b>PREÇO</b></td><td>R${{PRECO_TOTAL}} ({{PRECO_TOTAL_EXTENSO}} reais)</td></tr>
+    <tr><td><b>VIGÊNCIA</b></td><td>Até {{VIGENCIA_DIAS}} ({{VIGENCIA_DIAS_EXTENSO}}) dias – {{VIGENCIA_INICIO}} a {{VIGENCIA_FIM}}.</td></tr>
+  </table>
+
+  <p>As partes acima qualificadas têm, entre si, como justo e acertado o que será regido pelas cláusulas e condições nas laudas a seguir.</p>
+
+  <h4 class="contract-h">1. OBJETO DESTE CONTRATO</h4>
+
+  <p class="contract-clause lvl1"><span class="contract-num">1.1.</span> Conforme negociação e arquivos enviados via WhatsApp no dia {{DATA_ARQUIVOS}} e respectiva proposta n.º {{PROPOSTA_NUM}} {{REVISAO_CONTRATO}} enviada em {{DATA_PROPOSTA}} o escopo de trabalho da CONTRATADA compreende projetos de instalações para fins de {{FINALIDADE_OBRA}} em {{OBRA_ENDERECO_RESUMIDO}}, abrangendo:</p>
+
+  <p class="contract-clause lvl2"><span class="contract-num">1.1.1.</span> Projeto elétrico de baixa tensão que inclui:</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.1.1.</span> projeto do sistema de distribuição de força e luz das residências → quadros de força, iluminação e tomadas com apresentação dos diagramas trifilares, conforme padrão definido na NBR 5410;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.1.2.</span> Desenvolvimento e aprovação do projeto de entrada de energia elétrica → considerando demandas específicas e normas das concessionárias;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.1.3.</span> Projeto do sistema de distribuição para iluminação e tomadas → das áreas comuns e vias internas do condomínio;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.1.4.</span> Compatibilização com sistemas complementares de automação, fotovoltaico e gerador, quando aplicáveis.</p>
+
+  <p class="contract-clause lvl2"><span class="contract-num">1.1.2.</span> Projeto de especiais que inclui rede de dados, telefonia, CFTV, TV e som que inclui:</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.2.1.</span> Projeto de infraestrutura seca para redes de telefonia, dados, antena, CFTV e automação das áreas comuns, até a entrada das edificações;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.2.2.</span> A infraestrutura atenderá aos sistemas, conforme pontos e orientações de projetos/consultoria especializadas.</p>
+
+  <p class="contract-clause lvl2"><span class="contract-num">1.1.3.</span> Projeto de gás canalizado que inclui:</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.3.1.</span> Desenvolvimento do sistema de gás canalizado → abrangendo distribuição interna, ventilação, detalhamento de medidores e pontos de consumo;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.3.2.</span> Projeto em conformidade com normas específicas e exigências da concessionária pública ou outro agente fiscalizador;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.3.3.</span> Dimensionamento das tubulações e especificação dos materiais adequados (aço carbono, cobre, polietileno reticulado, entre outros), conforme normas de segurança e eficiência no transporte do gás;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.3.4.</span> Aprovação do projeto de gás da concessionária pública ou outro agente fiscalizador.</p>
+
+  <p class="contract-clause lvl2"><span class="contract-num">1.1.4.</span> Projeto esgoto sanitário e águas pluviais que inclui:</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.1.</span> Elaboração de projeto executivo para coleta e condução de esgoto sanitário (NBR 8160) e águas pluviais (NBR 10844);</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.2.</span> Dimensionamento e detalhamento das redes internas e externas de esgoto e drenagem pluvial incluindo calhas, condutores verticais e horizontais, exceto as calhas das vias públicas que serão traçadas conforme projeto de pavimentação.</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.3.</span> Representação dos pontos de coleta, plantas e cortes detalhados, com atenção às áreas comuns e vias internas;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.4.</span> Proposição de soluções para armazenamento, retardo ou infiltração de águas pluviais, considerando a eficiência do sistema e conformidade com normas aplicáveis;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.5.</span> Compatibilização com os sistemas estruturais e arquitetônicos, incluindo soluções para rebaixos e interferências;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.6.</span> Aprovação do projeto de esgoto perante a concessionária pública ou outro agente fiscalizador;</p>
+
+  <p class="contract-clause lvl2"><span class="contract-num">1.1.5.</span> Projeto hidráulico que inclui:</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.5.1.</span> Desenvolvimento do projeto executivo, incluindo plantas, cortes e detalhes de instalação, conforme NBR 5626;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.5.2.</span> Distribuição e dimensionamento da rede de água fria e água quente para abastecimento dos pontos de consumo;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.5.3.</span> Dimensionamento e detalhamento do sistema de pressurização e aquecimento das residências, considerando eficiência energética e compatibilidade com outros sistemas;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.5.4.</span> Compatibilização com projetos de piscina e SPA, elaborados por empresas especializadas</p>
+
+  <p class="contract-clause lvl2"><span class="contract-num">1.1.6.</span> Memorial Técnico Descritivo que inclui:</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.6.1.</span> Elaboração de um memorial técnico descritivo consolidando as informações sobre materiais, equipamentos, metodologias e normas aplicáveis a cada disciplina;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.1.6.2.</span> O documento incluirá recomendações técnicas, especificações detalhadas e orientações claras para a execução das instalações.</p>
+
+  <p class="contract-clause lvl2"><span class="contract-num">1.1.7.</span> Os projetos serão desenvolvidos por meio software CAD (“computer-aided design and drafting”), sendo que a CONTRATADA deverá possuir licenças de software de CAD para abertura e exame dos projetos;</p>
+
+  <h4 class="contract-h">1.2. ITENS FORA DO ESCOPO</h4>
+
+  <p class="contract-clause lvl2"><span class="contract-num">1.2.1.</span> Projeto luminotécnico, automação, estrutural, HVAC, piscina, sauna e gerador;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1.2.2.</span> Acompanhamento técnico de obras ou fiscalização.</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1.2.3.</span> Custos para inspeção e recomposição de elementos inspecionados;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1.2.4.</span> Fornecimento ou relação de materiais para execução da obra;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1.2.5.</span> Serviços de topografia, sondagem ou estudos geotécnicos;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1.2.6.</span> Projeto de estudo de proteções ou projeto de média tensão;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1.2.7.</span> Testes de aceitação ou comissionamento de sistemas instalados;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1.2.8.</span> Qualquer serviços que não estiver explicitamente descrito no item 1.1, estará fora do escopo desse CONTRATO, bem como quaisquer alterações nos projetos arquitetônicos ou de engenharia e outras não elencadas solicitadas pela CONTRATANTE, devendo ser objeto de nova proposta.</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.2.8.1.</span> Caso a CONTRANTANTE determine alteração arquitetônica, para que a CONTRATADA realize serão cobrados honorários adicionais para análises, consultoria e elaboração do novo projeto;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.2.8.2.</span> Alterações no escopo ou valor do projeto, por solicitação do cliente, deverão ser formalizadas por e-mail e sua realização dependerá de aditivo contratual, com ajustes nos prazos e valores previamente negociados;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.2.8.3.</span> A compatibilização dos projetos da CONTRATADA será realizada com base nos projetos fornecidos pela CONTRATANTE, logo inconsistências, erros de cálculo, etc. nesses projetos poderão impactar o cronograma e gerar custos adicionais, que serão previamente negociados;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1.2.9.</span> quaisquer documentos que não estejam em formato eletrônico;</p>
+
+  <h4 class="contract-h">2. FORMA E PRAZO EXECUÇÃO DESTE CONTRATO</h4>
+
+  <p class="contract-clause lvl1"><span class="contract-num">2.1.</span> Etapas dos projetos:</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1ª</span> Concepção — Após a aprovação desta proposta, a concepção será feita através de uma reunião inicial no local da obra, no escritório de arquitetura, ou virtualmente, com acompanhamento da fiscalização/arquitetos, para identificação das necessidades.</p>
+  <p class="contract-clause lvl2"><span class="contract-num">2ª</span> Estudo preliminar — No Estudo preliminar contará com algumas indicações em planta baixa e será acompanhado de memorial preliminar para análise e comentários.</p>
+  <p class="contract-clause lvl2"><span class="contract-num">3ª</span> Projeto Básico — No Projeto Básico estarão marcados os pontos de utilização e tubulações para análise e comentários.</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4ª</span> Projeto Executivo — O projeto executivo será elaborado com base nos comentários do projeto básico, onde conterá todos os dimensionamentos e encaminhamentos além dos detalhes construtivos, diagramas, esquemas, vistas e memorial descritivo.</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">2.2.</span> Segue abaixo o fluxograma da prestação de serviços:</p>
+  <p class="contract-clause lvl2"><em>{{INSERIR_FLUXOGRAMA_PRESTACAO_SERVICOS}}</em></p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">2.3.</span> O prazo previsto de execução será de {{PRAZO_DIAS}} ({{PRAZO_DIAS_EXTENSO}}) dias – {{PRAZO_INICIO}} a {{PRAZO_FIM}}, independentemente de qualquer aviso, notificação ou interpelação judicial, podendo ser finalizado antes mediante cronograma de trabalho acertado entre as partes.</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">2.4.</span> Os projetos serão entregues em arquivo eletrônico, via e-mail, conforme esquema abaixo:</p>
+  <p class="contract-clause lvl2"><span class="contract-num">2.4.1.</span> Em caso de prorrogação da vigência deste CONTRATO as partes deverão negociar pagamento de valores adicionais em favor da CONTRATADA por meio de Termo(s) Aditivo(s).</p>
+  <p class="contract-clause lvl2"><em>{{CRONOGRAMA_ESQUEMA}}</em></p>
+
+  <h4 class="contract-h">3. DAS OBRIGAÇÕES DA CONTRATANTE</h4>
+
+  <p class="contract-clause lvl1"><span class="contract-num">3.1.</span> A CONTRATANTE se obriga a:</p>
+  <p class="contract-clause lvl2"><span class="contract-num">3.1.1.</span> fornecer todas as informações necessárias para a elaboração do projeto, incluindo especificações técnicas, dados normativos, projetos complementares (estrutura, arquitetura, paisagismo, automação, etc.) e documentos regulamentares;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">3.1.2.</span> Comunicar à CONTRATADA sobre as reclamações feitas contra seus empregados/prepostos, bem como com relação a danos por eles causados;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">3.1.3.</span> Evitar modificações do objeto e escopo das obras após a assinatura do contrato, mantendo fidelidade aos arquivos enviados por e-mail datado de {{DATA_EMAIL_ARQUIVOS}}, a saber:</p>
+
+  <table class="contract-table">
+    <tr><td><b>ARQUIVO</b></td><td><b>ITEM</b></td><td><b>REVISÃO</b></td></tr>
+    <tr><td>{{ARQ_1_NOME}}</td><td>{{ARQ_1_ITEM}}</td><td>{{ARQ_1_REV}}</td></tr>
+    <tr><td>{{ARQ_2_NOME}}</td><td>{{ARQ_2_ITEM}}</td><td>{{ARQ_2_REV}}</td></tr>
+    <tr><td>{{ARQ_3_NOME}}</td><td>{{ARQ_3_ITEM}}</td><td>{{ARQ_3_REV}}</td></tr>
+    <tr><td>{{ARQ_4_NOME}}</td><td>{{ARQ_4_ITEM}}</td><td>{{ARQ_4_REV}}</td></tr>
+    <tr><td>{{ARQ_5_NOME}}</td><td>{{ARQ_5_ITEM}}</td><td>{{ARQ_5_REV}}</td></tr>
+  </table>
+
+  <p class="contract-clause lvl2"><span class="contract-num">3.1.4.</span> Reter os tributos devidos e exibir para a CONTRATADA as guias de recolhimento quando solicitadas;</p>
+
+  <h4 class="contract-h">4. DAS OBRIGAÇÕES DA CONTRATADA</h4>
+
+  <p class="contract-clause lvl1"><span class="contract-num">4.1.</span> A CONTRATADA se obriga:</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4.1.1.</span> Registrar perante o órgão profissional e exibir a Anotação de Responsabilidade de Trabalho (ART);</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4.1.2.</span> Prestar os serviços contratados descritos na cláusula 1.1, modo e prazos ajustados, dentro das normas e especificações técnicas vigentes;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4.1.3.</span> Todos os projetos atenderão na integra as normas ABNT NBR vigentes, as Normas Regulamentadoras e aos Regulamentos das concessionárias atuantes no Rio de Janeiro.</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4.1.4.</span> Realizar até 2 (duas) visitas ao local da obra e até 2 (duas) reuniões com a CONTRATADA, necessárias à elaboração dos nossos trabalhos;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4.1.5.</span> Enviar todos os documentos elaborados por meio eletrônico em formatos para arquivos dos projetos gerados em programa formato AutoCAD “Drawing” (com extensão “DWG”) e descritivos e outros em “Portable Document Format” (com extensão “.PDF”), cadastrados no gerenciador eletrônico da CONTRATANTE, desde que previamente autorizado o acesso da CONTRATADA;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4.1.6.</span> Garantia de atendimento aos checklists da contratante e conformidade com os padrões de qualidade definidos;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4.1.7.</span> Observar e fazer com que seus funcionários e/ou contratados respeitem as normas relativas à segurança e medicina do trabalho, fornecendo ainda Equipamento de Proteção Individual – EPI para todos;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4.1.8.</span> Assumir a responsabilidade por qualquer indenização pleiteada por seus empregados/prepostos, principalmente no tocante a reclamações trabalhistas e acidentes do trabalho no decorrer da vigência do contrato;</p>
+
+  <h4 class="contract-h">5. PREÇO E DESPESAS NÃO INCLUÍDAS</h4>
+
+  <p class="contract-clause lvl1"><span class="contract-num">5.1.</span> O preço dos serviços enumerados acima será de R${{PRECO_TOTAL}} ({{PRECO_TOTAL_EXTENSO}} reais) que se referem aos seguintes projetos e serviços:</p>
+
+  <table class="contract-table">
+    <tr><td><b>ITEM</b></td><td><b>ÍCONE</b></td><td><b>PROJETO OU SERVIÇO</b></td><td><b>PREÇO (EM R$)</b></td></tr>
+    <tr><td>5.1.1.</td><td>⚡</td><td>Elétrica</td><td>{{PRECO_ELETRICA}}</td></tr>
+    <tr><td>5.1.2.</td><td>📡</td><td>Projeto especiais</td><td>{{PRECO_ESPECIAIS}}</td></tr>
+    <tr><td>5.1.3.</td><td>🚰</td><td>Projeto da parte hidráulica</td><td>{{PRECO_HIDRAULICA}}</td></tr>
+    <tr><td>5.1.4.</td><td>🌀</td><td>Projeto de Esgoto Sanitário/Águas Pluviais</td><td>{{PRECO_ESGOTO_PLUVIAL}}</td></tr>
+    <tr><td>5.1.5.</td><td>🔥</td><td>Projeto de gás canalizado</td><td>{{PRECO_GAS}}</td></tr>
+  </table>
+
+  <p class="contract-clause lvl1"><span class="contract-num">5.2.</span> Forma de pagamento → o pagamento poderá ser realizado por transferência eletrônica (“PIX”), por meio da chave 23.012.176/0001-69 (CNPJ), endereçada ao Banco Inter S/A (077), agência 0001, conta corrente n.º 3375106-4, com as seguintes condições de pagamento:</p>
+
+  <table class="contract-table">
+    <tr><td><b>ITEM</b></td><td><b>SERVIÇO</b></td><td><b>PERCENTUAL</b></td><td><b>PREÇO (EM R$)</b></td></tr>
+    <tr><td>5.2.1.</td><td>Entrega do Estudo Preliminar</td><td>{{PCT_EP}}</td><td>{{VAL_EP}}</td></tr>
+    <tr><td>5.2.2.</td><td>Entrega do Anteprojeto</td><td>{{PCT_AP}}</td><td>{{VAL_AP}}</td></tr>
+    <tr><td>5.2.3.</td><td>Aceite do Anteprojeto</td><td>{{PCT_AA}}</td><td>{{VAL_AA}}</td></tr>
+    <tr><td>5.2.4.</td><td>Entrega do Pré-Executivo</td><td>{{PCT_PE}}</td><td>{{VAL_PE}}</td></tr>
+    <tr><td>5.2.5.</td><td>Aceite do Pré-Executivo</td><td>{{PCT_APE}}</td><td>{{VAL_APE}}</td></tr>
+    <tr><td>5.2.6.</td><td>Entrega do Projeto Executivo</td><td>{{PCT_EX}}</td><td>{{VAL_EX}}</td></tr>
+    <tr><td>5.2.7.</td><td>Aceite do Projeto Executivo</td><td>{{PCT_AEX}}</td><td>{{VAL_AEX}}</td></tr>
+    <tr><td>5.2.8.</td><td>Projeto aprovado junto às concessionárias</td><td>{{PCT_APROV}}</td><td>{{VAL_APROV}}</td></tr>
+  </table>
+
+  <p class="contract-clause lvl1"><span class="contract-num">5.3.</span> Despesas para execução do serviço → não estão inclusos nos preços dos serviços listados no item 5.1, tais como: recolhimento de taxas de licenças, emolumentos, despesas de cartório com certidões, etc., eventuais exigências adicionais ou atrasos causados pelas concessionárias não são de responsabilidade da CONTRATADA.</p>
+  <p class="contract-clause lvl2"><span class="contract-num">5.3.1.</span> O processo será conduzido de forma transparente, com a CONTRATANTE sendo informada sobre todas as movimentações relacionadas ao projeto</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">5.4.</span> Tributos → as despesas com tributação serão de responsabilidade da CONTRATADA, desde que não haja alteração da legislação tributária, em especial se houver aumento da carga tributária, caso em que poderá ser renegociado o preço.</p>
+
+  <h4 class="contract-h">6. ATRASO NO PAGAMENTO</h4>
+
+  <p class="contract-clause lvl1"><span class="contract-num">6.1.</span> Em caso de mora no pagamento dos valores relacionados na cláusula 5.2, o saldo devedor (principal) deverá ser atualizado monetariamente, pela variação do Índice Nacional de Custo da Construção Civil (INCC) e, como obrigação acessória, ainda será aplicada:</p>
+  <p class="contract-clause lvl2"><span class="contract-num">6.1.1.</span> Multa de mora diária de 0,33% (zero ponto trinta e três centésimos por cento) até um limite de 10% (dez por cento) calculados sobre o saldo devedor atualizado;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">6.1.2.</span> juros simples de 1% (um por cento) ao mês de atraso, contados pro rata die calculados sobre o saldo devedor atualizado.</p>
+
+  <h4 class="contract-h">7. RESCISÃO</h4>
+
+  <p class="contract-clause lvl1"><span class="contract-num">7.1.</span> Em caso de rescisão antecipada do contrato por parte da CONTRATANTE esta deverá pagar à CONTRADA, além de todos os valores referentes aos projetos e serviços concluídos, multa penal correspondente a 15% (quinze por cento), ao preço indicado na cláusula 5.1.</p>
+
+  <table class="contract-table">
+    <tr><td><b>ITEM</b></td><td><b>SERVIÇO</b></td><td><b>PERCENTUAL</b></td><td><b>PREÇO (EM R$)</b></td></tr>
+    <tr><td>5.2.9.</td><td>Aceite final do projeto pela contratante</td><td>{{PCT_FINAL}}</td><td>{{VAL_FINAL}}</td></tr>
+  </table>
+
+  <h4 class="contract-h">8. DISPOSIÇÕES GERAIS</h4>
+
+  <p class="contract-clause lvl1"><span class="contract-num">8.1.</span> Os direitos autorais dos projetos elaborados pela CONTRATADA permanecerão sob sua titularidade, até o pagamento integral dos valores acordados.</p>
+  <p class="contract-clause lvl2"><span class="contract-num">8.1.1.</span> Após a quitação, a CONTRATADA cederá os direitos autorais em favor da CONTRATANTE que terá direito ao uso exclusivo dos projetos para os fins descritos nesta proposta, sendo vedada sua reprodução, divulgação ou modificação sem autorização prévia por e-mail da CONTRATADA</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">8.2.</span> Anticorrupção (Lei nº 12.846/2013) → a despeito de, em princípio, este contrato não relação com Administração Pública direta ou indireta, a CONTRATANTE e a CONTRATADA estão cientes e se comprometem a não oferecer ou prometer vantagens a agentes públicos ou a pessoas relacionadas a eles, especialmente na vigência deste CONTRATO, declaram que seus sócios e administradores não estão envolvidos em atos de corrupção, fraude, lavagem de dinheiro, entre outros.</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">8.3.</span> LGPD (Lei nº 13.709/2018) → A CONTRATANTE e a CONTRATADA estão cientes que todas as partes deste CONTRATO devem ter o cuidado devido com os dados pessoais e eventual tratamento de seus funcionários, prepostos, colaboradores, subcontratados, sócios que devem ser orientados ao mesmo cuidado, sendo vedado o compartilhamento, com terceiros sem prévio e expresso consentimento, inclusive com a obrigação recíproca de devolver ou eliminar os dados pessoais em caso de rescisão contratual, comunicar imediatamente qualquer incidente envolvendo os dados, responder a questionamentos sobre os dados pessoais repassados, observados os princípios legais da proteção de dados (LGPD, Art. 6º).</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">8.4.</span> A renúncia, por qualquer das partes, de exercer seus direitos em relação a qualquer violação ou inadimplemento da outra parte das avenças, termos ou condições ora pactuados não constituirá a renúncia do exercício de tais direitos em relação a qualquer outra violação ou inadimplemento.</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">8.5.</span> A CONTRATADA e seu representante legal, qualificado no quadro acima, neste ato, nomeiam-se reciprocamente seus procuradores, com amplos poderes, para receber intimações, notificações, interpelações e citações judiciais ou extrajudiciais, em toda e qualquer ação referente a este contrato.</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">8.6.</span> Os valores a serem recebidos pela CONTRATADA poderão ser objeto de eventual operação de antecipação dos recebíveis, tão somente se já tiverem sido concluídos os serviços relativos aos valores cedidos.</p>
+
+  <p class="contract-clause lvl1"><span class="contract-num">8.7.</span> Esse documento será firmado através de “Assinatura Eletrônica Avançadas” ou por meio da “Assinatura Eletrônica Qualificada” (com chave/token ICP-Brasil), na forma da Lei n.º 14.063/2020, Art. 4º, II ou III, e, dessa forma, CONTRATANTE e CONTRATADA dispensam o reconhecimento de firma e testemunhas, como autoriza o CPC, Art. 784 §4º (incluído pela Lei nº 14.620, de 2023).</p>
+
+  <h4 class="contract-h">9. FORO</h4>
+
+  <p class="contract-clause lvl1"><span class="contract-num">9.1.</span> As partes elegem o Foro da cidade do Rio de Janeiro no Estado do Rio de Janeiro, para as ações que resultem do presente contrato.</p>
+
+  <div class="contract-spacer"></div>
+
+  <p>Por estarem assim justos e acordados, este instrumento particular será firmado por meio de Assinatura Eletrônica Avançada ou Qualificada o CONTRATO será gerado somente em formato eletrônico Portable Documents Format ou “.pdf”.</p>
+
+  <p style="text-align:center; margin-top:18px;"><b>Rio de Janeiro, {{DATA_ASSINATURA}}.</b></p>
+
+  <table class="contract-table">
+    <tr><td style="text-align:center;"><b>{{CONTRATANTE_RAZAO}}</b><br>CONTRATANTE<br>CNPJ n.º {{CONTRATANTE_CNPJ}}</td>
+        <td style="text-align:center;"><b>COMPLEMENTARE PROJ. E INSTALACOES</b><br>CONTRATADA<br>CNPJ n.º 23.012.176/0001-69</td></tr>
+    <tr><td style="text-align:center;" colspan="2"><b>DISPENSADAS AS TESTEMUNHAS</b><br>(CPC, Art. 190 e CPC, Art. 784 §4º)</td></tr>
+  </table>
+</div></div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-checkbox">
+          <input type="checkbox" id="agree-terms" onchange="toggleConfirmButton()">
+          <label for="agree-terms">Li e concordo com os termos e condições apresentados acima. Autorizo o início dos trabalhos conforme proposta comercial P{{CODIGO_BASE}}.</label>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancelar</button>
+          <button class="modal-btn modal-btn-confirm" id="confirm-btn" disabled onclick="confirmAcceptance()">Confirmar Aceite</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp Float -->
+  <a href="https://wa.me/552132642475?text=Olá!%20Tenho%20interesse%20na%20proposta%20{{CODIGO_BASE}}" class="whatsapp-float" target="_blank">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <span class="whatsapp-tooltip">Fale conosco pelo WhatsApp</span>
+  </a>
+
+  <!-- Scroll to Top -->
+  <button id="scroll-top" onclick="scrollToTop()">↑</button>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <img class="footer-logo-image" src="/assets/img/logo-branca.png" alt="Complementare Projetos de Instalações">
+      </div>
+      <div class="footer-contact">
+        <h4>Contato</h4>
+        <a class="footer-item" href="https://wa.me/552132642475" target="_blank">
+          <span class="footer-icon"><svg aria-hidden="true" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"> <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/> </svg></span>
+          <span>(21) 3264-2475</span>
+        </a>
+        <a class="footer-item" href="https://www.cprojetos.com.br" target="_blank">
+          <span class="footer-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10.59 13.41a2 2 0 0 1 0-2.82l2.82-2.82a4 4 0 1 1 5.66 5.66l-1.41 1.41a1 1 0 0 1-1.42-1.42l1.41-1.41a2 2 0 1 0-2.82-2.82l-2.82 2.82a1 1 0 0 1-1.4 0z"/><path d="M13.41 10.59a2 2 0 0 1 0 2.82l-2.82 2.82a4 4 0 1 1-5.66-5.66l1.41-1.41a1 1 0 1 1 1.42 1.42L6.34 12a2 2 0 1 0 2.82 2.82l2.82-2.82a1 1 0 0 1 1.4 0z"/></svg></span>
+          <span>www.cprojetos.com.br</span>
+        </a>
+        <a class="footer-item" href="https://instagram.com/complementareprojetos" target="_blank">
+          <span class="footer-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm8.5 1.5h-8.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5z"/><path d="M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/><path d="M17.25 6.87a1.13 1.13 0 1 1 0 2.26 1.13 1.13 0 0 1 0-2.26z"/></svg></span>
+          <span>@complementareprojetos</span>
+        </a>
+      </div>
+      <div class="footer-contact">
+        <h4>Endereço</h4>
+        <div class="footer-item footer-item-address">
+          <span class="footer-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 22s7-5.2 7-12.2A7 7 0 0 0 5 9.8C5 16.8 12 22 12 22zm0-18a5.8 5.8 0 0 1 5.8 5.8c0 5.1-3.5 8.8-5.8 10.8-2.3-2-5.8-5.7-5.8-10.8A5.8 5.8 0 0 1 12 4zm0 8.3a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+            </svg>
+          </span>
+          <span class="footer-address">
+            Av. Alm. Júlio de Sá Bierrenbach, 200<br>
+            Bl Atlantic - Grupo 1107<br>
+            Barra Olímpica - Rio de Janeiro/RJ - Brasil
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© {ANO} Complementare Projetos de Instalações Ltda. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Progress Bar
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      document.getElementById('progress-bar').style.width = progress + '%';
+      
+      // Nav scroll effect
+      const nav = document.getElementById('nav');
+      if (scrollTop > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+      
+      // Scroll to top button
+      const scrollTopBtn = document.getElementById('scroll-top');
+      if (scrollTop > 500) {
+        scrollTopBtn.classList.add('show');
+      } else {
+        scrollTopBtn.classList.remove('show');
+      }
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Modal functions
+    function openModal() {
+      document.getElementById('modal-overlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function toggleConfirmButton() {
+      const checkbox = document.getElementById('agree-terms');
+      const confirmBtn = document.getElementById('confirm-btn');
+      confirmBtn.disabled = !checkbox.checked;
+    }
+
+    function confirmAcceptance() {
+      alert('Proposta aceita com sucesso! Entraremos em contato em breve.');
+      closeModal();
+    }
+
+    // Copy PIX
+    function copyPix() {
+      const pixKey = '23.012.176/0001-69';
+      navigator.clipboard.writeText(pixKey).then(() => {
+        alert('Chave PIX copiada!');
+      });
+    }
+
+    // Scroll to top
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Close modal on overlay click
+    document.getElementById('modal-overlay').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('modal-overlay')) {
+        closeModal();
+      }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
