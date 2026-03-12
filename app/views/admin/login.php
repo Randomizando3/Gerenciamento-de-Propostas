@@ -10,6 +10,5 @@
   </label>
   <button class="btn btn-primary" type="submit">Entrar no painel</button>
 </form>
-<p class="muted">Acesso padrão inicial: <code>admin@local</code> / <code>admin123</code></p>
 
 

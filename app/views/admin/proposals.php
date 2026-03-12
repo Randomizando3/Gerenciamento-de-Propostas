@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $proposals = $proposals ?? [];
 ?>
 <section class="panel-head">
@@ -25,13 +25,15 @@ $proposals = $proposals ?? [];
         <th>Total</th>
         <th>Visualizações</th>
         <th>Scroll</th>
+        <th>Criada por</th>
+        <th>Editada depois</th>
         <th>Atualização</th>
         <th>Ações</th>
       </tr>
     </thead>
     <tbody>
       <?php if (!$proposals): ?>
-        <tr><td colspan="8">Nenhuma proposta cadastrada.</td></tr>
+        <tr><td colspan="10">Nenhuma proposta cadastrada.</td></tr>
       <?php endif; ?>
       <?php foreach ($proposals as $row): ?>
         <?php $publicUrl = proposal_public_url($row); ?>
@@ -52,6 +54,17 @@ $proposals = $proposals ?? [];
           <td><?= brl((float) $row['total_value']) ?></td>
           <td><?= (int) $row['total_views'] ?></td>
           <td><?= number_format((float) $row['max_scroll'], 1, ',', '.') ?>%</td>
+          <td>
+            <?= h((string) ($row['created_by_admin_name'] ?? 'Não informado')) ?>
+          </td>
+          <td>
+            <?php if ((int) ($row['edited_after_create'] ?? 0) === 1): ?>
+              <span class="badge badge-viewed">Sim</span><br>
+              <small><?= h((string) ($row['last_edited_by_admin_name'] ?? '')) ?></small>
+            <?php else: ?>
+              <span class="badge">Não</span>
+            <?php endif; ?>
+          </td>
           <td>
             <?= h((string) $row['updated_at']) ?><br>
             <?php if ($publicUrl): ?>
@@ -80,5 +93,3 @@ $proposals = $proposals ?? [];
     </tbody>
   </table>
 </section>
-
-

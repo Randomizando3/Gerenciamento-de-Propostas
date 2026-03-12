@@ -327,12 +327,14 @@ function proposal_total(array $payload): float
     return round($total, 2);
 }
 
-function save_proposal(array $payload, ?int $id = null): int
+function save_proposal(array $payload, ?int $id = null, ?array $actor = null): int
 {
     $now = now_iso();
     $total = proposal_total($payload);
     $totalWords = currency_to_words_ptbr($total);
     $payloadJson = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $actorId = (int) ($actor['id'] ?? 0);
+    $actorName = trim((string) ($actor['name'] ?? ''));
 
     if ($id === null) {
         $row = db_insert('proposals', [
@@ -357,6 +359,11 @@ function save_proposal(array $payload, ?int $id = null): int
             'token' => null,
             'zapsign_doc_id' => '',
             'zapsign_sign_url' => $payload['zapsign_sign_url'],
+            'created_by_admin_id' => $actorId > 0 ? $actorId : null,
+            'created_by_admin_name' => $actorName,
+            'last_edited_by_admin_id' => $actorId > 0 ? $actorId : null,
+            'last_edited_by_admin_name' => $actorName,
+            'edited_after_create' => 0,
             'published_at' => null,
             'created_at' => $now,
             'updated_at' => $now,
@@ -366,7 +373,22 @@ function save_proposal(array $payload, ?int $id = null): int
 
     $existing = db_find('proposals', $id);
     if (!$existing) {
-        return save_proposal($payload, null);
+        return save_proposal($payload, null, $actor);
+    }
+
+    $lastEditedById = $actorId > 0
+        ? $actorId
+        : (int) ($existing['last_edited_by_admin_id'] ?? ($existing['created_by_admin_id'] ?? 0));
+    $lastEditedByName = $actorName !== ''
+        ? $actorName
+        : trim((string) ($existing['last_edited_by_admin_name'] ?? ($existing['created_by_admin_name'] ?? '')));
+    $createdById = (int) ($existing['created_by_admin_id'] ?? 0);
+    $createdByName = trim((string) ($existing['created_by_admin_name'] ?? ''));
+    if ($createdById <= 0 && $actorId > 0) {
+        $createdById = $actorId;
+    }
+    if ($createdByName === '' && $actorName !== '') {
+        $createdByName = $actorName;
     }
 
     db_update('proposals', $id, [
@@ -388,6 +410,11 @@ function save_proposal(array $payload, ?int $id = null): int
         'total_value_extenso' => $totalWords,
         'payload_json' => $payloadJson,
         'zapsign_sign_url' => $payload['zapsign_sign_url'],
+        'created_by_admin_id' => $createdById > 0 ? $createdById : null,
+        'created_by_admin_name' => $createdByName,
+        'last_edited_by_admin_id' => $lastEditedById > 0 ? $lastEditedById : null,
+        'last_edited_by_admin_name' => $lastEditedByName,
+        'edited_after_create' => 1,
         'updated_at' => $now,
     ]);
 
@@ -400,6 +427,7 @@ function get_proposal_by_id(int $id): ?array
     if (!$proposal) {
         return null;
     }
+    $proposal = normalize_proposal_audit_fields($proposal);
     $proposal['payload'] = decode_payload($proposal['payload_json']);
     return $proposal;
 }
@@ -410,6 +438,7 @@ function get_proposal_by_token(string $token): ?array
     if (!$proposal) {
         return null;
     }
+    $proposal = normalize_proposal_audit_fields($proposal);
     $proposal['payload'] = decode_payload($proposal['payload_json']);
     return $proposal;
 }
@@ -452,6 +481,7 @@ function list_proposals_with_metrics(): array
     }
 
     foreach ($rows as &$row) {
+        $row = normalize_proposal_audit_fields($row);
         $row['payload'] = decode_payload($row['payload_json']);
         $metrics = $viewMap[(int) $row['id']] ?? null;
         if ($metrics === null) {
@@ -499,7 +529,7 @@ function publish_proposal(int $id): ?array
     return get_proposal_by_id($id);
 }
 
-function duplicate_proposal(int $id): ?int
+function duplicate_proposal(int $id, ?array $actor = null): ?int
 {
     $source = get_proposal_by_id($id);
     if (!$source) {
@@ -510,9 +540,42 @@ function duplicate_proposal(int $id): ?int
     $payload['codigo_base'] = $payload['codigo_base'] . '-C' . random_int(10, 99);
     $payload['revisao'] = '00';
 
-    $newId = save_proposal($payload);
+    $newId = save_proposal($payload, null, $actor);
 
     return $newId;
+}
+
+function normalize_proposal_audit_fields(array $proposal): array
+{
+    $createdById = (int) ($proposal['created_by_admin_id'] ?? 0);
+    $createdByName = trim((string) ($proposal['created_by_admin_name'] ?? ''));
+    if ($createdByName === '' && $createdById > 0) {
+        $admin = db_find('admins', $createdById);
+        $createdByName = trim((string) ($admin['name'] ?? ''));
+    }
+
+    $lastEditedById = (int) ($proposal['last_edited_by_admin_id'] ?? 0);
+    $lastEditedByName = trim((string) ($proposal['last_edited_by_admin_name'] ?? ''));
+    if ($lastEditedByName === '' && $lastEditedById > 0) {
+        $admin = db_find('admins', $lastEditedById);
+        $lastEditedByName = trim((string) ($admin['name'] ?? ''));
+    }
+    if ($lastEditedByName === '') {
+        $lastEditedByName = $createdByName;
+    }
+
+    $editedFlag = $proposal['edited_after_create'] ?? null;
+    if ($editedFlag === null || $editedFlag === '') {
+        $editedFlag = 0;
+    }
+
+    $proposal['created_by_admin_id'] = $createdById > 0 ? $createdById : null;
+    $proposal['created_by_admin_name'] = $createdByName !== '' ? $createdByName : 'Não informado';
+    $proposal['last_edited_by_admin_id'] = $lastEditedById > 0 ? $lastEditedById : null;
+    $proposal['last_edited_by_admin_name'] = $lastEditedByName;
+    $proposal['edited_after_create'] = (int) $editedFlag === 1 ? 1 : 0;
+
+    return $proposal;
 }
 
 function proposal_public_url(array $proposal): ?string

@@ -206,6 +206,24 @@ a:hover {
   min-width: 980px;
 }
 
+.data-table.table-compact {
+  min-width: 0;
+}
+
+.users-grid {
+  grid-template-columns: minmax(280px, 1fr) minmax(0, 2fr);
+  align-items: start;
+}
+
+.users-table-wrap {
+  margin-top: 10px;
+  overflow-x: auto;
+}
+
+.users-table-wrap .data-table {
+  min-width: 760px;
+}
+
 .data-table th,
 .data-table td {
   padding: 11px 12px;
@@ -866,6 +884,7 @@ code {
   .cols-2,
   .cols-3,
   .cols-4,
+  .users-grid,
   .discipline-grid,
   .metrics-columns,
   .analytics-charts,

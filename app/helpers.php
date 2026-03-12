@@ -163,6 +163,12 @@ function require_auth(): void
         flash('error', 'Faça login para continuar.');
         redirect('/admin/login');
     }
+
+    if (current_admin() === null) {
+        logout_admin();
+        flash('error', 'Sessão inválida. Faça login novamente.');
+        redirect('/admin/login');
+    }
 }
 
 function current_admin(): ?array
@@ -174,11 +180,33 @@ function current_admin(): ?array
     if (!$admin) {
         return null;
     }
+    $roleRaw = mb_strtolower(trim((string) ($admin['role'] ?? '')), 'UTF-8');
+    $role = in_array($roleRaw, ['admin', 'editor'], true) ? $roleRaw : 'admin';
+
     return [
         'id' => $admin['id'],
         'name' => $admin['name'],
         'email' => $admin['email'],
+        'role' => $role,
     ];
+}
+
+function is_admin_user(?array $admin = null): bool
+{
+    $admin = $admin ?? current_admin();
+    if (!$admin) {
+        return false;
+    }
+    return mb_strtolower((string) ($admin['role'] ?? ''), 'UTF-8') === 'admin';
+}
+
+function require_admin(): void
+{
+    require_auth();
+    if (!is_admin_user()) {
+        flash('error', 'Acesso restrito a administradores.');
+        redirect('/admin');
+    }
 }
 
 function set_admin_session(array $admin): void
@@ -304,7 +332,7 @@ function default_settings_values(): array
         'company_bank_cnpj' => '23.012.176/0001-69',
         'company_bank_pix_key' => '23.012.176/0001-69',
         'company_bank_pix_key_type' => 'CNPJ',
-        'accept_terms_title' => 'CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE PROJETOS DE ENGENHARIA',
+        'accept_terms_title' => 'CONTRATO DE PRESTA��O DE SERVI�OS DE PROJETOS DE ENGENHARIA',
         'accept_terms_html' => '',
         'accept_terms_checkbox_text' => 'Li e concordo com os termos e condições apresentados acima. Autorizo o início dos trabalhos conforme proposta comercial {{PROPOSTA_NUM}}.',
     ];
@@ -471,5 +499,6 @@ function parse_multilines(string $value): array
     }
     return $clean;
 }
+
 
 

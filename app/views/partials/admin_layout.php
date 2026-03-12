@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /** @var string $title */
 /** @var array $flashes */
 $adminUser = current_admin();
@@ -6,7 +6,9 @@ $path = request_path();
 $isDashboard = $path === '/admin';
 $isProposals = $path === '/admin/proposals' || str_starts_with($path, '/admin/proposals/');
 $isNewProposal = $path === '/admin/proposals/new';
+$isUsers = str_starts_with($path, '/admin/users');
 $isSettings = str_starts_with($path, '/admin/settings');
+$isAdmin = is_admin_user($adminUser);
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -26,7 +28,10 @@ $isSettings = str_starts_with($path, '/admin/settings');
         <a href="/admin" class="<?= $isDashboard ? 'active' : '' ?>">Dashboard</a>
         <a href="/admin/proposals" class="<?= $isProposals && !$isNewProposal ? 'active' : '' ?>">Propostas</a>
         <a href="/admin/proposals/new" class="<?= $isNewProposal ? 'active' : '' ?>">Nova proposta</a>
-        <a href="/admin/settings" class="<?= $isSettings ? 'active' : '' ?>">Configurações</a>
+        <?php if ($isAdmin): ?>
+          <a href="/admin/users" class="<?= $isUsers ? 'active' : '' ?>">Usuários</a>
+          <a href="/admin/settings" class="<?= $isSettings ? 'active' : '' ?>">Configurações</a>
+        <?php endif; ?>
       </nav>
       <div class="sidebar-foot">
         <?php if ($adminUser): ?>
@@ -52,5 +57,3 @@ $isSettings = str_starts_with($path, '/admin/settings');
   <script src="/assets/js/admin.js" defer></script>
 </body>
 </html>
-
-

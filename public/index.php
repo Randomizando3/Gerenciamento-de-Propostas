@@ -36,6 +36,21 @@ if ($path === '/admin/proposals' && $method === 'GET') {
     return;
 }
 
+if ($path === '/admin/users' && $method === 'GET') {
+    admin_list_users();
+    return;
+}
+
+if ($path === '/admin/users' && $method === 'POST') {
+    admin_create_user_action();
+    return;
+}
+
+if (preg_match('#^/admin/users/(\d+)/delete$#', $path, $matches) && $method === 'POST') {
+    admin_delete_user_action((int) $matches[1]);
+    return;
+}
+
 if ($path === '/admin/proposals/new' && $method === 'GET') {
     admin_show_new_proposal_form();
     return;

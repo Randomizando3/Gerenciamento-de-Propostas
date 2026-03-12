@@ -1,5 +1,7 @@
-<?php
+﻿<?php
 $stats = $stats ?? [];
+$admin = current_admin();
+$isAdmin = is_admin_user($admin);
 ?>
 <section class="panel-head">
   <div>
@@ -9,7 +11,9 @@ $stats = $stats ?? [];
   <div class="inline-actions">
     <a class="btn btn-primary" href="/admin/proposals/new">Nova proposta</a>
     <a class="btn btn-ghost" href="/admin/proposals">Ver propostas</a>
-    <a class="btn btn-ghost" href="/admin/settings">Configurações</a>
+    <?php if ($isAdmin): ?>
+      <a class="btn btn-ghost" href="/admin/settings">Configurações</a>
+    <?php endif; ?>
   </div>
 </section>
 
@@ -47,11 +51,13 @@ $stats = $stats ?? [];
   </article>
   <article class="panel">
     <h2>Integrações</h2>
-    <p class="muted">Confira Clarity, ZapSign e URL base em Configurações.</p>
-    <div class="inline-actions" style="margin-top: 12px;">
-      <a class="btn btn-ghost" href="/admin/settings">Abrir configurações</a>
-    </div>
+    <?php if ($isAdmin): ?>
+      <p class="muted">Confira Clarity, ZapSign e URL base em Configurações.</p>
+      <div class="inline-actions" style="margin-top: 12px;">
+        <a class="btn btn-ghost" href="/admin/settings">Abrir configurações</a>
+      </div>
+    <?php else: ?>
+      <p class="muted">Somente administradores podem gerenciar integrações e configurações.</p>
+    <?php endif; ?>
   </article>
 </section>
-
-

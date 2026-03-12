@@ -34,6 +34,11 @@ function login_action(): void
         redirect('/admin/login');
     }
 
+    if ((int) ($admin['is_active'] ?? 1) !== 1) {
+        flash('error', 'Usuário inativo. Solicite liberação ao administrador.');
+        redirect('/admin/login');
+    }
+
     clear_old();
     set_admin_session($admin);
     flash('success', 'Bem-vindo! Painel liberado.');

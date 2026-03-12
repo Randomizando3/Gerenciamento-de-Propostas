@@ -28,6 +28,17 @@ function admin_list_proposals(): void
     ]);
 }
 
+function admin_list_users(): void
+{
+    require_admin();
+
+    render('admin/users', [
+        'title' => 'Usuários',
+        'admin' => current_admin(),
+        'users' => list_admin_users(),
+    ]);
+}
+
 function admin_show_new_proposal_form(): void
 {
     require_auth();
@@ -83,7 +94,7 @@ function admin_save_proposal_action(): void
 
     $payloadInput = normalize_admin_payload_input($_POST, $_FILES);
     $payload = normalize_proposal_payload($payloadInput, $basePayload);
-    $savedId = save_proposal($payload, $proposalId);
+    $savedId = save_proposal($payload, $proposalId, current_admin());
 
     flash('success', 'Proposta salva com sucesso.');
 
@@ -116,7 +127,7 @@ function admin_duplicate_proposal_action(int $proposalId): void
     require_auth();
     verify_csrf_or_die();
 
-    $newId = duplicate_proposal($proposalId);
+    $newId = duplicate_proposal($proposalId, current_admin());
     if ($newId === null) {
         flash('error', 'Não foi possível duplicar.');
         redirect('/admin');
@@ -124,6 +135,69 @@ function admin_duplicate_proposal_action(int $proposalId): void
 
     flash('success', 'Proposta duplicada com sucesso.');
     redirect('/admin/proposals/' . $newId . '/edit');
+}
+
+function admin_create_user_action(): void
+{
+    require_admin();
+    verify_csrf_or_die();
+
+    $name = trim((string) request_input('name', ''));
+    $email = mb_strtolower(trim((string) request_input('email', '')), 'UTF-8');
+    $role = mb_strtolower(trim((string) request_input('role', 'editor')), 'UTF-8');
+    $password = (string) request_input('password', '');
+    $passwordConfirm = (string) request_input('password_confirm', '');
+
+    if ($name === '' || $email === '' || $password === '' || $passwordConfirm === '') {
+        flash('error', 'Preencha nome, e-mail, senha e confirmação.');
+        redirect('/admin/users');
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        flash('error', 'Informe um e-mail válido.');
+        redirect('/admin/users');
+    }
+
+    if (mb_strlen($password, 'UTF-8') < 6) {
+        flash('error', 'A senha deve ter pelo menos 6 caracteres.');
+        redirect('/admin/users');
+    }
+
+    if (!hash_equals($password, $passwordConfirm)) {
+        flash('error', 'A confirmação de senha não confere.');
+        redirect('/admin/users');
+    }
+
+    try {
+        create_admin_user($name, $email, $password, $role);
+    } catch (InvalidArgumentException $exception) {
+        flash('error', $exception->getMessage());
+        redirect('/admin/users');
+    }
+
+    flash('success', 'Usuário criado com sucesso.');
+    redirect('/admin/users');
+}
+
+function admin_delete_user_action(int $userId): void
+{
+    require_admin();
+    verify_csrf_or_die();
+    $currentUserId = (int) ((current_admin()['id'] ?? 0));
+
+    if (!delete_admin_user($userId)) {
+        flash('error', 'Usuário não encontrado.');
+        redirect('/admin/users');
+    }
+
+    if ($currentUserId === $userId) {
+        logout_admin();
+        flash('success', 'Seu usuário foi removido.');
+        redirect('/admin/login');
+    }
+
+    flash('success', 'Usuário removido com sucesso.');
+    redirect('/admin/users');
 }
 
 function admin_show_preview(int $proposalId): void
@@ -170,7 +244,7 @@ function admin_show_analytics(int $proposalId): void
 
 function admin_show_settings(): void
 {
-    require_auth();
+    require_admin();
     render('admin/settings', [
         'title' => 'Configurações',
         'admin' => current_admin(),
@@ -181,7 +255,7 @@ function admin_show_settings(): void
 
 function admin_save_settings_action(): void
 {
-    require_auth();
+    require_admin();
     verify_csrf_or_die();
 
     $data = [
