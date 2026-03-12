@@ -15,6 +15,10 @@ storage/logs/*
 storage/backups/*
 !storage/backups/.gitkeep
 
+# Sensitive runtime data (contains API keys/tokens)
+storage/database.json
+storage/database-*.json
+
 # User uploads
 public/uploads/*
 !public/uploads/.gitkeep
@@ -26,6 +30,16 @@ public/uploads/disciplinas/*
 .env
 .env.*
 *.local
+
+# Certificates and private keys
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.jks
+*.keystore
 
 # Dependency folders (if used)
 vendor/
