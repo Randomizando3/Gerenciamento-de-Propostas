@@ -170,4 +170,3 @@ function api_tracking_event(): void
 
     json_response(['ok' => true]);
 }
-

@@ -9,7 +9,7 @@ if (!$focusProposal || !$focusMetrics) {
 <section class="panel-head">
   <div>
     <h1>Analytics da Proposta</h1>
-    <p><?= h((string) $focusProposal['code']) ?> - desempenho de leitura e conversao.</p>
+    <p><?= h((string) $focusProposal['code']) ?> - desempenho de leitura e conversão.</p>
   </div>
   <div class="inline-actions">
     <a class="btn btn-ghost" href="/admin/proposals">Voltar para propostas</a>
@@ -31,11 +31,11 @@ if (!$focusProposal || !$focusMetrics) {
     <strong><?= (int) ($stats['signed'] ?? 0) ?></strong>
   </article>
   <article class="stat-card">
-    <h3>Visualizacoes</h3>
+    <h3>Visualizações</h3>
     <strong><?= (int) ($stats['views'] ?? 0) ?></strong>
   </article>
   <article class="stat-card">
-    <h3>Scroll medio</h3>
+    <h3>Scroll médio</h3>
     <strong><?= number_format((float) ($stats['avg_scroll'] ?? 0), 1, ',', '.') ?>%</strong>
   </article>
 </section>
@@ -50,11 +50,11 @@ if (!$focusProposal || !$focusMetrics) {
       <strong><?= (int) $focusMetrics['views'] ?></strong>
     </article>
     <article class="stat-card">
-      <h3>Tempo medio</h3>
+      <h3>Tempo médio</h3>
       <strong><?= (int) $focusMetrics['avg_time_seconds'] ?>s</strong>
     </article>
     <article class="stat-card">
-      <h3>Scroll medio</h3>
+      <h3>Scroll médio</h3>
       <strong><?= number_format((float) $focusMetrics['avg_scroll'], 1, ',', '.') ?>%</strong>
     </article>
     <article class="stat-card">
@@ -97,7 +97,7 @@ if (!$focusProposal || !$focusMetrics) {
     <article class="panel chart-panel">
       <h3>Tempo por secao</h3>
       <?php if (empty($sections)): ?>
-        <p class="muted">Sem dados por secao ainda.</p>
+        <p class="muted">Sem dados por seção ainda.</p>
       <?php else: ?>
         <div class="bar-chart">
           <?php foreach ($sections as $section => $seconds): ?>
@@ -139,7 +139,7 @@ if (!$focusProposal || !$focusMetrics) {
       <h3>Funil de conversao</h3>
       <div class="funnel-rows">
         <div class="funnel-row">
-          <div class="funnel-head"><span>Visualizacoes</span><strong><?= (int) $focusMetrics['views'] ?></strong></div>
+          <div class="funnel-head"><span>Visualizações</span><strong><?= (int) $focusMetrics['views'] ?></strong></div>
           <div class="funnel-track"><span class="funnel-fill" style="width: 100%;"></span></div>
         </div>
         <div class="funnel-row">
@@ -167,3 +167,5 @@ if (!$focusProposal || !$focusMetrics) {
     </article>
   </div>
 </section>
+
+

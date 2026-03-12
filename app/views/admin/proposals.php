@@ -4,7 +4,7 @@ $proposals = $proposals ?? [];
 <section class="panel-head">
   <div>
     <h1>Propostas</h1>
-    <p>Lista completa de propostas com status, visualizacoes e acoes.</p>
+    <p>Lista completa de propostas com status, visualizações e ações.</p>
   </div>
   <div class="inline-actions">
     <a class="btn btn-primary" href="/admin/proposals/new">Nova proposta</a>
@@ -19,14 +19,14 @@ $proposals = $proposals ?? [];
   <table class="data-table">
     <thead>
       <tr>
-        <th>Codigo</th>
+        <th>Código</th>
         <th>Cliente</th>
         <th>Status</th>
         <th>Total</th>
-        <th>Views</th>
+        <th>Visualizações</th>
         <th>Scroll</th>
-        <th>Atualizacao</th>
-        <th>Acoes</th>
+        <th>Atualização</th>
+        <th>Ações</th>
       </tr>
     </thead>
     <tbody>
@@ -43,7 +43,7 @@ $proposals = $proposals ?? [];
             <?php endif; ?>
           </td>
           <td>
-            <?= h((string) ($row['client_name'] ?: 'Nao informado')) ?><br>
+            <?= h((string) ($row['client_name'] ?: 'Não informado')) ?><br>
             <small><?= h((string) ($row['obra_nome'] ?: 'Sem obra')) ?></small>
           </td>
           <td>
@@ -55,7 +55,7 @@ $proposals = $proposals ?? [];
           <td>
             <?= h((string) $row['updated_at']) ?><br>
             <?php if ($publicUrl): ?>
-              <a href="<?= h($publicUrl) ?>" target="_blank">Link publico</a>
+              <a href="<?= h($publicUrl) ?>" target="_blank">Link público</a>
             <?php endif; ?>
           </td>
           <td>
@@ -80,3 +80,5 @@ $proposals = $proposals ?? [];
     </tbody>
   </table>
 </section>
+
+

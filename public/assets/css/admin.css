@@ -338,9 +338,9 @@ a:hover {
 }
 
 .settings-form .field {
-  grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
-  align-items: center;
-  gap: 8px;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  gap: 6px;
 }
 
 .settings-form .field.field-top {
@@ -362,6 +362,20 @@ select {
   background: #fff;
 }
 
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+  min-width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: none;
+  accent-color: var(--teal-600);
+  flex: 0 0 auto;
+}
+
 textarea {
   resize: vertical;
   min-height: 90px;
@@ -373,6 +387,11 @@ select:focus {
   outline: 0;
   border-color: var(--teal-600);
   box-shadow: 0 0 0 3px rgba(15, 174, 179, 0.12);
+}
+
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  box-shadow: none;
 }
 
 .btn {

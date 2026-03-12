@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -380,7 +380,7 @@
 
     .hero-brand {
       margin-bottom: 3rem;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: flex-start;
     }
@@ -2728,30 +2728,30 @@
         </div>
 
         <div class="bank-card payment-method-card is-active" data-method="pix">
-          <h4>🏦 DADOS BANCÁRIOS</h4>
+          <h4>&#127974; DADOS BANCÁRIOS</h4>
           <p class="bank-line"><strong>Banco:</strong> {{BANK_NAME}}</p>
           <p class="bank-line"><strong>Agência:</strong> {{BANK_AGENCY}} — <strong>C/C:</strong> {{BANK_ACCOUNT}}</p>
           <p class="bank-line"><strong>Favorecido:</strong> {{BANK_FAVORED}}</p>
           <p class="bank-line"><strong>CNPJ:</strong> {{BANK_CNPJ}}</p>
           <p class="bank-line"><strong>Chave PIX ({{BANK_PIX_KEY_TYPE}}):</strong> {{BANK_PIX_KEY}}</p>
           <button class="pix-button pix-copy-button" data-pix-key="{{BANK_PIX_KEY}}" onclick="copyPix()">
-            📱 {{BANK_PIX_COPY_LABEL}}
+            &#128241; {{BANK_PIX_COPY_LABEL}}
           </button>
         </div>
 
         <div class="bank-card payment-method-card" data-method="cartao" data-enabled="{{PAYMENT_CARD_ENABLED}}" data-link="{{PAYMENT_CARD_LINK}}">
-          <h4>💳 {{PAYMENT_CARD_TITLE}}</h4>
+          <h4>&#128179; {{PAYMENT_CARD_TITLE}}</h4>
           <p class="payment-method-desc">{{PAYMENT_CARD_DESC}}</p>
           <a class="pix-button" href="{{PAYMENT_CARD_LINK}}" target="_blank" rel="noopener noreferrer">
-            🔗 {{PAYMENT_CARD_BUTTON}}
+            &#128279; {{PAYMENT_CARD_BUTTON}}
           </a>
         </div>
 
         <div class="bank-card payment-method-card" data-method="boleto" data-enabled="{{PAYMENT_BOLETO_ENABLED}}" data-link="{{PAYMENT_BOLETO_LINK}}">
-          <h4>🧾 {{PAYMENT_BOLETO_TITLE}}</h4>
+          <h4>&#129534; {{PAYMENT_BOLETO_TITLE}}</h4>
           <p class="payment-method-desc">{{PAYMENT_BOLETO_DESC}}</p>
           <a class="pix-button" href="{{PAYMENT_BOLETO_LINK}}" target="_blank" rel="noopener noreferrer">
-            🔗 {{PAYMENT_BOLETO_BUTTON}}
+            &#128279; {{PAYMENT_BOLETO_BUTTON}}
           </a>
         </div>
       </div>
@@ -2833,7 +2833,7 @@
       <p class="accept-subtitle">Ao aceitar esta proposta, você concorda com os termos e condições apresentados. Entraremos em contato para dar início ao projeto.</p>
       <div class="accept-buttons">
         <button class="accept-button" onclick="openModal()">✓ Aceitar Proposta</button>
-        <a href="#" class="download-button">📥 Baixar PDF</a>
+        <a href="#" class="download-button">&#128229; Baixar PDF</a>
       </div>
     </div>
   </section>
@@ -2902,7 +2902,7 @@
   <p class="contract-clause lvl3"><span class="contract-num">1.1.6.1.</span> Elaboração de um memorial técnico descritivo consolidando as informações sobre materiais, equipamentos, metodologias e normas aplicáveis a cada disciplina;</p>
   <p class="contract-clause lvl3"><span class="contract-num">1.1.6.2.</span> O documento incluirá recomendações técnicas, especificações detalhadas e orientações claras para a execução das instalações.</p>
 
-  <p class="contract-clause lvl2"><span class="contract-num">1.1.7.</span> Os projetos serão desenvolvidos por meio software CAD (“computer-aided design and drafting”), sendo que a CONTRATADA deverá possuir licenças de software de CAD para abertura e exame dos projetos;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">1.1.7.</span> Os projetos serão desenvolvidos por meio software CAD ("computer-aided design and drafting"), sendo que a CONTRATADA deverá possuir licenças de software de CAD para abertura e exame dos projetos;</p>
 
   <h4 class="contract-h">1.2. ITENS FORA DO ESCOPO</h4>
 
@@ -2914,7 +2914,7 @@
   <p class="contract-clause lvl2"><span class="contract-num">1.2.6.</span> Projeto de estudo de proteções ou projeto de média tensão;</p>
   <p class="contract-clause lvl2"><span class="contract-num">1.2.7.</span> Testes de aceitação ou comissionamento de sistemas instalados;</p>
   <p class="contract-clause lvl2"><span class="contract-num">1.2.8.</span> Qualquer serviços que não estiver explicitamente descrito no item 1.1, estará fora do escopo desse CONTRATO, bem como quaisquer alterações nos projetos arquitetônicos ou de engenharia e outras não elencadas solicitadas pela CONTRATANTE, devendo ser objeto de nova proposta.</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.2.8.1.</span> Caso a CONTRANTANTE determine alteração arquitetônica, para que a CONTRATADA realize serão cobrados honorários adicionais para análises, consultoria e elaboração do novo projeto;</p>
+  <p class="contract-clause lvl3"><span class="contract-num">1.2.8.1.</span> Caso a CONTRATANTE determine alteração arquitetônica, para que a CONTRATADA realize serão cobrados honorários adicionais para análises, consultoria e elaboração do novo projeto;</p>
   <p class="contract-clause lvl3"><span class="contract-num">1.2.8.2.</span> Alterações no escopo ou valor do projeto, por solicitação do cliente, deverão ser formalizadas por e-mail e sua realização dependerá de aditivo contratual, com ajustes nos prazos e valores previamente negociados;</p>
   <p class="contract-clause lvl3"><span class="contract-num">1.2.8.3.</span> A compatibilização dos projetos da CONTRATADA será realizada com base nos projetos fornecidos pela CONTRATANTE, logo inconsistências, erros de cálculo, etc. nesses projetos poderão impactar o cronograma e gerar custos adicionais, que serão previamente negociados;</p>
   <p class="contract-clause lvl2"><span class="contract-num">1.2.9.</span> quaisquer documentos que não estejam em formato eletrônico;</p>
@@ -2961,7 +2961,7 @@
   <p class="contract-clause lvl2"><span class="contract-num">4.1.2.</span> Prestar os serviços contratados descritos na cláusula 1.1, modo e prazos ajustados, dentro das normas e especificações técnicas vigentes;</p>
   <p class="contract-clause lvl2"><span class="contract-num">4.1.3.</span> Todos os projetos atenderão na integra as normas ABNT NBR vigentes, as Normas Regulamentadoras e aos Regulamentos das concessionárias atuantes no Rio de Janeiro.</p>
   <p class="contract-clause lvl2"><span class="contract-num">4.1.4.</span> Realizar até 2 (duas) visitas ao local da obra e até 2 (duas) reuniões com a CONTRATADA, necessárias à elaboração dos nossos trabalhos;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4.1.5.</span> Enviar todos os documentos elaborados por meio eletrônico em formatos para arquivos dos projetos gerados em programa formato AutoCAD “Drawing” (com extensão “DWG”) e descritivos e outros em “Portable Document Format” (com extensão “.PDF”), cadastrados no gerenciador eletrônico da CONTRATANTE, desde que previamente autorizado o acesso da CONTRATADA;</p>
+  <p class="contract-clause lvl2"><span class="contract-num">4.1.5.</span> Enviar todos os documentos elaborados por meio eletrônico em formatos para arquivos dos projetos gerados em programa formato AutoCAD "Drawing" (com extensão "DWG") e descritivos e outros em "Portable Document Format" (com extensão ".PDF"), cadastrados no gerenciador eletrônico da CONTRATANTE, desde que previamente autorizado o acesso da CONTRATADA;</p>
   <p class="contract-clause lvl2"><span class="contract-num">4.1.6.</span> Garantia de atendimento aos checklists da contratante e conformidade com os padrões de qualidade definidos;</p>
   <p class="contract-clause lvl2"><span class="contract-num">4.1.7.</span> Observar e fazer com que seus funcionários e/ou contratados respeitem as normas relativas à segurança e medicina do trabalho, fornecendo ainda Equipamento de Proteção Individual – EPI para todos;</p>
   <p class="contract-clause lvl2"><span class="contract-num">4.1.8.</span> Assumir a responsabilidade por qualquer indenização pleiteada por seus empregados/prepostos, principalmente no tocante a reclamações trabalhistas e acidentes do trabalho no decorrer da vigência do contrato;</p>
@@ -2972,11 +2972,11 @@
 
   <table class="contract-table">
     <tr><td><b>ITEM</b></td><td><b>ÍCONE</b></td><td><b>PROJETO OU SERVIÇO</b></td><td><b>PREÇO (EM R$)</b></td></tr>
-    <tr><td>5.1.1.</td><td>⚡</td><td>Elétrica</td><td>{{PRECO_ELETRICA}}</td></tr>
-    <tr><td>5.1.2.</td><td>📡</td><td>Projeto especiais</td><td>{{PRECO_ESPECIAIS}}</td></tr>
-    <tr><td>5.1.3.</td><td>🚰</td><td>Projeto da parte hidráulica</td><td>{{PRECO_HIDRAULICA}}</td></tr>
-    <tr><td>5.1.4.</td><td>🌀</td><td>Projeto de Esgoto Sanitário/Águas Pluviais</td><td>{{PRECO_ESGOTO_PLUVIAL}}</td></tr>
-    <tr><td>5.1.5.</td><td>🔥</td><td>Projeto de gás canalizado</td><td>{{PRECO_GAS}}</td></tr>
+    <tr><td>5.1.1.</td><td>âš¡</td><td>Elétrica</td><td>{{PRECO_ELETRICA}}</td></tr>
+    <tr><td>5.1.2.</td><td>&#128225;</td><td>Projeto especiais</td><td>{{PRECO_ESPECIAIS}}</td></tr>
+    <tr><td>5.1.3.</td><td>&#128688;</td><td>Projeto da parte hidráulica</td><td>{{PRECO_HIDRAULICA}}</td></tr>
+    <tr><td>5.1.4.</td><td>&#127744;</td><td>Projeto de Esgoto Sanitário/Águas Pluviais</td><td>{{PRECO_ESGOTO_PLUVIAL}}</td></tr>
+    <tr><td>5.1.5.</td><td>&#128293;</td><td>Projeto de gás canalizado</td><td>{{PRECO_GAS}}</td></tr>
   </table>
 
   <p class="contract-clause lvl1"><span class="contract-num">5.2.</span> Forma de pagamento → {{FORMA_PAGAMENTO_BASE}}. {{FORMA_PAGAMENTO_EXTRA}} Com as seguintes condições de pagamento:</p>
@@ -3006,7 +3006,7 @@
 
   <h4 class="contract-h">7. RESCISÃO</h4>
 
-  <p class="contract-clause lvl1"><span class="contract-num">7.1.</span> Em caso de rescisão antecipada do contrato por parte da CONTRATANTE esta deverá pagar à CONTRADA, além de todos os valores referentes aos projetos e serviços concluídos, multa penal correspondente a 15% (quinze por cento), ao preço indicado na cláusula 5.1.</p>
+  <p class="contract-clause lvl1"><span class="contract-num">7.1.</span> Em caso de rescisão antecipada do contrato por parte da CONTRATANTE esta deverá pagar à CONTRATADA, além de todos os valores referentes aos projetos e serviços concluídos, multa penal correspondente a 15% (quinze por cento), ao preço indicado na cláusula 5.1.</p>
 
   <table class="contract-table">
     <tr><td><b>ITEM</b></td><td><b>SERVIÇO</b></td><td><b>PERCENTUAL</b></td><td><b>PREÇO (EM R$)</b></td></tr>
@@ -3018,7 +3018,7 @@
   <p class="contract-clause lvl1"><span class="contract-num">8.1.</span> Os direitos autorais dos projetos elaborados pela CONTRATADA permanecerão sob sua titularidade, até o pagamento integral dos valores acordados.</p>
   <p class="contract-clause lvl2"><span class="contract-num">8.1.1.</span> Após a quitação, a CONTRATADA cederá os direitos autorais em favor da CONTRATANTE que terá direito ao uso exclusivo dos projetos para os fins descritos nesta proposta, sendo vedada sua reprodução, divulgação ou modificação sem autorização prévia por e-mail da CONTRATADA</p>
 
-  <p class="contract-clause lvl1"><span class="contract-num">8.2.</span> Anticorrupção (Lei nº 12.846/2013) → a despeito de, em princípio, este contrato não relação com Administração Pública direta ou indireta, a CONTRATANTE e a CONTRATADA estão cientes e se comprometem a não oferecer ou prometer vantagens a agentes públicos ou a pessoas relacionadas a eles, especialmente na vigência deste CONTRATO, declaram que seus sócios e administradores não estão envolvidos em atos de corrupção, fraude, lavagem de dinheiro, entre outros.</p>
+  <p class="contract-clause lvl1"><span class="contract-num">8.2.</span> Anticorrupção (Lei nº 12.846/2013) → a despeito de, em princípio, este contrato não ter relação com Administração Pública direta ou indireta, a CONTRATANTE e a CONTRATADA estão cientes e se comprometem a não oferecer ou prometer vantagens a agentes públicos ou a pessoas relacionadas a eles, especialmente na vigência deste CONTRATO, declaram que seus sócios e administradores não estão envolvidos em atos de corrupção, fraude, lavagem de dinheiro, entre outros.</p>
 
   <p class="contract-clause lvl1"><span class="contract-num">8.3.</span> LGPD (Lei nº 13.709/2018) → A CONTRATANTE e a CONTRATADA estão cientes que todas as partes deste CONTRATO devem ter o cuidado devido com os dados pessoais e eventual tratamento de seus funcionários, prepostos, colaboradores, subcontratados, sócios que devem ser orientados ao mesmo cuidado, sendo vedado o compartilhamento, com terceiros sem prévio e expresso consentimento, inclusive com a obrigação recíproca de devolver ou eliminar os dados pessoais em caso de rescisão contratual, comunicar imediatamente qualquer incidente envolvendo os dados, responder a questionamentos sobre os dados pessoais repassados, observados os princípios legais da proteção de dados (LGPD, Art. 6º).</p>
 
@@ -3028,7 +3028,7 @@
 
   <p class="contract-clause lvl1"><span class="contract-num">8.6.</span> Os valores a serem recebidos pela CONTRATADA poderão ser objeto de eventual operação de antecipação dos recebíveis, tão somente se já tiverem sido concluídos os serviços relativos aos valores cedidos.</p>
 
-  <p class="contract-clause lvl1"><span class="contract-num">8.7.</span> Esse documento será firmado através de “Assinatura Eletrônica Avançadas” ou por meio da “Assinatura Eletrônica Qualificada” (com chave/token ICP-Brasil), na forma da Lei n.º 14.063/2020, Art. 4º, II ou III, e, dessa forma, CONTRATANTE e CONTRATADA dispensam o reconhecimento de firma e testemunhas, como autoriza o CPC, Art. 784 §4º (incluído pela Lei nº 14.620, de 2023).</p>
+  <p class="contract-clause lvl1"><span class="contract-num">8.7.</span> Esse documento será firmado através de "Assinatura Eletrônica Avançadas" ou por meio da "Assinatura Eletrônica Qualificada" (com chave/token ICP-Brasil), na forma da Lei n.º 14.063/2020, Art. 4º, II ou III, e, dessa forma, CONTRATANTE e CONTRATADA dispensam o reconhecimento de firma e testemunhas, como autoriza o CPC, Art. 784 §4º (incluído pela Lei nº 14.620, de 2023).</p>
 
   <h4 class="contract-h">9. FORO</h4>
 
@@ -3036,7 +3036,7 @@
 
   <div class="contract-spacer"></div>
 
-  <p>Por estarem assim justos e acordados, este instrumento particular será firmado por meio de Assinatura Eletrônica Avançada ou Qualificada o CONTRATO será gerado somente em formato eletrônico Portable Documents Format ou “.pdf”.</p>
+  <p>Por estarem assim justos e acordados, este instrumento particular será firmado por meio de Assinatura Eletrônica Avançada ou Qualificada o CONTRATO será gerado somente em formato eletrônico Portable Documents Format ou ".pdf".</p>
 
   <p style="text-align:center; margin-top:18px;"><b>Rio de Janeiro, {{DATA_ASSINATURA}}.</b></p>
 
@@ -3211,6 +3211,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 

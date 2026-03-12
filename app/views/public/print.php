@@ -105,7 +105,7 @@ $total = proposal_total($payload);
       <div class="meta">
         <div><span>Código</span><strong><?= h((string) $payload['codigo_base']) ?></strong></div>
         <?php if (trim((string) ($payload['revisao'] ?? '')) !== '' && trim((string) ($payload['revisao'] ?? '')) !== '00'): ?>
-          <div><span>Revisao</span><strong><?= h((string) $payload['revisao']) ?></strong></div>
+          <div><span>Revisão</span><strong><?= h((string) $payload['revisao']) ?></strong></div>
         <?php endif; ?>
         <div><span>Prazo</span><strong><?= (int) $payload['prazo_dias'] ?> dias</strong></div>
         <div><span>Validade</span><strong><?= (int) $payload['validade_dias'] ?> dias</strong></div>
@@ -189,4 +189,3 @@ $total = proposal_total($payload);
   </script>
 </body>
 </html>
-

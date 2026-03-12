@@ -246,7 +246,7 @@ function admin_send_to_zapsign_action(int $proposalId): void
     $modeLabel = match ($mode) {
         'url_pdf' => 'PDF da proposta',
         'markdown_text' => 'Resumo em texto',
-        default => 'Integracao padrao',
+        default => 'Integração padrão',
     };
     flash('success', 'Proposta enviada para assinatura no ZapSign. Documento usado: ' . $modeLabel . '.');
     redirect('/admin/proposals/' . $proposalId . '/edit');
@@ -310,3 +310,5 @@ function save_uploaded_discipline_icon(?array $fileBag, int|string $index): ?str
 
     return '/uploads/disciplinas/' . $filename;
 }
+
+

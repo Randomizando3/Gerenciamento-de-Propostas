@@ -19,14 +19,14 @@ if (!is_array($stageRows) || $stageRows === []) {
 <section class="panel-head">
   <div>
     <h1><?= $isEdit ? 'Editar proposta' : 'Nova proposta' ?></h1>
-    <p>Fluxo completo: rascunho, preview, publicacao, tracking e assinatura.</p>
+    <p>Fluxo completo: rascunho, preview, publicação, tracking e assinatura.</p>
   </div>
   <div class="inline-actions">
     <a class="btn btn-ghost" href="/admin/proposals">Voltar</a>
     <?php if ($isEdit): ?>
       <a class="btn btn-ghost" href="/admin/proposals/<?= (int) $proposal['id'] ?>/preview" target="_blank">Abrir preview</a>
       <?php if ($publicUrl): ?>
-        <a class="btn btn-primary" href="<?= h($publicUrl) ?>" target="_blank">Abrir publica</a>
+        <a class="btn btn-primary" href="<?= h($publicUrl) ?>" target="_blank">Abrir pública</a>
       <?php endif; ?>
     <?php endif; ?>
   </div>
@@ -36,7 +36,7 @@ if (!is_array($stageRows) || $stageRows === []) {
   <section class="panel compact">
     <div class="inline-info">
       <span><strong>Status:</strong> <?= h(status_label((string) $proposal['status'])) ?></span>
-      <span><strong>Token:</strong> <?= h((string) ($proposal['token'] ?: 'nao publicado')) ?></span>
+      <span><strong>Token:</strong> <?= h((string) ($proposal['token'] ?: 'não publicado')) ?></span>
       <span><strong>Atualizado:</strong> <?= h((string) $proposal['updated_at']) ?></span>
     </div>
     <div class="inline-actions">
@@ -69,11 +69,11 @@ if (!is_array($stageRows) || $stageRows === []) {
       <h2>Dados gerais</h2>
       <div class="grid cols-3">
         <label class="field">
-          <span>Codigo base</span>
+          <span>Código base</span>
           <input type="text" name="codigo_base" value="<?= h((string) $payload['codigo_base']) ?>" required>
         </label>
         <label class="field">
-          <span>Revisao</span>
+          <span>Revisão</span>
           <input type="text" name="revisao" value="<?= h((string) $payload['revisao']) ?>" required>
         </label>
         <label class="field">
@@ -82,7 +82,7 @@ if (!is_array($stageRows) || $stageRows === []) {
         </label>
       </div>
       <label class="field">
-        <span>Titulo</span>
+        <span>Título</span>
         <input type="text" name="titulo" value="<?= h((string) $payload['titulo']) ?>">
       </label>
     </article>
@@ -91,7 +91,7 @@ if (!is_array($stageRows) || $stageRows === []) {
       <h2>Cliente</h2>
       <div class="grid cols-2">
         <label class="field">
-          <span>Nome responsavel</span>
+          <span>Nome responsável</span>
           <input type="text" name="cliente_nome" value="<?= h((string) $payload['cliente_nome']) ?>">
         </label>
         <label class="field">
@@ -119,7 +119,7 @@ if (!is_array($stageRows) || $stageRows === []) {
       </div>
       <div class="grid cols-3">
         <label class="field col-span-2">
-          <span>Endereco</span>
+          <span>Endereço</span>
           <input type="text" name="cliente_endereco" value="<?= h((string) $payload['cliente_endereco']) ?>">
         </label>
         <label class="field">
@@ -143,7 +143,7 @@ if (!is_array($stageRows) || $stageRows === []) {
           <input type="text" name="obra_nome" value="<?= h((string) $payload['obra_nome']) ?>">
         </label>
         <label class="field">
-          <span>Endereco da obra</span>
+          <span>Endereço da obra</span>
           <input type="text" name="obra_endereco" value="<?= h((string) $payload['obra_endereco']) ?>">
         </label>
       </div>
@@ -170,7 +170,7 @@ if (!is_array($stageRows) || $stageRows === []) {
         <textarea name="finalidade_obra" rows="2"><?= h((string) $payload['finalidade_obra']) ?></textarea>
       </label>
       <label class="field">
-        <span>Descricao do objeto</span>
+        <span>Descrição do objeto</span>
         <textarea name="descricao_objeto" rows="3"><?= h((string) $payload['descricao_objeto']) ?></textarea>
       </label>
     </article>
@@ -178,7 +178,7 @@ if (!is_array($stageRows) || $stageRows === []) {
 
   <section class="panel">
     <h2>Escopo e investimento por disciplina</h2>
-    <p class="muted">Selecione as disciplinas base. O sistema remove automaticamente do template o que nao foi marcado.</p>
+    <p class="muted">Selecione as disciplinas base. O sistema remove automaticamente do template o que não foi marcado.</p>
     <div class="discipline-grid">
       <?php foreach ($catalog as $key => $info): ?>
         <?php $checked = in_array($key, $payload['disciplinas'], true); ?>
@@ -219,17 +219,17 @@ if (!is_array($stageRows) || $stageRows === []) {
               <input type="text" name="disciplinas_custom[<?= (int) $index ?>][valor]" value="<?= h((string) number_format((float) ($discipline['valor'] ?? 0), 2, ',', '.')) ?>" data-money-input>
             </label>
             <label class="field">
-              <span>Icone atual (URL)</span>
+              <span>Ícone atual (URL)</span>
               <input type="text" name="disciplinas_custom[<?= (int) $index ?>][icone]" value="<?= h((string) ($discipline['icone'] ?? '')) ?>" placeholder="/uploads/disciplinas/exemplo.png">
             </label>
           </div>
           <div class="grid cols-2">
             <label class="field">
-              <span>Descricao do escopo</span>
+              <span>Descrição do escopo</span>
               <input type="text" name="disciplinas_custom[<?= (int) $index ?>][descricao]" value="<?= h((string) ($discipline['descricao'] ?? '')) ?>">
             </label>
             <label class="field">
-              <span>Enviar icone</span>
+              <span>Enviar ícone</span>
               <input type="file" name="disciplinas_custom_icone[<?= (int) $index ?>]" accept=".png,.jpg,.jpeg,.webp,.svg">
             </label>
           </div>
@@ -241,7 +241,7 @@ if (!is_array($stageRows) || $stageRows === []) {
       <div class="repeater-row custom-discipline-row">
         <div class="row-actions">
           <label class="checkbox-inline">
-            <input type="checkbox" name="disciplinas_custom[__INDEX__][ativa]" value="1" checked data-custom-discipline-active>
+            <input type="checkbox" name="disciplinas_custom[__INDEX__][ativa]" value="1" data-custom-discipline-active>
             Ativa
           </label>
           <button class="btn btn-ghost btn-sm repeater-remove" type="button">Remover</button>
@@ -257,17 +257,17 @@ if (!is_array($stageRows) || $stageRows === []) {
             <input type="text" name="disciplinas_custom[__INDEX__][valor]" value="0,00" data-money-input>
           </label>
           <label class="field">
-            <span>Icone atual (URL)</span>
+            <span>Ícone atual (URL)</span>
             <input type="text" name="disciplinas_custom[__INDEX__][icone]" value="" placeholder="/uploads/disciplinas/exemplo.png">
           </label>
         </div>
         <div class="grid cols-2">
           <label class="field">
-            <span>Descricao do escopo</span>
+            <span>Descrição do escopo</span>
             <input type="text" name="disciplinas_custom[__INDEX__][descricao]" value="">
           </label>
           <label class="field">
-            <span>Enviar icone</span>
+            <span>Enviar ícone</span>
             <input type="file" name="disciplinas_custom_icone[__INDEX__]" accept=".png,.jpg,.jpeg,.webp,.svg">
           </label>
         </div>
@@ -363,7 +363,7 @@ if (!is_array($stageRows) || $stageRows === []) {
               <input type="number" min="0" max="100" name="etapas[<?= (int) $index ?>][percentual]" value="<?= (int) ($etapa['percentual'] ?? 0) ?>">
             </label>
             <label class="field">
-              <span>Descricao</span>
+              <span>Descrição</span>
               <input type="text" name="etapas[<?= (int) $index ?>][descricao]" value="<?= h((string) ($etapa['descricao'] ?? '')) ?>">
             </label>
           </div>
@@ -385,7 +385,7 @@ if (!is_array($stageRows) || $stageRows === []) {
             <input type="number" min="0" max="100" name="etapas[__INDEX__][percentual]" value="0">
           </label>
           <label class="field">
-            <span>Descricao</span>
+            <span>Descrição</span>
             <input type="text" name="etapas[__INDEX__][descricao]" value="">
           </label>
         </div>
@@ -394,12 +394,12 @@ if (!is_array($stageRows) || $stageRows === []) {
   </section>
 
   <section class="panel">
-    <h2>Opcoes de pagamento complementares</h2>
-    <p class="muted">Se ativar, a proposta exibe seletor no card para PIX, cartao e/ou boleto.</p>
+    <h2>Opções de pagamento complementares</h2>
+    <p class="muted">Se ativar, a proposta exibe seletor no card para PIX, cartão e/ou boleto.</p>
     <div class="grid cols-2">
       <label class="checkbox-inline">
         <input type="checkbox" name="pagamento_cartao_ativo" value="1" <?= !empty($payload['pagamento_cartao_ativo']) ? 'checked' : '' ?>>
-        Habilitar pagamento por cartao
+        Habilitar pagamento por cartão
       </label>
       <label class="checkbox-inline">
         <input type="checkbox" name="pagamento_boleto_ativo" value="1" <?= !empty($payload['pagamento_boleto_ativo']) ? 'checked' : '' ?>>
@@ -409,35 +409,35 @@ if (!is_array($stageRows) || $stageRows === []) {
 
     <div class="grid cols-2">
       <label class="field">
-        <span>Titulo (cartao)</span>
-        <input type="text" name="pagamento_cartao_titulo" value="<?= h((string) ($payload['pagamento_cartao_titulo'] ?? 'Pagamento por cartao')) ?>">
+        <span>Título (cartão)</span>
+        <input type="text" name="pagamento_cartao_titulo" value="<?= h((string) ($payload['pagamento_cartao_titulo'] ?? 'Pagamento por cartão')) ?>">
       </label>
       <label class="field">
-        <span>Botao (cartao)</span>
-        <input type="text" name="pagamento_cartao_botao" value="<?= h((string) ($payload['pagamento_cartao_botao'] ?? 'Pagar no cartao')) ?>">
+        <span>Botão (cartão)</span>
+        <input type="text" name="pagamento_cartao_botao" value="<?= h((string) ($payload['pagamento_cartao_botao'] ?? 'Pagar no cartão')) ?>">
       </label>
     </div>
     <label class="field">
-      <span>Descricao (cartao)</span>
+      <span>Descrição (cartão)</span>
       <input type="text" name="pagamento_cartao_descricao" value="<?= h((string) ($payload['pagamento_cartao_descricao'] ?? '')) ?>">
     </label>
     <label class="field">
-      <span>Link de pagamento (cartao)</span>
+      <span>Link de pagamento (cartão)</span>
       <input type="url" name="pagamento_cartao_link" value="<?= h((string) ($payload['pagamento_cartao_link'] ?? '')) ?>" placeholder="https://...">
     </label>
 
     <div class="grid cols-2">
       <label class="field">
-        <span>Titulo (boleto)</span>
+        <span>Título (boleto)</span>
         <input type="text" name="pagamento_boleto_titulo" value="<?= h((string) ($payload['pagamento_boleto_titulo'] ?? 'Pagamento por boleto')) ?>">
       </label>
       <label class="field">
-        <span>Botao (boleto)</span>
+        <span>Botão (boleto)</span>
         <input type="text" name="pagamento_boleto_botao" value="<?= h((string) ($payload['pagamento_boleto_botao'] ?? 'Abrir boleto')) ?>">
       </label>
     </div>
     <label class="field">
-      <span>Descricao (boleto)</span>
+      <span>Descrição (boleto)</span>
       <input type="text" name="pagamento_boleto_descricao" value="<?= h((string) ($payload['pagamento_boleto_descricao'] ?? '')) ?>">
     </label>
     <label class="field">
@@ -447,10 +447,10 @@ if (!is_array($stageRows) || $stageRows === []) {
   </section>
 
   <section class="panel">
-    <h2>Observacoes e exclusoes</h2>
+    <h2>Observações e exclusões</h2>
     <div class="grid cols-2">
       <label class="field">
-        <span>Consideracoes importantes (1 por linha)</span>
+        <span>Considerações importantes (1 por linha)</span>
         <textarea name="consideracoes" rows="8"><?= h(implode("\n", $payload['consideracoes'])) ?></textarea>
       </label>
       <label class="field">
@@ -459,7 +459,7 @@ if (!is_array($stageRows) || $stageRows === []) {
       </label>
     </div>
     <label class="field">
-      <span>Observacoes finais</span>
+      <span>Observações finais</span>
       <textarea name="observacoes" rows="3"><?= h((string) $payload['observacoes']) ?></textarea>
     </label>
     <label class="field">
@@ -473,3 +473,6 @@ if (!is_array($stageRows) || $stageRows === []) {
     <button type="submit" name="save_mode" value="preview" class="btn btn-ghost">Salvar e visualizar preview</button>
   </section>
 </form>
+
+
+

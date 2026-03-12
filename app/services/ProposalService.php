@@ -40,25 +40,25 @@ function default_proposal_payload(): array
         'disciplinas_custom' => [],
         'valores_custom' => [],
         'etapas' => [
-            ['nome' => 'Sinal e kick-off', 'percentual' => 20, 'descricao' => 'Assinatura e inÃ­cio'],
-            ['nome' => 'Projeto bÃ¡sico', 'percentual' => 30, 'descricao' => 'Entrega preliminar'],
+            ['nome' => 'Sinal e kick-off', 'percentual' => 20, 'descricao' => 'Assinatura e início'],
+            ['nome' => 'Projeto básico', 'percentual' => 30, 'descricao' => 'Entrega preliminar'],
             ['nome' => 'Projeto executivo', 'percentual' => 30, 'descricao' => 'Entrega executiva'],
-            ['nome' => 'AprovaÃ§Ã£o final', 'percentual' => 20, 'descricao' => 'Encerramento'],
+            ['nome' => 'Aprovação final', 'percentual' => 20, 'descricao' => 'Encerramento'],
         ],
         'arquivos' => [
             ['item' => 'ARQ-01', 'nome' => 'Memorial descritivo', 'rev' => '00', 'link' => ''],
-            ['item' => 'ARQ-02', 'nome' => 'Projeto bÃ¡sico', 'rev' => '00', 'link' => ''],
+            ['item' => 'ARQ-02', 'nome' => 'Projeto básico', 'rev' => '00', 'link' => ''],
             ['item' => 'ARQ-03', 'nome' => 'Projeto executivo', 'rev' => '00', 'link' => ''],
         ],
         'consideracoes' => [
-            'A aprovaÃ§Ã£o em concessionÃ¡rias depende dos prazos de anÃ¡lise dos Ã³rgÃ£os.',
+            'A aprovação em concessionárias depende dos prazos de análise dos órgãos.',
             'Escopo considera somente disciplinas selecionadas nesta proposta.',
-            'AlteraÃ§Ãµes apÃ³s aceite podem gerar custos adicionais.',
+            'Alterações após aceite podem gerar custos adicionais.',
         ],
         'exclusoes' => [
-            'ExecuÃ§Ã£o fÃ­sica da obra.',
+            'Execução física da obra.',
             'Fornecimento de materiais e equipamentos.',
-            'Taxas e emolumentos de concessionÃ¡rias.',
+            'Taxas e emolumentos de concessionárias.',
         ],
         'pagamento_cartao_ativo' => false,
         'pagamento_cartao_titulo' => 'Pagamento por cartao',
@@ -79,29 +79,29 @@ function discipline_catalog(): array
 {
     return [
         'eletrica' => [
-            'nome' => 'ElÃ©trica',
+            'nome' => 'Elétrica',
             'icone' => '/assets/img/icon-eletrica.png',
-            'descricao' => 'Projeto de instalaÃ§Ãµes elÃ©tricas, cargas, quadros e detalhamentos tÃ©cnicos.',
+            'descricao' => 'Projeto de instalações elétricas, cargas, quadros e detalhamentos técnicos.',
         ],
         'hidraulica' => [
-            'nome' => 'HidrÃ¡ulica',
+            'nome' => 'Hidráulica',
             'icone' => '/assets/img/icon-hidraulica.png',
-            'descricao' => 'Projeto de Ã¡gua fria/quente, distribuiÃ§Ã£o, barrilete e pontos de consumo.',
+            'descricao' => 'Projeto de água fria/quente, distribuição, barrilete e pontos de consumo.',
         ],
         'esgoto' => [
             'nome' => 'Esgoto',
             'icone' => '/assets/img/icon-esgoto.png',
-            'descricao' => 'Projeto sanitÃ¡rio, ventilaÃ§Ã£o e encaminhamento para rede pÃºblica.',
+            'descricao' => 'Projeto sanitário, ventilação e encaminhamento para rede pública.',
         ],
         'gas' => [
-            'nome' => 'GÃ¡s',
+            'nome' => 'Gás',
             'icone' => '/assets/img/icon-gas.png',
-            'descricao' => 'Projeto de gÃ¡s conforme normas aplicÃ¡veis e seguranÃ§a operacional.',
+            'descricao' => 'Projeto de gás conforme normas aplicáveis e segurança operacional.',
         ],
         'especiais' => [
             'nome' => 'Especiais',
             'icone' => '/assets/img/icon-especiais.png',
-            'descricao' => 'SoluÃ§Ãµes especiais como SPDA, incÃªndio e sistemas complementares.',
+            'descricao' => 'Soluções especiais como SPDA, incêndio e sistemas complementares.',
         ],
     ];
 }
@@ -641,7 +641,7 @@ function render_proposal_template_html(array $proposal, array $payload, array $s
 {
     $templatePath = base_path('propostabase.html');
     if (!file_exists($templatePath)) {
-        return '<h1>Template de proposta nÃ£o encontrado.</h1>';
+        return '<h1>Template de proposta não encontrado.</h1>';
     }
 
     $template = file_get_contents($templatePath);
@@ -765,10 +765,10 @@ function render_proposal_template_html(array $proposal, array $payload, array $s
     }
     if ($timelineStages === []) {
         $timelineStages = [
-            ['nome' => 'ConcepÃ§Ã£o', 'descricao' => 'DefiniÃ§Ã£o inicial do escopo.', 'badge' => '10 dias', 'ordem' => '1Âª'],
-            ['nome' => 'Estudo Preliminar', 'descricao' => 'Diretrizes e validaÃ§Ã£o inicial.', 'badge' => '15 dias', 'ordem' => '2Âª'],
-            ['nome' => 'Projeto BÃ¡sico', 'descricao' => 'ConsolidaÃ§Ã£o tÃ©cnica.', 'badge' => '10 dias', 'ordem' => '3Âª'],
-            ['nome' => 'Projeto Executivo', 'descricao' => 'Entrega final do detalhamento.', 'badge' => 'Final', 'ordem' => '4Âª'],
+            ['nome' => 'Concepção', 'descricao' => 'Definição inicial do escopo.', 'badge' => '10 dias', 'ordem' => '1ª'],
+            ['nome' => 'Estudo Preliminar', 'descricao' => 'Diretrizes e validação inicial.', 'badge' => '15 dias', 'ordem' => '2ª'],
+            ['nome' => 'Projeto Básico', 'descricao' => 'Consolidação técnica.', 'badge' => '10 dias', 'ordem' => '3ª'],
+            ['nome' => 'Projeto Executivo', 'descricao' => 'Entrega final do detalhamento.', 'badge' => 'Final', 'ordem' => '4ª'],
         ];
     }
 
@@ -784,7 +784,7 @@ function render_proposal_template_html(array $proposal, array $payload, array $s
     );
 
     if ($previewMode) {
-        $previewBar = '<div style="position:sticky;top:0;z-index:99999;background:#ffe79f;color:#5f4600;padding:8px 12px;font:700 12px/1.2 Arial,sans-serif;text-align:center;border-bottom:1px solid #e9cc78;">PrÃ©-visualizaÃ§Ã£o interna - tracking e redirecionamento de assinatura desativados.</div>';
+        $previewBar = '<div style="position:sticky;top:0;z-index:99999;background:#ffe79f;color:#5f4600;padding:8px 12px;font:700 12px/1.2 Arial,sans-serif;text-align:center;border-bottom:1px solid #e9cc78;">Pré-visualização interna - tracking e redirecionamento de assinatura desativados.</div>';
         $template = str_replace('<body>', '<body>' . $previewBar, $template);
     }
 
@@ -800,26 +800,26 @@ function acceptance_terms_variable_catalog(): array
     $keys = array_keys(build_proposal_placeholder_map($sampleProposal, default_proposal_payload(), default_settings_values()));
 
     $knownDescriptions = [
-        'PROPOSTA_NUM' => 'CÃ³digo da proposta (ex: P260311-293)',
-        'CODIGO_BASE' => 'CÃ³digo base da proposta',
-        'REVISAO' => 'RevisÃ£o atual (vazio quando 00)',
+        'PROPOSTA_NUM' => 'Código da proposta (ex: P260311-293)',
+        'CODIGO_BASE' => 'Código base da proposta',
+        'REVISAO' => 'Revisão atual (vazio quando 00)',
         'NOME_CLIENTE' => 'Nome do cliente',
-        'CONTRATANTE_RAZAO' => 'RazÃ£o/nome do contratante',
+        'CONTRATANTE_RAZAO' => 'Razão/nome do contratante',
         'CONTRATANTE_CNPJ' => 'CNPJ do contratante',
         'CONTRATANTE_EMAIL' => 'E-mail do contratante',
-        'CONTRATANTE_ENDERECO' => 'EndereÃ§o do contratante',
+        'CONTRATANTE_ENDERECO' => 'Endereço do contratante',
         'CONTRATANTE_MUNICIPIO' => 'Cidade do contratante',
         'CONTRATANTE_UF' => 'UF do contratante',
         'CONTRATANTE_CEP' => 'CEP do contratante',
         'OBRA' => 'Nome da obra',
-        'OBRA_ENDERECO_COMPLETO' => 'EndereÃ§o completo da obra',
+        'OBRA_ENDERECO_COMPLETO' => 'Endereço completo da obra',
         'DATA_PROPOSTA' => 'Data da proposta',
         'DATA_ASSINATURA' => 'Data de assinatura',
         'PRAZO_DIAS' => 'Prazo em dias',
         'VALIDADE_PROPOSTA' => 'Validade da proposta',
         'VALOR_TOTAL' => 'Valor total formatado (R$)',
         'VALOR_TOTAL_EXTENSO' => 'Valor por extenso',
-        'PRECO_TOTAL' => 'Valor total numÃ©rico para contrato',
+        'PRECO_TOTAL' => 'Valor total numérico para contrato',
         'BANK_NAME' => 'Banco para pagamento via PIX',
         'BANK_AGENCY' => 'Agencia bancaria',
         'BANK_ACCOUNT' => 'Conta corrente bancaria',
@@ -835,7 +835,7 @@ function acceptance_terms_variable_catalog(): array
 
     $catalog = [];
     foreach ($keys as $key) {
-        $catalog[$key] = $knownDescriptions[$key] ?? 'Valor dinÃ¢mico da proposta.';
+        $catalog[$key] = $knownDescriptions[$key] ?? 'Valor dinâmico da proposta.';
     }
     ksort($catalog);
 
@@ -966,7 +966,7 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
 
     $formatDiscipline = static function (string $key) use ($discSet, $values): string {
         if (!isset($discSet[$key])) {
-            return 'NÃ£o incluso';
+            return 'Não incluso';
         }
         return brl((float) ($values[$key] ?? 0.0));
     };
@@ -1017,7 +1017,7 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
     if (!is_array($consideracoes)) {
         $consideracoes = [];
     }
-    $flowText = 'ConcepÃ§Ã£o > Estudo preliminar > Projeto bÃ¡sico > Projeto executivo > Entrega final';
+    $flowText = 'Concepção > Estudo preliminar > Projeto básico > Projeto executivo > Entrega final';
     $cronogramaParts = [];
     foreach ($etapas as $item) {
         if (!is_array($item)) {
@@ -1061,8 +1061,8 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
 
     $cardLink = trim((string) ($payload['pagamento_cartao_link'] ?? ''));
     $boletoLink = trim((string) ($payload['pagamento_boleto_link'] ?? ''));
-    $cardEnabled = !empty($payload['pagamento_cartao_ativo']) && $cardLink !== '';
-    $boletoEnabled = !empty($payload['pagamento_boleto_ativo']) && $boletoLink !== '';
+    $cardEnabled = !empty($payload['pagamento_cartao_ativo']);
+    $boletoEnabled = !empty($payload['pagamento_boleto_ativo']);
     $paymentMethodsCount = 1 + ($cardEnabled ? 1 : 0) + ($boletoEnabled ? 1 : 0);
 
     $paymentBaseText = 'o pagamento podera ser realizado por transferencia eletronica (PIX), por meio da chave '
@@ -1075,10 +1075,10 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         . $bankAccount;
 
     $paymentExtraParts = [];
-    if ($cardEnabled) {
+    if ($cardEnabled && $cardLink !== '') {
         $paymentExtraParts[] = 'Tambem e possivel pagar por cartao no link: ' . $cardLink . '.';
     }
-    if ($boletoEnabled) {
+    if ($boletoEnabled && $boletoLink !== '') {
         $paymentExtraParts[] = 'Tambem e possivel pagar por boleto no link: ' . $boletoLink . '.';
     }
     $paymentExtraText = implode(' ', $paymentExtraParts);
@@ -1461,35 +1461,72 @@ function proposal_runtime_script(
     const wrapper = document.getElementById('payment-methods');
     if (!wrapper) return;
 
+    const note = document.querySelector('.payment-note');
     const tabsWrap = wrapper.querySelector('.payment-method-switch');
     const tabs = Array.from(wrapper.querySelectorAll('.payment-method-tab'));
     const cards = Array.from(wrapper.querySelectorAll('.payment-method-card'));
     if (cards.length === 0) return;
 
     const available = [];
+    const tabByMethod = new Map();
+    tabs.forEach((tab) => {
+      const method = (tab.getAttribute('data-method') || '').trim();
+      if (method) tabByMethod.set(method, tab);
+    });
+
+    const syncMethodAction = (card, method) => {
+      if (method !== 'cartao' && method !== 'boleto') return;
+      const action = card.querySelector('.pix-button');
+      if (!action) return;
+      const link = (card.getAttribute('data-link') || '').trim();
+
+      if (link !== '') {
+        action.setAttribute('href', link);
+        action.removeAttribute('aria-disabled');
+        action.classList.remove('is-disabled');
+        action.style.display = 'inline-flex';
+        return;
+      }
+
+      action.removeAttribute('href');
+      action.setAttribute('aria-disabled', 'true');
+      action.classList.add('is-disabled');
+      action.style.display = 'none';
+    };
+
     cards.forEach((card) => {
       const method = (card.getAttribute('data-method') || '').trim();
       if (!method) return;
 
       let enabled = true;
       if (method === 'cartao') {
-        enabled = card.getAttribute('data-enabled') === '1' && (card.getAttribute('data-link') || '').trim() !== '';
+        enabled = card.getAttribute('data-enabled') === '1';
       } else if (method === 'boleto') {
-        enabled = card.getAttribute('data-enabled') === '1' && (card.getAttribute('data-link') || '').trim() !== '';
+        enabled = card.getAttribute('data-enabled') === '1';
       }
+      syncMethodAction(card, method);
+
+      const tab = tabByMethod.get(method);
 
       if (!enabled) {
         card.style.display = 'none';
-        tabs.forEach((tab) => {
-          if ((tab.getAttribute('data-method') || '').trim() === method) {
-            tab.style.display = 'none';
-          }
-        });
+        if (tab) tab.style.display = 'none';
         return;
       }
 
+      card.style.display = '';
+      if (tab) tab.style.display = '';
       available.push(method);
     });
+
+    if (available.length === 0) {
+      wrapper.style.display = 'none';
+      if (note) note.style.display = 'none';
+      return;
+    }
+
+    wrapper.style.display = '';
+    if (note) note.style.display = '';
 
     const activate = (method) => {
       cards.forEach((card) => {
@@ -1506,6 +1543,7 @@ function proposal_runtime_script(
       tab.addEventListener('click', () => {
         const method = (tab.getAttribute('data-method') || '').trim();
         if (!method) return;
+        if (available.indexOf(method) === -1) return;
         activate(method);
       });
     });
@@ -1513,7 +1551,7 @@ function proposal_runtime_script(
     if (tabsWrap) {
       tabsWrap.style.display = available.length > 1 ? 'inline-flex' : 'none';
     }
-    activate(available[0] || 'pix');
+    activate(available[0]);
   }
 
   const downloadButton = document.getElementById('download-pdf-button');
@@ -1543,7 +1581,7 @@ function proposal_runtime_script(
   function setupAcceptance() {
     const acceptButton = document.getElementById('accept-proposal-button');
     if (acceptButton && previewMode) {
-      acceptButton.textContent = 'âœ“ PrÃ©-visualizaÃ§Ã£o';
+      acceptButton.textContent = '✓ Pré-visualização';
     }
 
     window.confirmAcceptance = function () {
@@ -1699,6 +1737,8 @@ function normalize_revision_for_display(string $revision): string
     }
     return $revision;
 }
+
+
 
 
 

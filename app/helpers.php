@@ -300,11 +300,11 @@ function default_settings_values(): array
         'company_bank_name' => 'Banco Inter (077)',
         'company_bank_agency' => '0001',
         'company_bank_account' => '3375106-4',
-        'company_bank_favored' => 'Complementare Projetos de Instalacoes LTDA-EPP',
+        'company_bank_favored' => 'Complementare Projetos de Instalações LTDA-EPP',
         'company_bank_cnpj' => '23.012.176/0001-69',
         'company_bank_pix_key' => '23.012.176/0001-69',
         'company_bank_pix_key_type' => 'CNPJ',
-        'accept_terms_title' => 'CONTRATO DE PRESTACAO DE SERVICOS DE PROJETOS DE ENGENHARIA',
+        'accept_terms_title' => 'CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE PROJETOS DE ENGENHARIA',
         'accept_terms_html' => '',
         'accept_terms_checkbox_text' => 'Li e concordo com os termos e condições apresentados acima. Autorizo o início dos trabalhos conforme proposta comercial {{PROPOSTA_NUM}}.',
     ];
@@ -471,3 +471,5 @@ function parse_multilines(string $value): array
     }
     return $clean;
 }
+
+

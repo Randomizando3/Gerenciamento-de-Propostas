@@ -4,12 +4,12 @@ $stats = $stats ?? [];
 <section class="panel-head">
   <div>
     <h1>Painel Administrativo</h1>
-    <p>Visao geral de desempenho das propostas e conversao.</p>
+    <p>Visão geral de desempenho das propostas e conversão.</p>
   </div>
   <div class="inline-actions">
     <a class="btn btn-primary" href="/admin/proposals/new">Nova proposta</a>
     <a class="btn btn-ghost" href="/admin/proposals">Ver propostas</a>
-    <a class="btn btn-ghost" href="/admin/settings">Configuracoes</a>
+    <a class="btn btn-ghost" href="/admin/settings">Configurações</a>
   </div>
 </section>
 
@@ -27,11 +27,11 @@ $stats = $stats ?? [];
     <strong><?= (int) ($stats['signed'] ?? 0) ?></strong>
   </article>
   <article class="stat-card">
-    <h3>Visualizacoes</h3>
+    <h3>Visualizações</h3>
     <strong><?= (int) ($stats['views'] ?? 0) ?></strong>
   </article>
   <article class="stat-card">
-    <h3>Scroll medio</h3>
+    <h3>Scroll médio</h3>
     <strong><?= number_format((float) ($stats['avg_scroll'] ?? 0), 1, ',', '.') ?>%</strong>
   </article>
 </section>
@@ -39,17 +39,19 @@ $stats = $stats ?? [];
 <section class="grid cols-2">
   <article class="panel">
     <h2>Atalhos</h2>
-    <p class="muted">Acesse rapidamente as principais acoes do fluxo comercial.</p>
+    <p class="muted">Acesse rapidamente as principais ações do fluxo comercial.</p>
     <div class="inline-actions" style="margin-top: 12px;">
       <a class="btn btn-primary" href="/admin/proposals/new">Criar proposta</a>
       <a class="btn btn-ghost" href="/admin/proposals">Listar propostas</a>
     </div>
   </article>
   <article class="panel">
-    <h2>Integracoes</h2>
-    <p class="muted">Confira Clarity, ZapSign e URL base em Configuracoes.</p>
+    <h2>Integrações</h2>
+    <p class="muted">Confira Clarity, ZapSign e URL base em Configurações.</p>
     <div class="inline-actions" style="margin-top: 12px;">
-      <a class="btn btn-ghost" href="/admin/settings">Abrir configuracoes</a>
+      <a class="btn btn-ghost" href="/admin/settings">Abrir configurações</a>
     </div>
   </article>
 </section>
+
+
