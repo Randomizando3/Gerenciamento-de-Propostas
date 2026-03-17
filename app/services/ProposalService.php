@@ -27,6 +27,14 @@ function default_proposal_payload(): array
         'obra_uf' => '',
         'finalidade_obra' => '',
         'descricao_objeto' => '',
+        'intro_title' => 'Obrigado pelo convite para desenvolver os projetos de instalações da {{OBRA}}.',
+        'files_section_label' => '01 - INTRODUÇÃO',
+        'files_section_title' => 'Arquivos Recebidos',
+        'files_section_subtitle' => 'A presente proposta foi elaborada utilizando arquivos enviados via WhatsApp no dia {{DATA_ARQUIVOS}}.',
+        'guidelines_title' => 'Diretrizes Gerais',
+        'guidelines_subtitle' => '',
+        'guidelines_items' => default_guidelines_items(),
+        'scope_items' => default_scope_blueprints(),
         'prazo_dias' => 7,
         'validade_dias' => 10,
         'disciplinas' => ['eletrica', 'hidraulica', 'esgoto'],
@@ -40,15 +48,15 @@ function default_proposal_payload(): array
         'disciplinas_custom' => [],
         'valores_custom' => [],
         'etapas' => [
-            ['nome' => 'Sinal e kick-off', 'percentual' => 20, 'descricao' => 'Assinatura e início'],
-            ['nome' => 'Projeto básico', 'percentual' => 30, 'descricao' => 'Entrega preliminar'],
-            ['nome' => 'Projeto executivo', 'percentual' => 30, 'descricao' => 'Entrega executiva'],
-            ['nome' => 'Aprovação final', 'percentual' => 20, 'descricao' => 'Encerramento'],
+            ['nome' => 'Sinal e kick-off', 'prazo' => '20 dias', 'descricao' => 'Assinatura e início'],
+            ['nome' => 'Projeto básico', 'prazo' => '15 dias', 'descricao' => 'Entrega preliminar'],
+            ['nome' => 'Projeto executivo', 'prazo' => '10 dias', 'descricao' => 'Entrega executiva'],
+            ['nome' => 'Aprovação final', 'prazo' => 'Final', 'descricao' => 'Encerramento'],
         ],
         'arquivos' => [
-            ['item' => 'ARQ-01', 'nome' => 'Memorial descritivo', 'rev' => '00', 'link' => ''],
-            ['item' => 'ARQ-02', 'nome' => 'Projeto básico', 'rev' => '00', 'link' => ''],
-            ['item' => 'ARQ-03', 'nome' => 'Projeto executivo', 'rev' => '00', 'link' => ''],
+            ['item' => 'ARQ-01', 'nome' => 'Memorial descritivo', 'rev' => '00', 'data' => $today->format('d/m/Y')],
+            ['item' => 'ARQ-02', 'nome' => 'Projeto básico', 'rev' => '00', 'data' => $today->format('d/m/Y')],
+            ['item' => 'ARQ-03', 'nome' => 'Projeto executivo', 'rev' => '00', 'data' => $today->format('d/m/Y')],
         ],
         'consideracoes' => [
             'A aprovação em concessionárias depende dos prazos de análise dos órgãos.',
@@ -61,49 +69,194 @@ function default_proposal_payload(): array
             'Taxas e emolumentos de concessionárias.',
         ],
         'pagamento_cartao_ativo' => false,
-        'pagamento_cartao_titulo' => 'Pagamento por cartao',
-        'pagamento_cartao_descricao' => 'Use o link seguro para pagar no cartao de credito.',
+        'pagamento_cartao_titulo' => 'Pagamento por cartão',
+        'pagamento_cartao_descricao' => 'Use o link seguro para pagar no cartão de crédito.',
         'pagamento_cartao_link' => '',
-        'pagamento_cartao_botao' => 'Pagar no cartao',
+        'pagamento_cartao_botao' => 'Pagar no cartão',
         'pagamento_boleto_ativo' => false,
         'pagamento_boleto_titulo' => 'Pagamento por boleto',
         'pagamento_boleto_descricao' => 'Use o link para emitir ou visualizar o boleto.',
         'pagamento_boleto_link' => '',
         'pagamento_boleto_botao' => 'Abrir boleto',
+        'header_title_layout' => 'default',
+        'header_aditivo_kicker' => 'PROPOSTA',
+        'header_aditivo_title' => 'ADITIVO DA PROPOSTA',
+        'header_custom_media_enabled' => false,
+        'header_custom_media_url' => '',
+        'acceptance_mode' => 'contract',
+        'accept_terms_title' => '',
+        'accept_terms_html' => '',
+        'accept_summary_html' => '',
+        'accept_terms_checkbox_text' => '',
         'observacoes' => '',
         'zapsign_sign_url' => '',
+    ];
+}
+
+function default_guidelines_items(): array
+{
+    return [
+        ['title' => 'Normas e Conformidade', 'content' => 'Projetos conforme ABNT NBR, NRs e regulamentos das concessionárias do Rio de Janeiro.', 'icon' => '/assets/img/guideline-1.png'],
+        ['title' => 'ART Emitida', 'content' => 'Anotação de Responsabilidade Técnica dos projetos será emitida.', 'icon' => '/assets/img/guideline-2.png'],
+        ['title' => 'Entrega DWG e PDF', 'content' => 'Projetos executivos cadastrados no gerenciador eletrônico do empreendimento.', 'icon' => '/assets/img/guideline-3.png'],
+        ['title' => 'Checklists de Qualidade', 'content' => 'Garantia de atendimento aos padrões de qualidade definidos pela contratante.', 'icon' => '/assets/img/guideline-4.png'],
+        ['title' => 'Reuniões de Coordenação', 'content' => 'Participação ativa para alinhamento técnico e solução de interferências.', 'icon' => '/assets/img/guideline-5.png'],
+        ['title' => 'Metodologia BIM', 'content' => 'Os projetos serão desenvolvidos em metodologia BIM.', 'icon' => '/assets/img/guideline-6.png'],
+    ];
+}
+
+function default_scope_blueprints(): array
+{
+    return [
+        'eletrica' => [
+            'title' => 'Projeto Elétrico de Baixa Tensão',
+            'subtitle' => '',
+            'summary' => 'Projeto de instalações elétricas, cargas, quadros e detalhamentos técnicos.',
+            'icon' => '/assets/img/scope-eletrica.png',
+            'topics' => [
+                'Projeto do sistema de distribuição de força e luz.',
+                'Projetos dos quadros de força, iluminação e tomadas, com apresentação dos diagramas trifilares, conforme padrões e normas brasileiras, em especial a NBR 5410.',
+                'Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra.',
+            ],
+        ],
+        'especiais' => [
+            'title' => 'Projeto de Especiais',
+            'subtitle' => 'Rede de dados, telefonia, CFTV, TV e som',
+            'summary' => 'Soluções especiais como dados, CFTV, telefonia e sistemas complementares.',
+            'icon' => '/assets/img/scope-especiais.png',
+            'topics' => [
+                'Projeto de distribuição e dimensionamento de tubulação seca para rede de telefonia, dados, antena, CFTV e sonorização.',
+                'Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra.',
+            ],
+        ],
+        'hidraulica' => [
+            'title' => 'Projeto Hidráulico',
+            'subtitle' => '',
+            'summary' => 'Projeto de água fria/quente, distribuição, barrilete e pontos de consumo.',
+            'icon' => '/assets/img/scope-hidraulica.png',
+            'topics' => [
+                'Projeto executivo e detalhes; desenvolvimento do projeto conforme NBR 5626 e 8160.',
+                'Detalhamento dos pontos de coleta de esgoto e dos aparelhos em plantas, cortes e detalhes gerais.',
+                'Distribuição da rede interna de água fria e água quente para abastecimento dos pontos de consumo, com plantas, vistas e detalhes.',
+                'Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra.',
+            ],
+        ],
+        'esgoto' => [
+            'title' => 'Projeto de Esgoto Sanitário',
+            'subtitle' => '',
+            'summary' => 'Projeto sanitário, ventilação e encaminhamento para rede pública.',
+            'icon' => '/assets/img/scope-esgoto.png',
+            'topics' => [
+                'Projeto executivo e detalhes; desenvolvimento do projeto conforme NBR 5626 e 8160.',
+                'Detalhamento dos pontos de coleta de esgoto e dos aparelhos em plantas, cortes e detalhes gerais.',
+                'Distribuição da rede interna de água fria e água quente para abastecimento dos pontos de consumo, com plantas, vistas e detalhes.',
+                'Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra.',
+            ],
+        ],
+        'gas' => [
+            'title' => 'Projeto de Gás Canalizado',
+            'subtitle' => '',
+            'summary' => 'Projeto de gás conforme normas aplicáveis e segurança operacional.',
+            'icon' => '/assets/img/scope-gas.png',
+            'topics' => [
+                'Distribuição interna das instalações de gás e detalhes de execução conforme padrões e normas brasileiras.',
+                'Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra.',
+            ],
+        ],
     ];
 }
 
 function discipline_catalog(): array
 {
     return [
-        'eletrica' => [
-            'nome' => 'Elétrica',
-            'icone' => '/assets/img/icon-eletrica.png',
-            'descricao' => 'Projeto de instalações elétricas, cargas, quadros e detalhamentos técnicos.',
-        ],
-        'hidraulica' => [
-            'nome' => 'Hidráulica',
-            'icone' => '/assets/img/icon-hidraulica.png',
-            'descricao' => 'Projeto de água fria/quente, distribuição, barrilete e pontos de consumo.',
-        ],
-        'esgoto' => [
-            'nome' => 'Esgoto',
-            'icone' => '/assets/img/icon-esgoto.png',
-            'descricao' => 'Projeto sanitário, ventilação e encaminhamento para rede pública.',
-        ],
-        'gas' => [
-            'nome' => 'Gás',
-            'icone' => '/assets/img/icon-gas.png',
-            'descricao' => 'Projeto de gás conforme normas aplicáveis e segurança operacional.',
-        ],
-        'especiais' => [
-            'nome' => 'Especiais',
-            'icone' => '/assets/img/icon-especiais.png',
-            'descricao' => 'Soluções especiais como SPDA, incêndio e sistemas complementares.',
-        ],
+        'eletrica' => ['nome' => 'Elétrica', 'icone' => '/assets/img/scope-eletrica.png', 'descricao' => 'Projeto de instalações elétricas, cargas, quadros e detalhamentos técnicos.'],
+        'hidraulica' => ['nome' => 'Hidráulica', 'icone' => '/assets/img/scope-hidraulica.png', 'descricao' => 'Projeto de água fria/quente, distribuição, barrilete e pontos de consumo.'],
+        'esgoto' => ['nome' => 'Esgoto', 'icone' => '/assets/img/scope-esgoto.png', 'descricao' => 'Projeto sanitário, ventilação e encaminhamento para rede pública.'],
+        'gas' => ['nome' => 'Gás', 'icone' => '/assets/img/scope-gas.png', 'descricao' => 'Projeto de gás conforme normas aplicáveis e segurança operacional.'],
+        'especiais' => ['nome' => 'Especiais', 'icone' => '/assets/img/scope-especiais.png', 'descricao' => 'Soluções especiais como SPDA, incêndio e sistemas complementares.'],
     ];
+}
+
+function normalize_topic_lines(mixed $value): array
+{
+    if (is_string($value)) {
+        $value = parse_multilines($value);
+    }
+    if (!is_array($value)) {
+        return [];
+    }
+
+    $lines = [];
+    foreach ($value as $line) {
+        $line = trim((string) $line);
+        if ($line !== '') {
+            $lines[] = $line;
+        }
+    }
+
+    return $lines;
+}
+
+function proposal_flag_enabled(mixed $value): bool
+{
+    if (is_bool($value)) {
+        return $value;
+    }
+    if (is_int($value) || is_float($value)) {
+        return (int) $value === 1;
+    }
+    if (is_string($value)) {
+        $normalized = mb_strtolower(trim($value), 'UTF-8');
+        return in_array($normalized, ['1', 'true', 'on', 'yes', 'sim'], true);
+    }
+    return false;
+}
+
+function proposal_payload_for_model(array $payload): array
+{
+    $payload = normalize_proposal_payload($payload, $payload);
+    $payload['codigo_base'] = '';
+    $payload['revisao'] = '00';
+    $payload['data_proposta'] = '';
+    $payload['cliente_nome'] = '';
+    $payload['cliente_empresa'] = '';
+    $payload['cliente_cnpj'] = '';
+    $payload['cliente_email'] = '';
+    $payload['cliente_telefone'] = '';
+    $payload['cliente_endereco'] = '';
+    $payload['cliente_cidade'] = '';
+    $payload['cliente_uf'] = '';
+    $payload['cliente_cep'] = '';
+    $payload['obra_nome'] = '';
+    $payload['obra_endereco'] = '';
+    $payload['obra_cidade'] = '';
+    $payload['obra_uf'] = '';
+    $payload['zapsign_sign_url'] = '';
+
+    return $payload;
+}
+
+function proposal_payload_from_model(array $payload): array
+{
+    $defaults = default_proposal_payload();
+    $modelPayload = normalize_proposal_payload($payload, $payload);
+    $newPayload = array_replace_recursive($defaults, $modelPayload);
+
+    $newPayload['codigo_base'] = $defaults['codigo_base'];
+    $newPayload['revisao'] = '00';
+    $newPayload['data_proposta'] = $defaults['data_proposta'];
+    $newPayload['cliente_nome'] = '';
+    $newPayload['cliente_empresa'] = '';
+    $newPayload['cliente_cnpj'] = '';
+    $newPayload['cliente_email'] = '';
+    $newPayload['cliente_telefone'] = '';
+    $newPayload['cliente_endereco'] = '';
+    $newPayload['cliente_cidade'] = '';
+    $newPayload['cliente_uf'] = '';
+    $newPayload['cliente_cep'] = '';
+    $newPayload['zapsign_sign_url'] = '';
+
+    return $newPayload;
 }
 
 function normalize_proposal_payload(array $input, ?array $base = null): array
@@ -112,46 +265,33 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
     $payload = $base ? array_replace_recursive($defaults, $base) : $defaults;
 
     $stringFields = [
-        'codigo_base',
-        'revisao',
-        'titulo',
-        'data_proposta',
-        'cliente_nome',
-        'cliente_empresa',
-        'cliente_cnpj',
-        'cliente_email',
-        'cliente_telefone',
-        'cliente_endereco',
-        'cliente_cidade',
-        'cliente_uf',
-        'cliente_cep',
-        'obra_nome',
-        'obra_endereco',
-        'obra_cidade',
-        'obra_uf',
-        'finalidade_obra',
-        'descricao_objeto',
-        'pagamento_cartao_titulo',
-        'pagamento_cartao_descricao',
-        'pagamento_cartao_link',
-        'pagamento_cartao_botao',
-        'pagamento_boleto_titulo',
-        'pagamento_boleto_descricao',
-        'pagamento_boleto_link',
-        'pagamento_boleto_botao',
-        'observacoes',
-        'zapsign_sign_url',
+        'codigo_base', 'revisao', 'titulo', 'data_proposta', 'cliente_nome', 'cliente_empresa', 'cliente_cnpj', 'cliente_email', 'cliente_telefone',
+        'cliente_endereco', 'cliente_cidade', 'cliente_uf', 'cliente_cep', 'obra_nome', 'obra_endereco', 'obra_cidade', 'obra_uf', 'finalidade_obra',
+        'descricao_objeto', 'intro_title', 'files_section_label', 'files_section_title', 'files_section_subtitle', 'guidelines_title', 'guidelines_subtitle',
+        'pagamento_cartao_titulo', 'pagamento_cartao_descricao', 'pagamento_cartao_link', 'pagamento_cartao_botao', 'pagamento_boleto_titulo',
+        'pagamento_boleto_descricao', 'pagamento_boleto_link', 'pagamento_boleto_botao', 'header_title_layout',
+        'header_aditivo_kicker', 'header_aditivo_title', 'header_custom_media_url', 'acceptance_mode', 'accept_terms_title',
+        'accept_terms_html', 'accept_summary_html', 'accept_terms_checkbox_text', 'observacoes', 'zapsign_sign_url',
     ];
-
     foreach ($stringFields as $field) {
         if (array_key_exists($field, $input)) {
             $payload[$field] = trim((string) $input[$field]);
         }
     }
 
-    $payload['pagamento_cartao_ativo'] = isset($input['pagamento_cartao_ativo']) && (string) $input['pagamento_cartao_ativo'] !== '0';
-    $payload['pagamento_boleto_ativo'] = isset($input['pagamento_boleto_ativo']) && (string) $input['pagamento_boleto_ativo'] !== '0';
-
+    $payload['pagamento_cartao_ativo'] = array_key_exists('pagamento_cartao_ativo', $input)
+        ? proposal_flag_enabled($input['pagamento_cartao_ativo'])
+        : false;
+    $payload['pagamento_boleto_ativo'] = array_key_exists('pagamento_boleto_ativo', $input)
+        ? proposal_flag_enabled($input['pagamento_boleto_ativo'])
+        : false;
+    $payload['header_custom_media_enabled'] = array_key_exists('header_custom_media_enabled', $input)
+        ? proposal_flag_enabled($input['header_custom_media_enabled'])
+        : false;
+    $layout = trim((string) ($input['header_title_layout'] ?? ($payload['header_title_layout'] ?? 'default')));
+    $payload['header_title_layout'] = $layout === 'aditivo' ? 'aditivo' : 'default';
+    $acceptanceMode = trim((string) ($input['acceptance_mode'] ?? ($payload['acceptance_mode'] ?? 'contract')));
+    $payload['acceptance_mode'] = $acceptanceMode === 'summary' ? 'summary' : 'contract';
     $payload['prazo_dias'] = (int) clamp((int) ($input['prazo_dias'] ?? $payload['prazo_dias']), 1, 365);
     $payload['validade_dias'] = (int) clamp((int) ($input['validade_dias'] ?? $payload['validade_dias']), 1, 365);
 
@@ -170,7 +310,52 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
     }
     $payload['valores'] = $values;
 
-    $customDisciplinesInput = $input['disciplinas_custom'] ?? $payload['disciplinas_custom'] ?? [];
+    $scopeDefaults = default_scope_blueprints();
+    $scopeBase = is_array($payload['scope_items'] ?? null) ? $payload['scope_items'] : [];
+    $scopeInput = $input['scope_items'] ?? $scopeBase;
+    if (!is_array($scopeInput)) {
+        $scopeInput = [];
+    }
+    $scopeItems = [];
+    foreach ($scopeDefaults as $key => $defaultItem) {
+        $baseItem = is_array($scopeBase[$key] ?? null) ? $scopeBase[$key] : [];
+        $source = is_array($scopeInput[$key] ?? null) ? $scopeInput[$key] : [];
+        $merged = array_replace_recursive($defaultItem, $baseItem, $source);
+        $scopeItems[$key] = [
+            'title' => trim((string) ($merged['title'] ?? $defaultItem['title'])),
+            'subtitle' => trim((string) ($merged['subtitle'] ?? '')),
+            'summary' => trim((string) ($merged['summary'] ?? $defaultItem['summary'])),
+            'icon' => trim((string) ($merged['icon'] ?? $defaultItem['icon'])),
+            'topics' => array_slice(normalize_topic_lines($merged['topics'] ?? $defaultItem['topics']), 0, 24),
+        ];
+    }
+    $payload['scope_items'] = $scopeItems;
+
+    $guidelinesInput = $input['guidelines_items'] ?? ($payload['guidelines_items'] ?? []);
+    if (!is_array($guidelinesInput)) {
+        $guidelinesInput = [];
+    }
+    $guidelineDefaults = default_guidelines_items();
+    $guidelines = [];
+    foreach ($guidelinesInput as $index => $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $defaultItem = $guidelineDefaults[$index] ?? ['title' => '', 'content' => '', 'icon' => ''];
+        $title = trim((string) ($item['title'] ?? $defaultItem['title'] ?? ''));
+        $content = trim((string) ($item['content'] ?? $defaultItem['content'] ?? ''));
+        $icon = trim((string) ($item['icon'] ?? $defaultItem['icon'] ?? ''));
+        if ($title === '' && $content === '') {
+            continue;
+        }
+        $guidelines[] = ['title' => $title !== '' ? $title : 'Diretriz', 'content' => $content, 'icon' => $icon];
+    }
+    if ($guidelines === []) {
+        $guidelines = $guidelineDefaults;
+    }
+    $payload['guidelines_items'] = array_slice($guidelines, 0, 24);
+
+    $customDisciplinesInput = $input['disciplinas_custom'] ?? ($payload['disciplinas_custom'] ?? []);
     if (!is_array($customDisciplinesInput)) {
         $customDisciplinesInput = [];
     }
@@ -189,20 +374,17 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
         if ($key === '') {
             $key = 'custom-' . ((int) $index + 1);
         }
-        $descricao = trim((string) ($item['descricao'] ?? ''));
-        $icone = trim((string) ($item['icone'] ?? ''));
-        $valor = round(to_float($item['valor'] ?? 0), 2);
-        $ativa = isset($item['ativa']) && (string) $item['ativa'] !== '0';
-
         $customDisciplines[] = [
             'key' => $key,
             'nome' => $nome,
-            'descricao' => $descricao,
-            'icone' => $icone,
-            'valor' => $valor,
-            'ativa' => $ativa,
+            'subtitle' => trim((string) ($item['subtitle'] ?? '')),
+            'descricao' => trim((string) ($item['descricao'] ?? '')),
+            'icone' => trim((string) ($item['icone'] ?? '')),
+            'valor' => round(to_float($item['valor'] ?? 0), 2),
+            'ativa' => isset($item['ativa']) && (string) ($item['ativa'] ?? '0') !== '0',
+            'topics' => array_slice(normalize_topic_lines($item['topics'] ?? []), 0, 24),
         ];
-        $customValues[$key] = $valor;
+        $customValues[$key] = round(to_float($item['valor'] ?? 0), 2);
     }
     $payload['disciplinas_custom'] = array_slice($customDisciplines, 0, 24);
     $payload['valores_custom'] = $customValues;
@@ -230,12 +412,15 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
             continue;
         }
         $name = trim((string) ($stage['nome'] ?? ''));
-        $percentual = (int) clamp((int) ($stage['percentual'] ?? 0), 0, 100);
+        $prazo = trim((string) ($stage['prazo'] ?? ''));
+        if ($prazo === '' && isset($stage['percentual'])) {
+            $prazo = (string) ((int) $stage['percentual']) . '%';
+        }
         $descricao = trim((string) ($stage['descricao'] ?? ''));
         if ($name === '') {
             continue;
         }
-        $normalizedStages[] = ['nome' => $name, 'percentual' => $percentual, 'descricao' => $descricao];
+        $normalizedStages[] = ['nome' => $name, 'prazo' => $prazo !== '' ? $prazo : 'Etapa', 'descricao' => $descricao];
     }
     if ($normalizedStages === []) {
         $normalizedStages = $payload['etapas'];
@@ -254,54 +439,19 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
         $item = trim((string) ($file['item'] ?? ''));
         $nome = trim((string) ($file['nome'] ?? ''));
         $rev = trim((string) ($file['rev'] ?? ''));
-        $link = trim((string) ($file['link'] ?? ''));
+        $data = trim((string) ($file['data'] ?? ($file['link'] ?? '')));
         if ($item === '' && $nome === '') {
             continue;
         }
-        $normalizedFiles[] = [
-            'item' => $item !== '' ? $item : 'ARQ',
-            'nome' => $nome !== '' ? $nome : 'Arquivo',
-            'rev' => $rev,
-            'link' => $link,
-        ];
+        $normalizedFiles[] = ['item' => $item !== '' ? $item : 'ARQ', 'nome' => $nome !== '' ? $nome : 'Arquivo', 'rev' => $rev, 'data' => $data];
     }
     $payload['arquivos'] = array_slice($normalizedFiles, 0, 40);
 
-    $consideracoesInput = $input['consideracoes'] ?? $payload['consideracoes'];
-    if (is_string($consideracoesInput)) {
-        $consideracoesInput = parse_multilines($consideracoesInput);
-    }
-    if (!is_array($consideracoesInput)) {
-        $consideracoesInput = [];
-    }
-    $consideracoes = [];
-    foreach ($consideracoesInput as $line) {
-        $line = trim((string) $line);
-        if ($line !== '') {
-            $consideracoes[] = $line;
-        }
-    }
-    $payload['consideracoes'] = array_slice($consideracoes, 0, 20);
-
-    $exclusoesInput = $input['exclusoes'] ?? $payload['exclusoes'];
-    if (is_string($exclusoesInput)) {
-        $exclusoesInput = parse_multilines($exclusoesInput);
-    }
-    if (!is_array($exclusoesInput)) {
-        $exclusoesInput = [];
-    }
-    $exclusoes = [];
-    foreach ($exclusoesInput as $line) {
-        $line = trim((string) $line);
-        if ($line !== '') {
-            $exclusoes[] = $line;
-        }
-    }
-    $payload['exclusoes'] = array_slice($exclusoes, 0, 40);
+    $payload['consideracoes'] = array_slice(normalize_topic_lines($input['consideracoes'] ?? $payload['consideracoes']), 0, 30);
+    $payload['exclusoes'] = array_slice(normalize_topic_lines($input['exclusoes'] ?? $payload['exclusoes']), 0, 40);
 
     return $payload;
 }
-
 function proposal_total(array $payload): float
 {
     $total = 0.0;
@@ -452,7 +602,7 @@ function decode_payload(string $payloadJson): array
     return normalize_proposal_payload($payload, $payload);
 }
 
-function list_proposals_with_metrics(): array
+function list_proposals_with_metrics(array $filters = []): array
 {
     $rows = db_all('proposals');
     $allViews = db_all('proposal_views');
@@ -500,6 +650,48 @@ function list_proposals_with_metrics(): array
         }
     }
     unset($row);
+
+    $query = mb_strtolower(trim((string) ($filters['query'] ?? '')), 'UTF-8');
+    $status = trim((string) ($filters['status'] ?? ''));
+    $client = mb_strtolower(trim((string) ($filters['client'] ?? '')), 'UTF-8');
+    $minValue = round(to_float($filters['min_total'] ?? 0), 2);
+    $maxValueRaw = trim((string) ($filters['max_total'] ?? ''));
+    $maxValue = $maxValueRaw !== '' ? round(to_float($maxValueRaw), 2) : null;
+
+    if ($query !== '' || $status !== '' || $client !== '' || $minValue > 0 || $maxValue !== null) {
+        $rows = array_values(array_filter($rows, static function (array $row) use ($query, $status, $client, $minValue, $maxValue): bool {
+            $haystack = mb_strtolower(
+                implode(' ', [
+                    (string) ($row['code'] ?? ''),
+                    (string) ($row['title'] ?? ''),
+                    (string) ($row['client_name'] ?? ''),
+                    (string) ($row['client_company'] ?? ''),
+                    (string) ($row['obra_nome'] ?? ''),
+                ]),
+                'UTF-8'
+            );
+
+            if ($query !== '' && !str_contains($haystack, $query)) {
+                return false;
+            }
+            if ($status !== '' && (string) ($row['status'] ?? '') !== $status) {
+                return false;
+            }
+            if ($client !== '' && !str_contains($haystack, $client)) {
+                return false;
+            }
+
+            $total = (float) ($row['total_value'] ?? 0);
+            if ($minValue > 0 && $total < $minValue) {
+                return false;
+            }
+            if ($maxValue !== null && $total > $maxValue) {
+                return false;
+            }
+
+            return true;
+        }));
+    }
 
     usort(
         $rows,
@@ -594,6 +786,40 @@ function proposal_print_url(array $proposal): ?string
     }
 
     return app_url('/p/' . $proposal['token'] . '/print');
+}
+
+function proposal_media_type_from_url(string $url): string
+{
+    $path = (string) parse_url($url, PHP_URL_PATH);
+    $extension = mb_strtolower(pathinfo($path, PATHINFO_EXTENSION), 'UTF-8');
+    if (in_array($extension, ['mp4', 'webm', 'ogg', 'mov', 'm4v'], true)) {
+        return 'video';
+    }
+
+    return 'image';
+}
+
+function proposal_contract_url(array $proposal): ?string
+{
+    if (empty($proposal['token'])) {
+        return null;
+    }
+
+    return app_url('/p/' . $proposal['token'] . '/contract');
+}
+
+function proposal_acceptance_mode(array $payload): string
+{
+    $mode = trim((string) ($payload['acceptance_mode'] ?? 'contract'));
+    return $mode === 'summary' ? 'summary' : 'contract';
+}
+
+function proposal_acceptance_document_url(array $proposal, ?array $payload = null): ?string
+{
+    $resolvedPayload = is_array($payload) ? $payload : (is_array($proposal['payload'] ?? null) ? (array) $proposal['payload'] : []);
+    return proposal_acceptance_mode($resolvedPayload) === 'summary'
+        ? proposal_print_url($proposal)
+        : proposal_contract_url($proposal);
 }
 
 function get_dashboard_stats(): array
@@ -738,7 +964,7 @@ function render_proposal_template_html(array $proposal, array $payload, array $s
     }
     $template = str_replace('{ANO}', (string) date('Y'), $template);
     $template = preg_replace('/\{\{[A-Z0-9_]+\}\}/', '', $template) ?? $template;
-    $template = apply_accept_terms_customization($template, $settings, $replaceMap);
+    $template = apply_accept_terms_customization($template, $payload, $settings, $replaceMap);
 
     $template = preg_replace_callback(
         '/<section class="section section-teal" id="exclusoes">.*?<\/section>/si',
@@ -777,73 +1003,12 @@ function render_proposal_template_html(array $proposal, array $payload, array $s
         1
     ) ?? $template;
 
-    $selectedDisciplines = $payload['disciplinas'] ?? [];
-    if (!is_array($selectedDisciplines)) {
-        $selectedDisciplines = [];
-    }
-    $selectedDisciplines = array_values(array_unique(array_filter($selectedDisciplines, 'is_string')));
-
-    $customDisciplines = [];
-    $customInput = $payload['disciplinas_custom'] ?? [];
-    if (is_array($customInput)) {
-        foreach ($customInput as $item) {
-            if (!is_array($item)) {
-                continue;
-            }
-            $nome = trim((string) ($item['nome'] ?? ''));
-            if ($nome === '') {
-                continue;
-            }
-            $customDisciplines[] = [
-                'key' => (string) ($item['key'] ?? ''),
-                'nome' => $nome,
-                'descricao' => trim((string) ($item['descricao'] ?? '')),
-                'icone' => trim((string) ($item['icone'] ?? '')),
-                'valor' => (float) ($item['valor'] ?? 0),
-                'ativa' => (bool) ($item['ativa'] ?? false),
-            ];
-        }
-    }
-
-    $timelineStages = [];
-    $stageInput = $payload['etapas'] ?? [];
-    if (is_array($stageInput)) {
-        foreach ($stageInput as $index => $item) {
-            if (!is_array($item)) {
-                continue;
-            }
-            $nome = trim((string) ($item['nome'] ?? ''));
-            if ($nome === '') {
-                continue;
-            }
-            $pct = (int) clamp((int) ($item['percentual'] ?? 0), 0, 100);
-            $badge = $pct > 0 ? $pct . '%' : 'Etapa';
-            $timelineStages[] = [
-                'nome' => $nome,
-                'descricao' => trim((string) ($item['descricao'] ?? '')),
-                'badge' => $badge,
-                'ordem' => ((int) $index + 1) . 'a',
-            ];
-        }
-    }
-    if ($timelineStages === []) {
-        $timelineStages = [
-            ['nome' => 'Concepção', 'descricao' => 'Definição inicial do escopo.', 'badge' => '10 dias', 'ordem' => '1ª'],
-            ['nome' => 'Estudo Preliminar', 'descricao' => 'Diretrizes e validação inicial.', 'badge' => '15 dias', 'ordem' => '2ª'],
-            ['nome' => 'Projeto Básico', 'descricao' => 'Consolidação técnica.', 'badge' => '10 dias', 'ordem' => '3ª'],
-            ['nome' => 'Projeto Executivo', 'descricao' => 'Entrega final do detalhamento.', 'badge' => 'Final', 'ordem' => '4ª'],
-        ];
-    }
-
     $runtimeScript = proposal_runtime_script(
         (string) $token,
         $downloadUrl,
         $signUrl,
-        $selectedDisciplines,
-        $customDisciplines,
-        $timelineStages,
-        $previewMode,
-        $settings
+        proposal_public_render_data($proposal, $payload, $settings),
+        $previewMode
     );
 
     if ($previewMode) {
@@ -860,13 +1025,20 @@ function acceptance_terms_variable_catalog(): array
         'code' => 'P000000-000',
         'revision' => '00',
     ];
-    $keys = array_keys(build_proposal_placeholder_map($sampleProposal, default_proposal_payload(), default_settings_values()));
+    $keys = array_values(array_filter(
+        array_keys(build_proposal_placeholder_map($sampleProposal, default_proposal_payload(), default_settings_values())),
+        static fn (string $key): bool => !preg_match('/^ARQUIVO_\d+_LINK$/', $key)
+    ));
 
     $knownDescriptions = [
         'PROPOSTA_NUM' => 'Código da proposta (ex: P260311-293)',
         'CODIGO_BASE' => 'Código base da proposta',
         'REVISAO' => 'Revisão atual (vazio quando 00)',
         'NOME_CLIENTE' => 'Nome do cliente',
+        'CLIENTE_NOME' => 'Nome do cliente',
+        'CLIENTE_EMPRESA' => 'Empresa do cliente',
+        'EMPRESA_CLIENTE' => 'Empresa do cliente',
+        'EMPRESA' => 'Empresa do cliente',
         'CONTRATANTE_RAZAO' => 'Razão/nome do contratante',
         'CONTRATANTE_CNPJ' => 'CNPJ do contratante',
         'CONTRATANTE_EMAIL' => 'E-mail do contratante',
@@ -884,14 +1056,19 @@ function acceptance_terms_variable_catalog(): array
         'VALOR_TOTAL_EXTENSO' => 'Valor por extenso',
         'PRECO_TOTAL' => 'Valor total numérico para contrato',
         'BANK_NAME' => 'Banco para pagamento via PIX',
-        'BANK_AGENCY' => 'Agencia bancaria',
-        'BANK_ACCOUNT' => 'Conta corrente bancaria',
+        'BANK_AGENCY' => 'Agência bancária',
+        'BANK_ACCOUNT' => 'Conta corrente bancária',
         'BANK_FAVORED' => 'Favorecido da conta',
         'BANK_CNPJ' => 'CNPJ vinculado ao pagamento',
         'BANK_PIX_KEY' => 'Chave PIX',
         'BANK_PIX_KEY_TYPE' => 'Tipo da chave PIX',
-        'PAYMENT_CARD_LINK' => 'Link de pagamento no cartao',
-        'PAYMENT_BOLETO_LINK' => 'Link para emissao de boleto',
+        'PAYMENT_CARD_LINK' => 'Link de pagamento no cartão',
+        'PAYMENT_BOLETO_LINK' => 'Link para emissão de boleto',
+        'ARQUIVO_01_DATA' => 'Data do arquivo recebido 01',
+        'ARQUIVO_02_DATA' => 'Data do arquivo recebido 02',
+        'ARQUIVO_03_DATA' => 'Data do arquivo recebido 03',
+        'ARQUIVO_04_DATA' => 'Data do arquivo recebido 04',
+        'ARQUIVO_05_DATA' => 'Data do arquivo recebido 05',
         'FORMA_PAGAMENTO_BASE' => 'Texto base da forma de pagamento',
         'FORMA_PAGAMENTO_EXTRA' => 'Texto extra com links adicionais',
     ];
@@ -905,7 +1082,7 @@ function acceptance_terms_variable_catalog(): array
     return $catalog;
 }
 
-function apply_accept_terms_customization(string $template, array $settings, array $replaceMap): string
+function apply_accept_terms_customization(string $template, array $payload, array $settings, array $replaceMap): string
 {
     $tokens = [];
     foreach ($replaceMap as $key => $value) {
@@ -916,7 +1093,10 @@ function apply_accept_terms_customization(string $template, array $settings, arr
         return strtr($content, $tokens);
     };
 
-    $titleTpl = trim((string) ($settings['accept_terms_title'] ?? ''));
+    $titleTpl = trim((string) ($payload['accept_terms_title'] ?? ''));
+    if ($titleTpl === '') {
+        $titleTpl = trim((string) ($settings['accept_terms_title'] ?? ''));
+    }
     if ($titleTpl !== '') {
         $title = $renderTokens(h($titleTpl));
         $template = preg_replace_callback(
@@ -928,7 +1108,10 @@ function apply_accept_terms_customization(string $template, array $settings, arr
     }
 
     $checkboxDefault = (string) (default_settings_values()['accept_terms_checkbox_text'] ?? '');
-    $checkboxTpl = trim((string) ($settings['accept_terms_checkbox_text'] ?? $checkboxDefault));
+    $checkboxTpl = trim((string) ($payload['accept_terms_checkbox_text'] ?? ''));
+    if ($checkboxTpl === '') {
+        $checkboxTpl = trim((string) ($settings['accept_terms_checkbox_text'] ?? $checkboxDefault));
+    }
     if ($checkboxTpl === '') {
         $checkboxTpl = $checkboxDefault;
     }
@@ -942,7 +1125,10 @@ function apply_accept_terms_customization(string $template, array $settings, arr
         ) ?? $template;
     }
 
-    $termsTpl = trim((string) ($settings['accept_terms_html'] ?? ''));
+    $termsTpl = trim((string) ($payload['accept_terms_html'] ?? ''));
+    if ($termsTpl === '') {
+        $termsTpl = trim((string) ($settings['accept_terms_html'] ?? ''));
+    }
     if ($termsTpl !== '') {
         $hasHtmlTags = preg_match('/<[^>]+>/', $termsTpl) === 1;
         if ($hasHtmlTags) {
@@ -999,10 +1185,10 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
     $code = (string) ($payload['codigo_base'] ?? ($proposal['code'] ?? 'P-000'));
     $revRaw = trim((string) ($payload['revisao'] ?? ($proposal['revision'] ?? '00')));
     $rev = normalize_revision_for_display($revRaw);
-    $revBadge = $rev !== '' ? ' - Revisao ' . $rev : '';
+    $revBadge = $rev !== '' ? ' - Revisão ' . $rev : '';
     $revBadgeUpper = $rev !== '' ? ' - REVISAO ' . $rev : '';
-    $revTitle = $rev !== '' ? ' - Revisao ' . $rev : '';
-    $revContract = $rev !== '' ? '(Revisao ' . $rev . ')' : '';
+    $revTitle = $rev !== '' ? ' - Revisão ' . $rev : '';
+    $revContract = $rev !== '' ? '(Revisão ' . $rev . ')' : '';
     $clientName = trim((string) ($payload['cliente_nome'] ?? ''));
     $clientCompany = trim((string) ($payload['cliente_empresa'] ?? ''));
     $clientDisplay = $clientName !== '' ? $clientName : ($clientCompany !== '' ? $clientCompany : 'Cliente');
@@ -1045,8 +1231,12 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         $etapas = [];
     }
     $etapaPct = static function (int $index) use ($etapas): string {
+        $prazo = trim((string) ($etapas[$index]['prazo'] ?? ''));
+        if ($prazo !== '') {
+            return $prazo;
+        }
         $pct = (int) ($etapas[$index]['percentual'] ?? 0);
-        return $pct . '%';
+        return $pct > 0 ? ($pct . '%') : 'Etapa';
     };
     $etapaVal = static function (int $index, float $total) use ($etapas): string {
         $pct = (int) ($etapas[$index]['percentual'] ?? 0);
@@ -1086,7 +1276,12 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         if (!is_array($item)) {
             continue;
         }
-        $cronogramaParts[] = (string) ($item['nome'] ?? 'Etapa') . ' (' . ((int) ($item['percentual'] ?? 0)) . '%)';
+        $badge = trim((string) ($item['prazo'] ?? ''));
+        if ($badge === '') {
+            $pct = (int) ($item['percentual'] ?? 0);
+            $badge = $pct > 0 ? ($pct . '%') : 'Etapa';
+        }
+        $cronogramaParts[] = (string) ($item['nome'] ?? 'Etapa') . ' (' . $badge . ')';
     }
     $cronogramaText = implode(' | ', $cronogramaParts);
     if (trim($cronogramaText) === '') {
@@ -1110,7 +1305,7 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         $bankAccount = '3375106-4';
     }
     if ($bankFavored === '') {
-        $bankFavored = 'Complementare Projetos de Instalacoes LTDA-EPP';
+        $bankFavored = 'Complementare Projetos de Instalações LTDA-EPP';
     }
     if ($bankCnpj === '') {
         $bankCnpj = '23.012.176/0001-69';
@@ -1124,8 +1319,8 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
 
     $cardLink = trim((string) ($payload['pagamento_cartao_link'] ?? ''));
     $boletoLink = trim((string) ($payload['pagamento_boleto_link'] ?? ''));
-    $cardEnabled = !empty($payload['pagamento_cartao_ativo']);
-    $boletoEnabled = !empty($payload['pagamento_boleto_ativo']);
+    $cardEnabled = proposal_flag_enabled($payload['pagamento_cartao_ativo'] ?? false);
+    $boletoEnabled = proposal_flag_enabled($payload['pagamento_boleto_ativo'] ?? false);
     $paymentMethodsCount = 1 + ($cardEnabled ? 1 : 0) + ($boletoEnabled ? 1 : 0);
 
     $paymentBaseText = 'o pagamento podera ser realizado por transferencia eletronica (PIX), por meio da chave '
@@ -1139,10 +1334,10 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
 
     $paymentExtraParts = [];
     if ($cardEnabled && $cardLink !== '') {
-        $paymentExtraParts[] = 'Tambem e possivel pagar por cartao no link: ' . $cardLink . '.';
+        $paymentExtraParts[] = 'Também é possível pagar por cartão no link: ' . $cardLink . '.';
     }
     if ($boletoEnabled && $boletoLink !== '') {
-        $paymentExtraParts[] = 'Tambem e possivel pagar por boleto no link: ' . $boletoLink . '.';
+        $paymentExtraParts[] = 'Também é possível pagar por boleto no link: ' . $boletoLink . '.';
     }
     $paymentExtraText = implode(' ', $paymentExtraParts);
 
@@ -1156,6 +1351,10 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         'PROPOSTA_NUM' => $code,
         'PROPOSTA_REV' => $rev,
         'NOME_CLIENTE' => $clientDisplay,
+        'CLIENTE_NOME' => $clientName !== '' ? $clientName : $clientDisplay,
+        'CLIENTE_EMPRESA' => $clientCompany !== '' ? $clientCompany : $clientDisplay,
+        'EMPRESA_CLIENTE' => $clientCompany !== '' ? $clientCompany : $clientDisplay,
+        'EMPRESA' => $clientCompany !== '' ? $clientCompany : $clientDisplay,
         'CONTRATANTE_RAZAO' => $clientCompany !== '' ? $clientCompany : $clientDisplay,
         'CONTRATANTE_CNPJ' => (string) ($payload['cliente_cnpj'] ?? ''),
         'CONTRATANTE_EMAIL' => (string) ($payload['cliente_email'] ?? ''),
@@ -1172,6 +1371,7 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         'FINALIDADE_OBRA' => (string) ($payload['finalidade_obra'] ?? ''),
         'VALOR_TOTAL' => brl($total),
         'VALOR_TOTAL_EXTENSO' => '(' . currency_to_words_ptbr($total) . ')',
+        'VALOR_TOTAL_EXTENSO_CARD' => currency_to_words_ptbr($total),
         'VALOR_ELETRICA' => $formatDiscipline('eletrica'),
         'VALOR_ESPECIAIS' => $formatDiscipline('especiais'),
         'VALOR_HIDRAULICA' => $formatDiscipline('hidraulica'),
@@ -1195,10 +1395,18 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         'VALIDADE_PROPOSTA' => (string) $validadeDias . ' dias',
         'DATA_EMISSAO' => $proposalDate->format('d/m/Y'),
         'DATA_PROPOSTA' => $proposalDate->format('d/m/Y'),
-        'DATA_ARQUIVOS' => $proposalDate->format('d/m/Y'),
+        'DATA_ARQUIVOS' => (string) ($arquivos[0]['data'] ?? $proposalDate->format('d/m/Y')),
         'DATA_EMAIL_ARQUIVOS' => $proposalDate->format('d/m/Y'),
         'DATA_ASSINATURA' => date('d/m/Y'),
         'ANO' => (string) date('Y'),
+        'INTRO_TITLE' => (string) ($payload['intro_title'] ?? ''),
+        'FILES_SECTION_LABEL' => (string) ($payload['files_section_label'] ?? ''),
+        'FILES_SECTION_TITLE' => (string) ($payload['files_section_title'] ?? ''),
+        'FILES_SECTION_SUBTITLE' => (string) ($payload['files_section_subtitle'] ?? ''),
+        'GUIDELINES_TITLE' => (string) ($payload['guidelines_title'] ?? ''),
+        'GUIDELINES_SUBTITLE' => (string) ($payload['guidelines_subtitle'] ?? ''),
+        'COMPANY_ABOUT_TEXT' => (string) ($settings['company_about_text'] ?? ''),
+        'COMPANY_ACCEPT_PHRASE' => (string) ($settings['company_accept_phrase'] ?? ''),
         'CRONOGRAMA_ESQUEMA' => $cronogramaText,
         'INSERIR_FLUXOGRAMA_PRESTACAO_SERVICOS' => $flowText,
         'BANK_NAME' => $bankName,
@@ -1210,12 +1418,16 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         'BANK_PIX_KEY_TYPE' => $bankPixType,
         'BANK_PIX_COPY_LABEL' => 'Copiar chave PIX (' . $bankPixType . ')',
         'PAYMENT_METHODS_COUNT' => (string) $paymentMethodsCount,
+        'PAYMENT_NOTE_STYLE' => $paymentMethodsCount > 1 ? '' : 'display:none;',
+        'PAYMENT_SWITCH_STYLE' => $paymentMethodsCount > 1 ? 'display:inline-flex;' : 'display:none;',
         'PAYMENT_CARD_ENABLED' => $cardEnabled ? '1' : '0',
-        'PAYMENT_CARD_TITLE' => (string) ($payload['pagamento_cartao_titulo'] ?? 'Pagamento por cartao'),
+        'PAYMENT_CARD_STYLE' => $cardEnabled ? '' : 'display:none;',
+        'PAYMENT_CARD_TITLE' => (string) ($payload['pagamento_cartao_titulo'] ?? 'Pagamento por cartão'),
         'PAYMENT_CARD_DESC' => (string) ($payload['pagamento_cartao_descricao'] ?? ''),
         'PAYMENT_CARD_LINK' => $cardLink,
-        'PAYMENT_CARD_BUTTON' => (string) ($payload['pagamento_cartao_botao'] ?? 'Pagar no cartao'),
+        'PAYMENT_CARD_BUTTON' => (string) ($payload['pagamento_cartao_botao'] ?? 'Pagar no cartão'),
         'PAYMENT_BOLETO_ENABLED' => $boletoEnabled ? '1' : '0',
+        'PAYMENT_BOLETO_STYLE' => $boletoEnabled ? '' : 'display:none;',
         'PAYMENT_BOLETO_TITLE' => (string) ($payload['pagamento_boleto_titulo'] ?? 'Pagamento por boleto'),
         'PAYMENT_BOLETO_DESC' => (string) ($payload['pagamento_boleto_descricao'] ?? ''),
         'PAYMENT_BOLETO_LINK' => $boletoLink,
@@ -1264,19 +1476,24 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         'ARQ_5_REV' => $getArquivoRev(4),
         'ARQUIVO_01' => $getArquivo(0, 'nome'),
         'ARQUIVO_01_REV' => $getArquivoRev(0),
-        'ARQUIVO_01_LINK' => $getArquivo(0, 'link'),
+        'ARQUIVO_01_DATA' => $getArquivo(0, 'data'),
+        'ARQUIVO_01_LINK' => $getArquivo(0, 'data'),
         'ARQUIVO_02' => $getArquivo(1, 'nome'),
         'ARQUIVO_02_REV' => $getArquivoRev(1),
-        'ARQUIVO_02_LINK' => $getArquivo(1, 'link'),
+        'ARQUIVO_02_DATA' => $getArquivo(1, 'data'),
+        'ARQUIVO_02_LINK' => $getArquivo(1, 'data'),
         'ARQUIVO_03' => $getArquivo(2, 'nome'),
         'ARQUIVO_03_REV' => $getArquivoRev(2),
-        'ARQUIVO_03_LINK' => $getArquivo(2, 'link'),
+        'ARQUIVO_03_DATA' => $getArquivo(2, 'data'),
+        'ARQUIVO_03_LINK' => $getArquivo(2, 'data'),
         'ARQUIVO_04' => $getArquivo(3, 'nome'),
         'ARQUIVO_04_REV' => $getArquivoRev(3),
-        'ARQUIVO_04_LINK' => $getArquivo(3, 'link'),
+        'ARQUIVO_04_DATA' => $getArquivo(3, 'data'),
+        'ARQUIVO_04_LINK' => $getArquivo(3, 'data'),
         'ARQUIVO_05' => $getArquivo(4, 'nome'),
         'ARQUIVO_05_REV' => $getArquivoRev(4),
-        'ARQUIVO_05_LINK' => $getArquivo(4, 'link'),
+        'ARQUIVO_05_DATA' => $getArquivo(4, 'data'),
+        'ARQUIVO_05_LINK' => $getArquivo(4, 'data'),
         'DATA_EMAIL_ARQUIVOS' => $proposalDate->format('d/m/Y'),
         'EXCLUSAO_A' => $excl(0),
         'EXCLUSAO_B' => $excl(1),
@@ -1301,27 +1518,639 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
     return $map;
 }
 
+function proposal_scope_entries(array $payload): array
+{
+    $catalog = discipline_catalog();
+    $scopeItems = is_array($payload['scope_items'] ?? null) ? $payload['scope_items'] : [];
+    $selected = is_array($payload['disciplinas'] ?? null) ? $payload['disciplinas'] : [];
+    $values = is_array($payload['valores'] ?? null) ? $payload['valores'] : [];
+    $entries = [];
+
+    foreach ($selected as $key) {
+        if (!isset($catalog[$key])) {
+            continue;
+        }
+
+        $defaultItem = default_scope_blueprints()[$key] ?? [];
+        $item = is_array($scopeItems[$key] ?? null) ? $scopeItems[$key] : [];
+        $merged = array_replace_recursive($defaultItem, $item);
+        $entries[] = [
+            'key' => $key,
+            'title' => trim((string) ($merged['title'] ?? $catalog[$key]['nome'] ?? 'Disciplina')),
+            'subtitle' => trim((string) ($merged['subtitle'] ?? '')),
+            'summary' => trim((string) ($merged['summary'] ?? ($catalog[$key]['descricao'] ?? ''))),
+            'icon' => trim((string) ($merged['icon'] ?? ($catalog[$key]['icone'] ?? ''))),
+            'topics' => array_values(normalize_topic_lines($merged['topics'] ?? [])),
+            'value' => round((float) ($values[$key] ?? 0), 2),
+        ];
+    }
+
+    $customDisciplines = is_array($payload['disciplinas_custom'] ?? null) ? $payload['disciplinas_custom'] : [];
+    foreach ($customDisciplines as $item) {
+        if (!is_array($item) || !(bool) ($item['ativa'] ?? false)) {
+            continue;
+        }
+
+        $name = trim((string) ($item['nome'] ?? ''));
+        if ($name === '') {
+            continue;
+        }
+
+        $entries[] = [
+            'key' => trim((string) ($item['key'] ?? '')),
+            'title' => $name,
+            'subtitle' => trim((string) ($item['subtitle'] ?? '')),
+            'summary' => trim((string) ($item['descricao'] ?? '')),
+            'icon' => trim((string) ($item['icone'] ?? '')),
+            'topics' => array_values(normalize_topic_lines($item['topics'] ?? [])),
+            'value' => round((float) ($item['valor'] ?? 0), 2),
+        ];
+    }
+
+    return $entries;
+}
+
+function proposal_guideline_entries(array $payload): array
+{
+    $items = is_array($payload['guidelines_items'] ?? null) ? $payload['guidelines_items'] : [];
+    $entries = [];
+    foreach ($items as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $title = trim((string) ($item['title'] ?? ''));
+        $content = trim((string) ($item['content'] ?? ''));
+        if ($title === '' && $content === '') {
+            continue;
+        }
+        $entries[] = [
+            'title' => $title !== '' ? $title : 'Diretriz',
+            'content' => $content,
+            'icon' => trim((string) ($item['icon'] ?? '')),
+        ];
+    }
+
+    return $entries;
+}
+
+function proposal_file_entries(array $payload): array
+{
+    $files = is_array($payload['arquivos'] ?? null) ? $payload['arquivos'] : [];
+    $entries = [];
+    foreach ($files as $file) {
+        if (!is_array($file)) {
+            continue;
+        }
+        $item = trim((string) ($file['item'] ?? ''));
+        $name = trim((string) ($file['nome'] ?? ''));
+        $revision = trim((string) ($file['rev'] ?? ''));
+        $date = trim((string) ($file['data'] ?? ($file['link'] ?? '')));
+        if ($item === '' && $name === '') {
+            continue;
+        }
+        $entries[] = [
+            'item' => $item,
+            'name' => $name,
+            'revision' => $revision === '00' ? '' : $revision,
+            'date' => $date,
+        ];
+    }
+
+    return $entries;
+}
+
+function proposal_timeline_entries(array $payload): array
+{
+    $stages = is_array($payload['etapas'] ?? null) ? $payload['etapas'] : [];
+    $entries = [];
+    foreach ($stages as $index => $stage) {
+        if (!is_array($stage)) {
+            continue;
+        }
+        $name = trim((string) ($stage['nome'] ?? ''));
+        if ($name === '') {
+            continue;
+        }
+        $badge = trim((string) ($stage['prazo'] ?? ''));
+        if ($badge === '' && isset($stage['percentual'])) {
+            $pct = (int) ($stage['percentual'] ?? 0);
+            $badge = $pct > 0 ? ($pct . '%') : 'Etapa';
+        }
+        $entries[] = [
+            'index' => $index + 1,
+            'label' => ($index + 1) . 'ª',
+            'name' => $name,
+            'badge' => $badge !== '' ? $badge : 'Etapa',
+            'description' => trim((string) ($stage['descricao'] ?? '')),
+        ];
+    }
+
+    return $entries;
+}
+
+function render_proposal_tokens(string $content, array $replaceMap, bool $allowHtml = false): string
+{
+    $tokens = [];
+    foreach ($replaceMap as $key => $value) {
+        $tokens['{{' . $key . '}}'] = (string) $value;
+    }
+
+    $rendered = strtr($content, $tokens);
+    if ($allowHtml) {
+        return $rendered;
+    }
+
+    return nl2br(h($rendered));
+}
+
+function render_terms_html(string $content, array $replaceMap): string
+{
+    $trimmed = trim($content);
+    if ($trimmed === '') {
+        return '';
+    }
+
+    if (preg_match('/<[^>]+>/', $trimmed) === 1) {
+        return render_proposal_tokens($trimmed, $replaceMap, true);
+    }
+
+    return '<p>' . render_proposal_tokens($trimmed, $replaceMap, false) . '</p>';
+}
+
+function strip_html_to_plaintext(string $html): string
+{
+    $text = preg_replace('/<br\s*\/?>/i', "\n", $html) ?? $html;
+    $text = preg_replace('/<\/p>/i', "\n\n", $text) ?? $text;
+    $text = preg_replace('/<\/li>/i', "\n", $text) ?? $text;
+    $text = preg_replace('/<\/h[1-6]>/i', "\n\n", $text) ?? $text;
+    $text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $text = preg_replace("/\n{3,}/", "\n\n", $text) ?? $text;
+    return trim((string) $text);
+}
+
+function proposal_contract_render_data(array $proposal, array $payload, array $settings): array
+{
+    $replaceMap = build_proposal_placeholder_map($proposal, $payload, $settings);
+    $plainTokens = [];
+    foreach ($replaceMap as $key => $value) {
+        $plainTokens['{{' . $key . '}}'] = html_entity_decode((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+    $renderPlainText = static function (string $text) use ($plainTokens): string {
+        return trim(strtr($text, $plainTokens));
+    };
+
+    $title = trim((string) ($payload['accept_terms_title'] ?? ''));
+    if ($title === '') {
+        $title = trim((string) ($settings['accept_terms_title'] ?? ''));
+    }
+    if ($title === '') {
+        $title = 'Contrato da proposta';
+    }
+    $title = $renderPlainText($title);
+
+    $checkbox = trim((string) ($payload['accept_terms_checkbox_text'] ?? ''));
+    if ($checkbox === '') {
+        $checkbox = trim((string) ($settings['accept_terms_checkbox_text'] ?? ''));
+    }
+    if ($checkbox === '') {
+        $checkbox = 'Li e concordo com os termos deste contrato.';
+    }
+    $checkbox = $renderPlainText($checkbox);
+
+    $terms = trim((string) ($payload['accept_terms_html'] ?? ''));
+    if ($terms === '') {
+        $terms = trim((string) ($settings['accept_terms_html'] ?? ''));
+    }
+
+    $bodyHtml = render_terms_html($terms, $replaceMap);
+    if (trim(strip_tags($bodyHtml)) === '') {
+        $bodyHtml = '<p>Ao aceitar esta proposta, as partes concordam com o escopo, os valores e as condições descritas neste documento.</p>';
+    }
+
+    return [
+        'mode' => 'contract',
+        'title' => $title,
+        'checkbox_text' => $checkbox,
+        'body_html' => $bodyHtml,
+    ];
+}
+
+function render_proposal_summary_fragment(array $proposal, array $payload, array $settings): string
+{
+    $scopeEntries = proposal_scope_entries($payload);
+    $files = proposal_file_entries($payload);
+    $stages = proposal_timeline_entries($payload);
+    $considerations = array_values(normalize_topic_lines($payload['consideracoes'] ?? []));
+    $exclusions = array_values(normalize_topic_lines($payload['exclusoes'] ?? []));
+    $replaceMap = build_proposal_placeholder_map($proposal, $payload, $settings);
+    $tokens = [];
+    foreach ($replaceMap as $key => $value) {
+        $tokens['{{' . $key . '}}'] = html_entity_decode((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+    $renderText = static function (string $value) use ($tokens): string {
+        return strtr($value, $tokens);
+    };
+    $revision = normalize_revision_for_display((string) ($payload['revisao'] ?? ($proposal['revision'] ?? '00')));
+    $code = (string) ($payload['codigo_base'] ?? ($proposal['code'] ?? ''));
+    $proposalDate = parse_ymd((string) ($payload['data_proposta'] ?? date('Y-m-d')))->format('d/m/Y');
+    $total = proposal_total($payload);
+
+    ob_start();
+    ?>
+    <div class="proposal-summary-doc" style="font-family:Arial,sans-serif;color:#173942;line-height:1.6;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid #d8ecef;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <img src="<?= h(app_url('/assets/img/logohorizontalbranco.png')) ?>" alt="Complementare" style="height:42px;width:auto;background:#0d4854;border-radius:10px;padding:10px 14px;">
+          <div>
+            <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#178f9c;font-weight:700;">Proposta Comercial</div>
+            <h2 style="margin:4px 0 0;font-size:28px;line-height:1.1;"><?= h((string) ($payload['titulo'] ?? 'Proposta Comercial')) ?></h2>
+          </div>
+        </div>
+        <div style="display:grid;gap:8px;min-width:220px;">
+          <div style="background:#f3fbfc;border:1px solid #d5edf0;border-radius:14px;padding:12px 14px;"><strong>Proposta:</strong> <?= h($code) ?></div>
+          <?php if ($revision !== ''): ?>
+            <div style="background:#f3fbfc;border:1px solid #d5edf0;border-radius:14px;padding:12px 14px;"><strong>Revisão:</strong> <?= h($revision) ?></div>
+          <?php endif; ?>
+          <div style="background:#f3fbfc;border:1px solid #d5edf0;border-radius:14px;padding:12px 14px;"><strong>Data:</strong> <?= h($proposalDate) ?></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:24px;">
+        <div style="background:#ffffff;border:1px solid #d5edf0;border-radius:18px;padding:18px;">
+          <div style="font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:#178f9c;font-weight:700;">Cliente</div>
+          <div style="margin-top:8px;font-size:18px;font-weight:700;"><?= h((string) ($payload['cliente_nome'] ?: ($payload['cliente_empresa'] ?: 'Cliente'))) ?></div>
+          <?php if (trim((string) ($payload['cliente_email'] ?? '')) !== ''): ?><div><?= h((string) $payload['cliente_email']) ?></div><?php endif; ?>
+          <?php if (trim((string) ($payload['cliente_telefone'] ?? '')) !== ''): ?><div><?= h((string) $payload['cliente_telefone']) ?></div><?php endif; ?>
+        </div>
+        <div style="background:#ffffff;border:1px solid #d5edf0;border-radius:18px;padding:18px;">
+          <div style="font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:#178f9c;font-weight:700;">Obra</div>
+          <div style="margin-top:8px;font-size:18px;font-weight:700;"><?= h((string) ($payload['obra_nome'] ?: 'Não informado')) ?></div>
+          <?php if (trim((string) ($payload['obra_endereco'] ?? '')) !== ''): ?><div><?= h((string) $payload['obra_endereco']) ?></div><?php endif; ?>
+          <div><?= h(trim((string) ($payload['obra_cidade'] ?? '') . ' / ' . (string) ($payload['obra_uf'] ?? ''))) ?></div>
+        </div>
+      </div>
+
+      <section style="margin-bottom:24px;">
+        <h3 style="margin:0 0 10px;font-size:20px;">Arquivos Recebidos</h3>
+        <p style="margin:0 0 12px;color:#54767d;"><?= h($renderText((string) ($payload['files_section_subtitle'] ?? ''))) ?></p>
+        <?php if ($files !== []): ?>
+          <table style="width:100%;border-collapse:collapse;border:1px solid #d5edf0;border-radius:16px;overflow:hidden;">
+            <thead>
+              <tr style="background:#0d8c98;color:#fff;">
+                <th style="padding:10px 12px;text-align:left;">Arquivo</th>
+                <th style="padding:10px 12px;text-align:center;">Revisão</th>
+                <th style="padding:10px 12px;text-align:center;">Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($files as $file): ?>
+                <tr>
+                  <td style="padding:10px 12px;border-top:1px solid #e5f2f4;"><?= h(trim($file['item'] . ' ' . $file['name'])) ?></td>
+                  <td style="padding:10px 12px;border-top:1px solid #e5f2f4;text-align:center;"><?= h($file['revision']) ?></td>
+                  <td style="padding:10px 12px;border-top:1px solid #e5f2f4;text-align:center;"><?= h($file['date']) ?></td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        <?php endif; ?>
+      </section>
+
+      <section style="margin-bottom:24px;">
+        <h3 style="margin:0 0 10px;font-size:20px;">Escopo da Proposta</h3>
+        <div style="display:grid;gap:14px;">
+          <?php foreach ($scopeEntries as $entry): ?>
+            <div style="border:1px solid #d5edf0;border-radius:18px;padding:18px;background:#fff;">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                <?php if ($entry['icon'] !== ''): ?><img src="<?= h(app_url($entry['icon'])) ?>" alt="<?= h($entry['title']) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
+                <div>
+                  <div style="font-size:18px;font-weight:700;"><?= h($entry['title']) ?></div>
+                  <?php if ($entry['subtitle'] !== ''): ?><div style="color:#54767d;"><?= h($entry['subtitle']) ?></div><?php endif; ?>
+                </div>
+              </div>
+              <?php if ($entry['topics'] !== []): ?>
+                <ul style="margin:0;padding-left:18px;">
+                  <?php foreach ($entry['topics'] as $topic): ?><li><?= h((string) $topic) ?></li><?php endforeach; ?>
+                </ul>
+              <?php elseif ($entry['summary'] !== ''): ?>
+                <p style="margin:0;"><?= h($entry['summary']) ?></p>
+              <?php endif; ?>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </section>
+
+      <section style="margin-bottom:24px;">
+        <h3 style="margin:0 0 10px;font-size:20px;">Etapas e Prazos</h3>
+        <div style="display:grid;gap:10px;">
+          <?php foreach ($stages as $stage): ?>
+            <div style="display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:start;border:1px solid #d5edf0;border-radius:16px;padding:14px;background:#fff;">
+              <div style="display:flex;align-items:center;justify-content:center;border-radius:999px;background:#0fb2af;color:#fff;font-weight:700;padding:8px 12px;"><?= h($stage['badge']) ?></div>
+              <div>
+                <div style="font-weight:700;"><?= h($stage['name']) ?></div>
+                <?php if ($stage['description'] !== ''): ?><div style="color:#54767d;"><?= h($stage['description']) ?></div><?php endif; ?>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </section>
+
+      <section style="margin-bottom:24px;">
+        <h3 style="margin:0 0 10px;font-size:20px;">Valor da Proposta</h3>
+        <div style="background:linear-gradient(135deg,#0d8c98,#18b5af);color:#fff;border-radius:18px;padding:18px;margin-bottom:12px;">
+          <div style="font-size:12px;text-transform:uppercase;letter-spacing:1.2px;">Total</div>
+          <div style="font-size:34px;font-weight:800;margin-top:4px;"><?= h(brl($total)) ?></div>
+          <div style="margin-top:6px;opacity:.9;"><?= h(currency_to_words_ptbr($total)) ?></div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;border:1px solid #d5edf0;border-radius:16px;overflow:hidden;">
+          <thead>
+            <tr style="background:#f3fbfc;">
+              <th style="padding:10px 12px;text-align:left;">Disciplina</th>
+              <th style="padding:10px 12px;text-align:right;">Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($scopeEntries as $entry): ?>
+              <tr>
+                <td style="padding:10px 12px;border-top:1px solid #e5f2f4;"><?= h($entry['title']) ?></td>
+                <td style="padding:10px 12px;border-top:1px solid #e5f2f4;text-align:right;"><?= h(brl((float) $entry['value'])) ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </section>
+
+      <?php if ($considerations !== []): ?>
+        <section style="margin-bottom:24px;">
+          <h3 style="margin:0 0 10px;font-size:20px;">Considerações Importantes</h3>
+          <ul style="margin:0;padding-left:18px;"><?php foreach ($considerations as $item): ?><li><?= h((string) $item) ?></li><?php endforeach; ?></ul>
+        </section>
+      <?php endif; ?>
+
+      <?php if ($exclusions !== []): ?>
+        <section>
+          <h3 style="margin:0 0 10px;font-size:20px;">Itens Fora do Escopo</h3>
+          <ol type="A" style="margin:0;padding-left:22px;"><?php foreach ($exclusions as $item): ?><li><?= h((string) $item) ?></li><?php endforeach; ?></ol>
+        </section>
+      <?php endif; ?>
+    </div>
+    <?php
+
+    return trim((string) ob_get_clean());
+}
+
+function render_proposal_summary_page(array $proposal, array $payload, array $settings): string
+{
+    $title = 'Resumo - Proposta ' . (string) ($proposal['code'] ?? ($payload['codigo_base'] ?? ''));
+    $body = render_proposal_summary_fragment($proposal, $payload, $settings);
+
+    return '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' .
+        '<title>' . h($title) . '</title>' .
+        '<style>body{margin:0;padding:32px;background:#eef7f8;} .summary-page{max-width:980px;margin:0 auto;background:#fff;border-radius:28px;padding:32px;box-shadow:0 20px 60px rgba(11,85,99,.12);} @media print{body{background:#fff;padding:0}.summary-page{max-width:none;box-shadow:none;border-radius:0;padding:0}}</style>' .
+        '</head><body><main class="summary-page">' . $body . '</main></body></html>';
+}
+
+function render_proposal_contract_page(array $proposal, array $payload, array $settings): string
+{
+    $contract = proposal_contract_render_data($proposal, $payload, $settings);
+    $revision = normalize_revision_for_display((string) ($payload['revisao'] ?? ($proposal['revision'] ?? '00')));
+    $code = (string) ($payload['codigo_base'] ?? ($proposal['code'] ?? ''));
+    $proposalDate = parse_ymd((string) ($payload['data_proposta'] ?? date('Y-m-d')))->format('d/m/Y');
+    $client = trim((string) ($payload['cliente_nome'] ?: ($payload['cliente_empresa'] ?: 'Cliente')));
+    $obra = trim((string) ($payload['obra_nome'] ?: 'Não informado'));
+    $files = proposal_file_entries($payload);
+    $scopeEntries = proposal_scope_entries($payload);
+    $considerations = array_values(normalize_topic_lines($payload['consideracoes'] ?? []));
+    $exclusions = array_values(normalize_topic_lines($payload['exclusoes'] ?? []));
+    $total = proposal_total($payload);
+
+    ob_start();
+    ?>
+    <!doctype html>
+    <html lang="pt-BR">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title><?= h((string) $contract['title']) ?> - <?= h($code) ?></title>
+      <style>
+        body{margin:0;padding:32px;background:#eef7f8;font-family:Arial,sans-serif;color:#173942;}
+        .contract-page{max-width:980px;margin:0 auto;background:#fff;border-radius:28px;padding:32px;box-shadow:0 20px 60px rgba(11,85,99,.12);}
+        .contract-head{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;padding-bottom:18px;margin-bottom:24px;border-bottom:2px solid #d8ecef;}
+        .contract-brand{display:flex;align-items:center;gap:16px;}
+        .contract-meta{display:grid;gap:8px;min-width:220px;}
+        .contract-chip{background:#f3fbfc;border:1px solid #d5edf0;border-radius:14px;padding:12px 14px;}
+        .contract-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:24px;}
+        .contract-box{background:#fff;border:1px solid #d5edf0;border-radius:18px;padding:18px;}
+        .contract-box-label{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:#178f9c;font-weight:700;}
+        .contract-body,.contract-annex{border:1px solid #d5edf0;border-radius:22px;padding:24px;background:#fff;line-height:1.7;}
+        .contract-body h1,.contract-body h2,.contract-body h3,.contract-annex h2,.contract-annex h3{color:#0d4854;}
+        .contract-annex{margin-top:24px;}
+        .contract-annex section + section{margin-top:24px;}
+        .contract-table{width:100%;border-collapse:collapse;border:1px solid #d5edf0;border-radius:16px;overflow:hidden;}
+        .contract-table th,.contract-table td{padding:10px 12px;border-top:1px solid #e5f2f4;text-align:left;}
+        .contract-table thead th{background:#0d8c98;color:#fff;border-top:none;}
+        .contract-scope{display:grid;gap:14px;}
+        .contract-scope-item{border:1px solid #d5edf0;border-radius:18px;padding:18px;background:#fdfefe;}
+        .contract-scope-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+        .contract-total{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;border-radius:999px;background:#0d8c98;color:#fff;font-weight:700;}
+        @media (max-width:720px){body{padding:16px}.contract-page{padding:22px;border-radius:20px}.contract-head,.contract-summary{display:grid}.contract-meta{min-width:0;}}
+        @media print{body{background:#fff;padding:0}.contract-page{max-width:none;border-radius:0;box-shadow:none;padding:0}}
+      </style>
+    </head>
+    <body>
+      <main class="contract-page">
+        <div class="contract-head">
+          <div class="contract-brand">
+            <img src="<?= h(app_url('/assets/img/logohorizontalbranco.png')) ?>" alt="Complementare" style="height:42px;width:auto;background:#0d4854;border-radius:10px;padding:10px 14px;">
+            <div>
+              <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#178f9c;font-weight:700;">Documento de aceite</div>
+              <h1 style="margin:4px 0 0;font-size:28px;line-height:1.1;"><?= h((string) $contract['title']) ?></h1>
+            </div>
+          </div>
+          <div class="contract-meta">
+            <div class="contract-chip"><strong>Proposta:</strong> <?= h($code) ?></div>
+            <?php if ($revision !== ''): ?><div class="contract-chip"><strong>Revisão:</strong> <?= h($revision) ?></div><?php endif; ?>
+            <div class="contract-chip"><strong>Data:</strong> <?= h($proposalDate) ?></div>
+          </div>
+        </div>
+
+        <div class="contract-summary">
+          <div class="contract-box">
+            <div class="contract-box-label">Cliente</div>
+            <div style="margin-top:8px;font-size:18px;font-weight:700;"><?= h($client) ?></div>
+          </div>
+          <div class="contract-box">
+            <div class="contract-box-label">Obra</div>
+            <div style="margin-top:8px;font-size:18px;font-weight:700;"><?= h($obra) ?></div>
+          </div>
+        </div>
+
+        <section class="contract-body">
+          <?= (string) ($contract['body_html'] ?? '') ?>
+        </section>
+
+        <section class="contract-annex">
+          <?php if ($files !== []): ?>
+            <section>
+              <h2 style="margin:0 0 12px;">Arquivos recebidos</h2>
+              <table class="contract-table">
+                <thead>
+                  <tr><th>Arquivo</th><th style="text-align:center;">Revisão</th><th style="text-align:center;">Data</th></tr>
+                </thead>
+                <tbody>
+                  <?php foreach ($files as $file): ?>
+                    <tr>
+                      <td><?= h(trim((string) ($file['item'] ?? '') . ' ' . (string) ($file['name'] ?? ''))) ?></td>
+                      <td style="text-align:center;"><?= h((string) ($file['revision'] ?? '')) ?></td>
+                      <td style="text-align:center;"><?= h((string) ($file['date'] ?? '')) ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                </tbody>
+              </table>
+            </section>
+          <?php endif; ?>
+
+          <?php if ($scopeEntries !== []): ?>
+            <section>
+              <h2 style="margin:0 0 12px;">Escopo da proposta</h2>
+              <div class="contract-scope">
+                <?php foreach ($scopeEntries as $entry): ?>
+                  <article class="contract-scope-item">
+                    <div class="contract-scope-head">
+                      <?php if (trim((string) ($entry['icon'] ?? '')) !== ''): ?><img src="<?= h(app_url((string) $entry['icon'])) ?>" alt="<?= h((string) ($entry['title'] ?? 'Disciplina')) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
+                      <div>
+                        <div style="font-size:18px;font-weight:700;"><?= h((string) ($entry['title'] ?? 'Disciplina')) ?></div>
+                        <?php if (trim((string) ($entry['subtitle'] ?? '')) !== ''): ?><div style="color:#54767d;"><?= h((string) $entry['subtitle']) ?></div><?php endif; ?>
+                      </div>
+                    </div>
+                    <?php if (!empty($entry['topics'])): ?>
+                      <ul style="margin:0;padding-left:18px;"><?php foreach ((array) $entry['topics'] as $topic): ?><li><?= h((string) $topic) ?></li><?php endforeach; ?></ul>
+                    <?php elseif (trim((string) ($entry['summary'] ?? '')) !== ''): ?>
+                      <p style="margin:0;"><?= h((string) $entry['summary']) ?></p>
+                    <?php endif; ?>
+                  </article>
+                <?php endforeach; ?>
+              </div>
+            </section>
+          <?php endif; ?>
+
+          <section>
+            <h2 style="margin:0 0 12px;">Valor total</h2>
+            <div class="contract-total"><?= h(brl($total)) ?> | <?= h(currency_to_words_ptbr($total)) ?></div>
+          </section>
+
+          <?php if ($considerations !== []): ?>
+            <section>
+              <h3 style="margin:0 0 10px;">Considerações importantes</h3>
+              <ul style="margin:0;padding-left:18px;"><?php foreach ($considerations as $item): ?><li><?= h((string) $item) ?></li><?php endforeach; ?></ul>
+            </section>
+          <?php endif; ?>
+
+          <?php if ($exclusions !== []): ?>
+            <section>
+              <h3 style="margin:0 0 10px;">Itens fora do escopo</h3>
+              <ul style="margin:0;padding-left:18px;"><?php foreach ($exclusions as $item): ?><li><?= h((string) $item) ?></li><?php endforeach; ?></ul>
+            </section>
+          <?php endif; ?>
+        </section>
+      </main>
+    </body>
+    </html>
+    <?php
+
+    return trim((string) ob_get_clean());
+}
+
+function proposal_acceptance_render_data(array $proposal, array $payload, array $settings): array
+{
+    if (proposal_acceptance_mode($payload) !== 'summary') {
+        return proposal_contract_render_data($proposal, $payload, $settings);
+    }
+
+    $replaceMap = build_proposal_placeholder_map($proposal, $payload, $settings);
+    $plainTokens = [];
+    foreach ($replaceMap as $key => $value) {
+        $plainTokens['{{' . $key . '}}'] = html_entity_decode((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+    $renderPlainText = static function (string $text) use ($plainTokens): string {
+        return trim(strtr($text, $plainTokens));
+    };
+
+    $summaryIntro = trim((string) ($payload['accept_summary_html'] ?? ''));
+    $summaryHtml = render_proposal_summary_fragment($proposal, $payload, $settings);
+    if ($summaryIntro !== '') {
+        $summaryHtml = '<section style="margin-bottom:20px;">' . render_terms_html($summaryIntro, $replaceMap) . '</section>' . $summaryHtml;
+    }
+
+    $checkbox = trim((string) ($payload['accept_terms_checkbox_text'] ?? ''));
+    if ($checkbox === '') {
+        $checkbox = 'Li e concordo com o resumo desta proposta.';
+    }
+
+    return [
+        'mode' => 'summary',
+        'title' => 'Resumo da proposta',
+        'checkbox_text' => $renderPlainText($checkbox),
+        'body_html' => $summaryHtml,
+    ];
+}
+
+function proposal_public_render_data(array $proposal, array $payload, array $settings): array
+{
+    $replaceMap = build_proposal_placeholder_map($proposal, $payload, $settings);
+    $tokens = [];
+    foreach ($replaceMap as $key => $value) {
+        $tokens['{{' . $key . '}}'] = html_entity_decode((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+    $renderText = static function (string $value) use ($tokens): string {
+        return strtr($value, $tokens);
+    };
+
+    $heroMediaUrl = $renderText((string) ($payload['header_custom_media_url'] ?? ''));
+
+    return [
+        'intro_title' => $renderText((string) ($payload['intro_title'] ?? '')),
+        'company_about_text' => (string) ($settings['company_about_text'] ?? ''),
+        'company_accept_phrase' => (string) ($settings['company_accept_phrase'] ?? ''),
+        'hero_header' => [
+            'layout' => (string) ($payload['header_title_layout'] ?? 'default'),
+            'kicker' => $renderText((string) ($payload['header_aditivo_kicker'] ?? 'PROPOSTA')),
+            'title' => $renderText((string) ($payload['header_aditivo_title'] ?? 'ADITIVO DA PROPOSTA')),
+            'code' => $renderText((string) ($payload['codigo_base'] ?? ($proposal['code'] ?? ''))),
+        ],
+        'hero_media' => [
+            'enabled' => proposal_flag_enabled($payload['header_custom_media_enabled'] ?? false),
+            'url' => $heroMediaUrl,
+            'type' => proposal_media_type_from_url($heroMediaUrl),
+        ],
+        'files_section' => [
+            'label' => $renderText((string) ($payload['files_section_label'] ?? '')),
+            'title' => $renderText((string) ($payload['files_section_title'] ?? '')),
+            'subtitle' => $renderText((string) ($payload['files_section_subtitle'] ?? '')),
+        ],
+        'guidelines' => [
+            'title' => (string) ($payload['guidelines_title'] ?? ''),
+            'subtitle' => (string) ($payload['guidelines_subtitle'] ?? ''),
+            'items' => proposal_guideline_entries($payload),
+        ],
+        'scope_entries' => proposal_scope_entries($payload),
+        'timeline' => proposal_timeline_entries($payload),
+        'files' => proposal_file_entries($payload),
+        'considerations' => array_values(normalize_topic_lines($payload['consideracoes'] ?? [])),
+        'exclusions' => array_values(normalize_topic_lines($payload['exclusoes'] ?? [])),
+        'acceptance' => proposal_acceptance_render_data($proposal, $payload, $settings),
+    ];
+}
+
 function proposal_runtime_script(
     string $token,
     string $downloadUrl,
     string $signUrl,
-    array $selectedDisciplines,
-    array $customDisciplines,
-    array $timelineStages,
-    bool $previewMode,
-    array $settings = []
+    array $publicData,
+    bool $previewMode
 ): string {
-    $selectedJson = json_encode(array_values($selectedDisciplines), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    if (!is_string($selectedJson)) {
-        $selectedJson = '[]';
-    }
-    $customJson = json_encode(array_values($customDisciplines), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    if (!is_string($customJson)) {
-        $customJson = '[]';
-    }
-    $stagesJson = json_encode(array_values($timelineStages), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    if (!is_string($stagesJson)) {
-        $stagesJson = '[]';
+    $publicJson = json_encode($publicData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (!is_string($publicJson)) {
+        $publicJson = '{}';
     }
     $tokenJs = json_encode($token, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '""';
     $downloadJs = json_encode($downloadUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '""';
@@ -1334,159 +2163,222 @@ function proposal_runtime_script(
   const token = {$tokenJs};
   const downloadUrl = {$downloadJs};
   const signUrl = {$signJs};
-  const selected = {$selectedJson};
-  const customDisciplines = {$customJson};
-  const timelineStages = {$stagesJson};
-
-  const disciplineOrder = ['eletrica', 'especiais', 'hidraulica', 'esgoto', 'gas'];
-  const contractMarkerByDiscipline = {
-    eletrica: '5.1.1.',
-    especiais: '5.1.2.',
-    hidraulica: '5.1.3.',
-    esgoto: '5.1.4.',
-    gas: '5.1.5.'
-  };
+  const publicData = {$publicJson};
 
   function formatBrl(value) {
     const numeric = Number(value || 0);
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numeric);
   }
 
-  function renderCustomDisciplines() {
-    if (!Array.isArray(customDisciplines) || customDisciplines.length === 0) return;
-    const enabledCustom = customDisciplines.filter((item) => item && item.ativa);
-    if (enabledCustom.length === 0) return;
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 
-    const etapasSection = document.getElementById('etapas');
-    if (etapasSection) {
-      const parent = etapasSection.parentNode;
-      enabledCustom.forEach((item) => {
-        const scopeItem = document.createElement('div');
-        scopeItem.className = 'scope-item fade-in visible';
+  function toParagraphs(text) {
+    return String(text || '')
+      .split(/\\n{2,}/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
 
-        const scopeIcon = document.createElement('div');
-        scopeIcon.className = 'scope-icon';
-        const iconImg = document.createElement('img');
-        iconImg.src = item.icone || '/assets/img/scope-especiais.png';
-        iconImg.alt = item.nome || 'Disciplina';
-        scopeIcon.appendChild(iconImg);
+  function renderIntro() {
+    const introRight = document.querySelector('.intro-right');
+    if (!introRight) return;
 
-        const scopeContent = document.createElement('div');
-        scopeContent.className = 'scope-content';
-        const title = document.createElement('h3');
-        title.textContent = item.nome || 'Disciplina';
-        const list = document.createElement('ul');
-        const line = document.createElement('li');
-        line.textContent = item.descricao && item.descricao.trim() !== '' ? item.descricao : 'Escopo definido na proposta comercial.';
-        list.appendChild(line);
+    const about = toParagraphs(publicData.company_about_text || '');
+    const introTitle = String(publicData.intro_title || '').trim();
+    const acceptPhrase = String(publicData.company_accept_phrase || '').trim();
 
-        scopeContent.appendChild(title);
-        scopeContent.appendChild(list);
-        scopeItem.appendChild(scopeIcon);
-        scopeItem.appendChild(scopeContent);
-        parent.insertBefore(scopeItem, etapasSection);
-      });
+    let html = '';
+    if (introTitle) {
+      html += '<h2>' + escapeHtml(introTitle) + '</h2>';
     }
-
-    const quoteBreakdown = document.querySelector('.quote-breakdown');
-    if (quoteBreakdown) {
-      enabledCustom.forEach((item) => {
-        const row = document.createElement('div');
-        row.className = 'quote-row';
-        row.innerHTML =
-          '<div class="quote-row-left">' +
-            '<div class="quote-row-icon"><img src="' + (item.icone || '/assets/img/scope-especiais.png') + '" alt="' + (item.nome || 'Disciplina') + '"></div>' +
-            '<span class="quote-row-label"></span>' +
-          '</div>' +
-          '<span class="quote-row-value"></span>';
-        const label = row.querySelector('.quote-row-label');
-        const value = row.querySelector('.quote-row-value');
-        if (label) label.textContent = item.nome || 'Disciplina';
-        if (value) value.textContent = formatBrl(item.valor || 0);
-        quoteBreakdown.appendChild(row);
-      });
+    about.forEach((paragraph) => {
+      html += '<p>' + escapeHtml(paragraph) + '</p>';
+    });
+    if (acceptPhrase) {
+      html += '<div class="intro-highlight"><p>' + escapeHtml(acceptPhrase) + '</p></div>';
+    }
+    if (html !== '') {
+      introRight.innerHTML = html;
     }
   }
 
-  function renderTimeline() {
-    const horizontal = document.querySelector('.timeline-horizontal');
-    if (!horizontal || !Array.isArray(timelineStages) || timelineStages.length === 0) return;
+  function setupHeroMedia() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
 
-    horizontal.innerHTML = '';
-    horizontal.style.setProperty('--timeline-count', String(timelineStages.length));
+    hero.classList.remove('has-custom-media', 'has-custom-video');
+    hero.querySelectorAll('.hero-custom-media').forEach((node) => node.remove());
 
-    timelineStages.forEach((stage, index) => {
-      const step = document.createElement('div');
-      step.className = 'timeline-step fade-in visible';
+    const media = publicData.hero_media || {};
+    const enabled = !!media.enabled;
+    const url = String(media.url || '').trim();
+    if (!enabled || url === '') {
+      return;
+    }
 
-      const marker = document.createElement('div');
-      marker.className = 'timeline-marker';
-      marker.innerHTML =
-        '<svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-          '<path d="M0 72 H120 V38 L188 14 V72 H320" />' +
-        '</svg>' +
-        '<span class="timeline-marker-inner">' + (index + 1) + '&ordf;</span>';
+    const detectMediaType = (value) => {
+      return /\.(mp4|webm|ogg|mov|m4v)(?:$|[?#])/i.test(String(value || '')) ? 'video' : 'image';
+    };
+    const mediaType = detectMediaType(url);
 
-      const badge = document.createElement('span');
-      badge.className = 'timeline-badge';
-      badge.textContent = stage.badge || 'Etapa';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'hero-custom-media';
 
-      const title = document.createElement('h4');
-      title.textContent = stage.nome || 'Etapa';
+    if (mediaType === 'video') {
+      const video = document.createElement('video');
+      const source = document.createElement('source');
+      const extensionMatch = url.match(/\.([a-z0-9]+)(?:$|[?#])/i);
+      const extension = extensionMatch ? extensionMatch[1].toLowerCase() : 'mp4';
+      const mimeTypeMap = {
+        mp4: 'video/mp4',
+        m4v: 'video/mp4',
+        webm: 'video/webm',
+        ogg: 'video/ogg',
+        mov: 'video/quicktime'
+      };
+      video.className = 'hero-custom-video';
+      video.src = url;
+      video.setAttribute('src', url);
+      video.autoplay = true;
+      video.muted = true;
+      video.defaultMuted = true;
+      video.volume = 0;
+      video.loop = true;
+      video.playsInline = true;
+      video.preload = 'metadata';
+      video.setAttribute('autoplay', '');
+      video.setAttribute('muted', '');
+      video.setAttribute('loop', '');
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.setAttribute('preload', 'metadata');
+      video.setAttribute('disablepictureinpicture', '');
+      video.controls = false;
+      video.poster = '/assets/img/hero-image8.png';
+      source.src = url;
+      source.type = mimeTypeMap[extension] || 'video/mp4';
+      video.appendChild(source);
 
-      const desc = document.createElement('p');
-      desc.textContent = stage.descricao || '';
+      const tryPlay = () => {
+        video.muted = true;
+        video.defaultMuted = true;
+        const playAttempt = video.play();
+        if (playAttempt && typeof playAttempt.catch === 'function') {
+          playAttempt.catch(() => {});
+        }
+      };
 
-      step.appendChild(marker);
-      step.appendChild(badge);
-      step.appendChild(title);
-      step.appendChild(desc);
-      horizontal.appendChild(step);
-    });
-  }
-
-  function applyDisciplineVisibility() {
-    const enabled = new Set(selected);
-    const scopeItems = document.querySelectorAll('.scope-item');
-    scopeItems.forEach((item, idx) => {
-      const key = disciplineOrder[idx];
-      if (!key) return;
-      if (!enabled.has(key)) item.style.display = 'none';
-    });
-
-    const quoteRows = document.querySelectorAll('.quote-row');
-    quoteRows.forEach((row, idx) => {
-      const key = disciplineOrder[idx];
-      if (!key) return;
-      if (!enabled.has(key)) row.style.display = 'none';
-    });
-
-    const contractRows = document.querySelectorAll('.contract-table tr');
-    contractRows.forEach((row) => {
-      const text = row.textContent || '';
-      disciplineOrder.forEach((key) => {
-        const marker = contractMarkerByDiscipline[key];
-        if (text.indexOf(marker) !== -1 && !enabled.has(key)) {
-          row.style.display = 'none';
+      video.addEventListener('loadedmetadata', tryPlay);
+      video.addEventListener('loadeddata', tryPlay);
+      video.addEventListener('canplay', tryPlay);
+      video.addEventListener('canplaythrough', tryPlay);
+      video.addEventListener('playing', tryPlay);
+      window.addEventListener('pageshow', tryPlay, { once: true });
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          tryPlay();
         }
       });
-    });
-
-    const exclusionLines = document.querySelectorAll('#exclusoes .exclusion-line');
-    let hasVisibleExclusion = false;
-    exclusionLines.forEach((line) => {
-      const textEl = line.querySelector('.exclusion-text');
-      const content = textEl ? textEl.textContent.trim() : '';
-      if (!content) {
-        line.style.display = 'none';
-      } else {
-        hasVisibleExclusion = true;
-      }
-    });
-    const exclusionSection = document.getElementById('exclusoes');
-    if (exclusionSection && !hasVisibleExclusion) {
-      exclusionSection.style.display = 'none';
+      ['click', 'touchstart', 'keydown', 'scroll'].forEach((eventName) => {
+        window.addEventListener(eventName, tryPlay, { once: true, passive: true });
+      });
+      wrapper.appendChild(video);
+      hero.classList.add('has-custom-media', 'has-custom-video');
+      requestAnimationFrame(() => {
+        video.load();
+        tryPlay();
+      });
+      [300, 900, 1800, 3200].forEach((delay) => {
+        window.setTimeout(tryPlay, delay);
+      });
+    } else {
+      const image = document.createElement('div');
+      image.className = 'hero-custom-image';
+      image.style.backgroundImage = 'url("' + url.replace(/"/g, '\\"') + '")';
+      wrapper.appendChild(image);
+      hero.classList.add('has-custom-media');
     }
+
+    const firstLayer = hero.querySelector('.hero-grid, .hero-orb, .hero-content');
+    if (firstLayer) {
+      hero.insertBefore(wrapper, firstLayer);
+      return;
+    }
+
+    hero.appendChild(wrapper);
+  }
+
+  function renderHeroHeading() {
+    const group = document.querySelector('.hero-title-group');
+    if (!group) return;
+
+    const header = publicData.hero_header || {};
+    const layout = String(header.layout || 'default').trim();
+
+    if (layout === 'aditivo') {
+      const kicker = String(header.kicker || 'PROPOSTA').trim() || 'PROPOSTA';
+      const title = String(header.title || 'ADITIVO DA PROPOSTA').trim() || 'ADITIVO DA PROPOSTA';
+      const code = String(header.code || '').trim();
+
+      group.classList.add('hero-title-group-card');
+      group.innerHTML =
+        '<div class="hero-aditivo-card">' +
+          '<div class="hero-aditivo-kicker">' + escapeHtml(kicker) + '</div>' +
+          '<div class="hero-aditivo-title">' + escapeHtml(title) + '</div>' +
+          (code ? '<div class="hero-aditivo-code">' + escapeHtml(code) + '</div>' : '') +
+        '</div>';
+      return;
+    }
+
+    group.classList.remove('hero-title-group-card');
+    group.innerHTML =
+      '<h1 class="hero-title">PROPOSTA</h1>' +
+      '<p class="hero-subtitle">COMERCIAL</p>';
+  }
+
+  function renderFilesSection() {
+    const section = document.getElementById('arquivos');
+    if (!section) return;
+
+    const header = section.querySelector('.section-header');
+    if (header) {
+      const number = header.querySelector('.section-number');
+      const title = header.querySelector('.section-title');
+      const subtitle = header.querySelector('.section-subtitle');
+      if (number) number.textContent = (publicData.files_section && publicData.files_section.label) || number.textContent;
+      if (title) title.textContent = (publicData.files_section && publicData.files_section.title) || title.textContent;
+      if (subtitle) subtitle.textContent = (publicData.files_section && publicData.files_section.subtitle) || subtitle.textContent;
+    }
+
+    const table = section.querySelector('table');
+    if (!table) return;
+
+    const thirdHead = table.querySelector('thead th:nth-child(3)');
+    if (thirdHead) thirdHead.textContent = 'Data';
+
+    const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+
+    const files = Array.isArray(publicData.files) ? publicData.files : [];
+    if (files.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    tbody.innerHTML = files.map((file) => (
+      '<tr>' +
+        '<td>' + escapeHtml((file.item ? file.item + ' ' : '') + (file.name || 'Arquivo')) + '</td>' +
+        '<td style="text-align:center;">' + escapeHtml(file.revision || '') + '</td>' +
+        '<td style="text-align:center;">' + escapeHtml(file.date || '') + '</td>' +
+      '</tr>'
+    )).join('');
   }
 
   function cleanupEmptyRevision() {
@@ -1499,25 +2391,158 @@ function proposal_runtime_script(
     });
   }
 
-  function renderFileLinks() {
-    const cells = document.querySelectorAll('.arquivo-link-cell');
-    cells.forEach((cell) => {
-      const raw = (cell.getAttribute('data-link') || '').trim();
-      if (!raw) {
-        cell.textContent = '';
-        return;
+  function renderGuidelines() {
+    const grid = document.querySelector('.guidelines-grid');
+    if (!grid) return;
+
+    const section = grid.closest('section');
+    if (!section) return;
+
+    const titleEl = section.querySelector('h3');
+    if (titleEl && publicData.guidelines && publicData.guidelines.title) {
+      titleEl.textContent = publicData.guidelines.title;
+    }
+
+    let subtitleEl = section.querySelector('.guidelines-subtitle');
+    const subtitle = String((publicData.guidelines && publicData.guidelines.subtitle) || '').trim();
+    if (subtitle !== '') {
+      if (!subtitleEl) {
+        subtitleEl = document.createElement('p');
+        subtitleEl.className = 'guidelines-subtitle fade-in visible';
+        subtitleEl.style.margin = '0 0 1.5rem';
+        subtitleEl.style.textAlign = 'center';
+        subtitleEl.style.color = 'var(--gray-500)';
+        if (titleEl) {
+          titleEl.insertAdjacentElement('afterend', subtitleEl);
+        }
       }
-      const link = document.createElement('a');
-      link.className = 'arquivo-link';
-      link.href = raw;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.title = 'Abrir arquivo';
-      link.setAttribute('aria-label', 'Abrir arquivo em nova guia');
-      link.innerHTML = '&#128279;';
-      cell.innerHTML = '';
-      cell.appendChild(link);
+      subtitleEl.textContent = subtitle;
+    } else if (subtitleEl) {
+      subtitleEl.remove();
+    }
+
+    const items = publicData.guidelines && Array.isArray(publicData.guidelines.items) ? publicData.guidelines.items : [];
+    if (items.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    grid.innerHTML = items.map((item) => (
+      '<div class="guideline-card fade-in visible">' +
+        '<div class="guideline-icon">' +
+          (item.icon ? '<img src="' + escapeHtml(item.icon) + '" alt="' + escapeHtml(item.title || 'Diretriz') + '">' : '') +
+        '</div>' +
+        '<h4>' + escapeHtml(item.title || 'Diretriz') + '</h4>' +
+        '<p>' + escapeHtml(item.content || '') + '</p>' +
+      '</div>'
+    )).join('');
+  }
+
+  function renderScope() {
+    const etapasSection = document.getElementById('etapas');
+    if (!etapasSection) return;
+
+    document.querySelectorAll('.scope-item').forEach((item) => item.remove());
+    const entries = Array.isArray(publicData.scope_entries) ? publicData.scope_entries : [];
+    const parent = etapasSection.parentNode;
+
+    entries.forEach((entry) => {
+      const block = document.createElement('div');
+      block.className = 'scope-item fade-in visible';
+      block.innerHTML =
+        '<div class="scope-icon">' + (entry.icon ? '<img src="' + escapeHtml(entry.icon) + '" alt="' + escapeHtml(entry.title || 'Disciplina') + '">' : '') + '</div>' +
+        '<div class="scope-content">' +
+          '<h3>' + escapeHtml(entry.title || 'Disciplina') + '</h3>' +
+          (entry.subtitle ? '<h4>' + escapeHtml(entry.subtitle) + '</h4>' : '') +
+          (
+            Array.isArray(entry.topics) && entry.topics.length
+              ? '<ul>' + entry.topics.map((topic) => '<li>' + escapeHtml(topic) + '</li>').join('') + '</ul>'
+              : '<p>' + escapeHtml(entry.summary || '') + '</p>'
+          ) +
+        '</div>';
+      parent.insertBefore(block, etapasSection);
     });
+  }
+
+  function renderTimeline() {
+    const horizontal = document.querySelector('.timeline-horizontal');
+    const stages = Array.isArray(publicData.timeline) ? publicData.timeline : [];
+    if (!horizontal || stages.length === 0) return;
+
+    horizontal.innerHTML = '';
+    horizontal.style.setProperty('--timeline-count', String(stages.length));
+
+    stages.forEach((stage, index) => {
+      const step = document.createElement('div');
+      step.className = 'timeline-step fade-in visible';
+      step.innerHTML =
+        '<div class="timeline-marker">' +
+          '<svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+            '<path d="M0 72 H120 V38 L188 14 V72 H320" />' +
+          '</svg>' +
+          '<span class="timeline-marker-inner"><span class="timeline-marker-number">' + escapeHtml(String(stage.index || (index + 1))) + '</span><span class="timeline-marker-ordinal">&ordf;</span></span>' +
+        '</div>' +
+        '<span class="timeline-badge">' + escapeHtml(stage.badge || 'Etapa') + '</span>' +
+        '<h4>' + escapeHtml(stage.name || 'Etapa') + '</h4>' +
+        '<p>' + escapeHtml(stage.description || '') + '</p>';
+      horizontal.appendChild(step);
+    });
+  }
+
+  function renderQuoteBreakdown() {
+    const breakdown = document.querySelector('.quote-breakdown');
+    if (!breakdown) return;
+
+    const entries = Array.isArray(publicData.scope_entries) ? publicData.scope_entries : [];
+    if (entries.length === 0) {
+      breakdown.style.display = 'none';
+      return;
+    }
+
+    breakdown.innerHTML =
+      '<div class="quote-breakdown-header"><span>Disciplina</span><span>Valor</span></div>' +
+      entries.map((entry) => (
+        '<div class="quote-row">' +
+          '<div class="quote-row-left">' +
+            '<div class="quote-row-icon">' + (entry.icon ? '<img src="' + escapeHtml(entry.icon) + '" alt="' + escapeHtml(entry.title || 'Disciplina') + '">' : '') + '</div>' +
+            '<span class="quote-row-label">' + escapeHtml(entry.title || 'Disciplina') + '</span>' +
+          '</div>' +
+          '<span class="quote-row-value">' + escapeHtml(formatBrl(entry.value || 0)) + '</span>' +
+        '</div>'
+      )).join('');
+  }
+
+  function renderConsiderations() {
+    const list = document.querySelector('.considerations-list');
+    const section = document.getElementById('consideracoes');
+    if (!list || !section) return;
+
+    const items = Array.isArray(publicData.considerations) ? publicData.considerations : [];
+    if (items.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    list.innerHTML = items.map((item) => '<li class="fade-in visible">' + escapeHtml(item) + '</li>').join('');
+  }
+
+  function renderExclusions() {
+    const list = document.querySelector('#exclusoes .exclusions-list');
+    const section = document.getElementById('exclusoes');
+    if (!list || !section) return;
+
+    const items = Array.isArray(publicData.exclusions) ? publicData.exclusions : [];
+    if (items.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    list.innerHTML = items.map((item) => (
+      '<div class="exclusion-line fade-in visible">' +
+        '<div class="exclusion-letter">&times;</div>' +
+        '<div class="exclusion-text">' + escapeHtml(item) + '</div>' +
+      '</div>'
+    )).join('');
   }
 
   function setupPaymentMethods() {
@@ -1589,7 +2614,7 @@ function proposal_runtime_script(
     }
 
     wrapper.style.display = '';
-    if (note) note.style.display = '';
+    if (note) note.style.display = available.length > 1 ? '' : 'none';
 
     const activate = (method) => {
       cards.forEach((card) => {
@@ -1643,6 +2668,20 @@ function proposal_runtime_script(
 
   function setupAcceptance() {
     const acceptButton = document.getElementById('accept-proposal-button');
+    const modalTitle = document.querySelector('.modal-header h2');
+    const checkboxLabel = document.querySelector('label[for="agree-terms"]');
+    const contractBody = document.querySelector('.contract-content .contract-body');
+
+    if (modalTitle && publicData.acceptance && publicData.acceptance.title) {
+      modalTitle.textContent = publicData.acceptance.title;
+    }
+    if (checkboxLabel && publicData.acceptance && publicData.acceptance.checkbox_text) {
+      checkboxLabel.textContent = publicData.acceptance.checkbox_text;
+    }
+    if (contractBody && publicData.acceptance && publicData.acceptance.body_html) {
+      contractBody.innerHTML = publicData.acceptance.body_html;
+    }
+
     if (acceptButton && previewMode) {
       acceptButton.textContent = '✓ Pré-visualização';
     }
@@ -1739,10 +2778,16 @@ function proposal_runtime_script(
     });
   }
 
-  applyDisciplineVisibility();
-  renderCustomDisciplines();
+  setupHeroMedia();
+  renderHeroHeading();
+  renderIntro();
+  renderFilesSection();
+  renderGuidelines();
+  renderScope();
   renderTimeline();
-  renderFileLinks();
+  renderQuoteBreakdown();
+  renderConsiderations();
+  renderExclusions();
   setupPaymentMethods();
   cleanupEmptyRevision();
   setupAcceptance();
@@ -1800,6 +2845,9 @@ function normalize_revision_for_display(string $revision): string
     }
     return $revision;
 }
+
+
+
 
 
 

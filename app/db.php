@@ -63,6 +63,7 @@ function db_empty_state(): array
                 'admins' => 0,
                 'settings' => 0,
                 'proposals' => 0,
+                'proposal_models' => 0,
                 'proposal_views' => 0,
                 'proposal_events' => 0,
                 'webhooks' => 0,
@@ -72,6 +73,7 @@ function db_empty_state(): array
         'admins' => [],
         'settings' => [],
         'proposals' => [],
+        'proposal_models' => [],
         'proposal_views' => [],
         'proposal_events' => [],
         'webhooks' => [],
@@ -102,7 +104,7 @@ function db_seed_defaults(array &$state): void
 
 function db_sync_counters(array &$state): void
 {
-    $tables = ['admins', 'settings', 'proposals', 'proposal_views', 'proposal_events', 'webhooks'];
+    $tables = ['admins', 'settings', 'proposals', 'proposal_models', 'proposal_views', 'proposal_events', 'webhooks'];
     foreach ($tables as $table) {
         $maxId = 0;
         foreach (($state[$table] ?? []) as $row) {
@@ -370,4 +372,88 @@ function save_settings_row(array $changes): array
     $current = get_settings_row();
     $changes['updated_at'] = now_iso();
     return db_update('settings', (int) $current['id'], $changes) ?? $current;
+}
+
+function list_proposal_models(): array
+{
+    $rows = db_all('proposal_models');
+    usort(
+        $rows,
+        static fn (array $a, array $b): int => strcmp((string) ($a['name'] ?? ''), (string) ($b['name'] ?? ''))
+    );
+
+    return $rows;
+}
+
+function get_proposal_model(int $id): ?array
+{
+    $row = db_find('proposal_models', $id);
+    if (!$row) {
+        return null;
+    }
+
+    $payload = json_decode((string) ($row['payload_json'] ?? '{}'), true);
+    $row['payload'] = is_array($payload) ? $payload : [];
+    return $row;
+}
+
+function save_proposal_model_record(?int $id, string $name, string $description, array $payload, ?array $actor = null): array
+{
+    $now = now_iso();
+    $actorId = (int) ($actor['id'] ?? 0);
+    $actorName = trim((string) ($actor['name'] ?? ''));
+    $payloadJson = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (!is_string($payloadJson)) {
+        $payloadJson = '{}';
+    }
+
+    if ($id === null) {
+        return db_insert('proposal_models', [
+            'name' => $name,
+            'description' => $description,
+            'payload_json' => $payloadJson,
+            'created_by_admin_id' => $actorId > 0 ? $actorId : null,
+            'created_by_admin_name' => $actorName,
+            'updated_by_admin_id' => $actorId > 0 ? $actorId : null,
+            'updated_by_admin_name' => $actorName,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+    }
+
+    $existing = db_find('proposal_models', $id);
+    if (!$existing) {
+        return save_proposal_model_record(null, $name, $description, $payload, $actor);
+    }
+
+    return db_update('proposal_models', $id, [
+        'name' => $name,
+        'description' => $description,
+        'payload_json' => $payloadJson,
+        'updated_by_admin_id' => $actorId > 0 ? $actorId : ($existing['updated_by_admin_id'] ?? null),
+        'updated_by_admin_name' => $actorName !== '' ? $actorName : (string) ($existing['updated_by_admin_name'] ?? ''),
+        'updated_at' => $now,
+    ]) ?? $existing;
+}
+
+function delete_proposal_model_record(int $id): bool
+{
+    $rows = db_all('proposal_models');
+    $filtered = [];
+    $deleted = false;
+
+    foreach ($rows as $row) {
+        if ((int) ($row['id'] ?? 0) === $id) {
+            $deleted = true;
+            continue;
+        }
+        $filtered[] = $row;
+    }
+
+    if (!$deleted) {
+        return false;
+    }
+
+    db_replace_rows('proposal_models', $filtered);
+    return true;
 }

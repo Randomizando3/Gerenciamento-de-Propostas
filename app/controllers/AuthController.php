@@ -51,3 +51,4 @@ function logout_action(): void
     flash('success', 'Sessão encerrada.');
     redirect('/admin/login');
 }
+

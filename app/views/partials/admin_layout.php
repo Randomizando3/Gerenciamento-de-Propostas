@@ -6,6 +6,7 @@ $path = request_path();
 $isDashboard = $path === '/admin';
 $isProposals = $path === '/admin/proposals' || str_starts_with($path, '/admin/proposals/');
 $isNewProposal = $path === '/admin/proposals/new';
+$isModels = str_starts_with($path, '/admin/models');
 $isUsers = str_starts_with($path, '/admin/users');
 $isSettings = str_starts_with($path, '/admin/settings');
 $isAdmin = is_admin_user($adminUser);
@@ -20,14 +21,16 @@ $isAdmin = is_admin_user($adminUser);
 </head>
 <body>
   <div class="admin-shell">
-    <aside class="admin-sidebar">
-      <div class="brand">
-        <img class="brand-logo" src="/assets/img/logohorizontalbranco.png" alt="Complementare">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-head">
+        <div class="brand">
+          <img class="brand-logo" src="/assets/img/logohorizontalbranco.png" alt="Complementare">
+        </div>
       </div>
       <nav class="admin-nav">
         <a href="/admin" class="<?= $isDashboard ? 'active' : '' ?>">Dashboard</a>
         <a href="/admin/proposals" class="<?= $isProposals && !$isNewProposal ? 'active' : '' ?>">Propostas</a>
-        <a href="/admin/proposals/new" class="<?= $isNewProposal ? 'active' : '' ?>">Nova proposta</a>
+        <a href="/admin/models" class="<?= $isModels ? 'active' : '' ?>">Modelos</a>
         <?php if ($isAdmin): ?>
           <a href="/admin/users" class="<?= $isUsers ? 'active' : '' ?>">Usuários</a>
           <a href="/admin/settings" class="<?= $isSettings ? 'active' : '' ?>">Configurações</a>
@@ -37,11 +40,27 @@ $isAdmin = is_admin_user($adminUser);
         <?php if ($adminUser): ?>
           <div class="whoami"><?= h((string) $adminUser['name']) ?><br><small><?= h((string) $adminUser['email']) ?></small></div>
         <?php endif; ?>
-        <form method="post" action="/admin/logout">
+        <form method="post" action="/admin/logout" class="sidebar-logout-form">
           <?= csrf_field() ?>
           <button class="btn btn-ghost" type="submit">Sair</button>
         </form>
       </div>
+      <button
+        class="sidebar-toggle-button sidebar-toggle-button-floating"
+        type="button"
+        data-sidebar-toggle
+        data-label-open="Ocultar menu"
+        data-label-closed="Expandir menu"
+        aria-controls="admin-sidebar"
+        aria-expanded="true"
+        aria-label="Ocultar menu"
+      >
+        <span class="sidebar-toggle-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
     </aside>
     <main class="admin-main">
       <?php if (!empty($flashes)): ?>

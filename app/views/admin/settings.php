@@ -5,7 +5,7 @@ $acceptTermsVariables = is_array($acceptTermsVariables ?? null) ? $acceptTermsVa
 <section class="panel-head">
   <div>
     <h1>Configurações</h1>
-    <p>Integrações, dados da empresa e personalização dos termos de aceite.</p>
+    <p>Integra&ccedil;&otilde;es, dados da empresa e personaliza&ccedil;&atilde;o dos termos de aceite.</p>
   </div>
   <a class="btn btn-ghost" href="/admin">Voltar</a>
 </section>
@@ -132,6 +132,18 @@ $acceptTermsVariables = is_array($acceptTermsVariables ?? null) ? $acceptTermsVa
       <span>Chave PIX</span>
       <input type="text" name="company_bank_pix_key" value="<?= h((string) ($settings['company_bank_pix_key'] ?? '')) ?>" placeholder="23.012.176/0001-69">
     </label>
+
+    <hr class="settings-separator">
+
+    <h2>Textos institucionais</h2>
+    <label class="field field-top">
+      <span>Texto da empresa</span>
+      <textarea name="company_about_text" rows="5"><?= h((string) ($settings['company_about_text'] ?? '')) ?></textarea>
+    </label>
+    <label class="field">
+      <span>Frase do aceite</span>
+      <input type="text" name="company_accept_phrase" value="<?= h((string) ($settings['company_accept_phrase'] ?? '')) ?>">
+    </label>
   </section>
 
   <section class="panel settings-pane" data-tab-pane="terms">
@@ -140,7 +152,7 @@ $acceptTermsVariables = is_array($acceptTermsVariables ?? null) ? $acceptTermsVa
 
     <label class="field">
       <span>Título do modal</span>
-      <input type="text" name="accept_terms_title" value="<?= h((string) ($settings['accept_terms_title'] ?? '')) ?>" placeholder="CONTRATO DE PRESTACAO DE SERVICOS...">
+      <input type="text" name="accept_terms_title" value="<?= h((string) ($settings['accept_terms_title'] ?? '')) ?>" placeholder="CONTRATO DE PRESTAÇÃO DE SERVIÇOS...">
     </label>
 
     <label class="field field-top">
@@ -153,18 +165,20 @@ $acceptTermsVariables = is_array($acceptTermsVariables ?? null) ? $acceptTermsVa
       <input type="text" name="accept_terms_checkbox_text" value="<?= h((string) ($settings['accept_terms_checkbox_text'] ?? '')) ?>">
     </label>
 
-    <div class="settings-vars">
-      <h3>Variáveis disponíveis</h3>
-      <p class="muted">Use no texto com o formato <code>{{NOME_DA_VARIAVEL}}</code>.</p>
-      <div class="settings-vars-grid">
-        <?php foreach ($acceptTermsVariables as $var => $description): ?>
-          <div class="settings-var-item">
-            <code>{{<?= h((string) $var) ?>}}</code>
-            <small><?= h((string) $description) ?></small>
-          </div>
-        <?php endforeach; ?>
+    <details class="settings-spoiler">
+      <summary>Ver variáveis disponíveis</summary>
+      <div class="settings-vars">
+        <p class="muted">Use no texto com o formato <code>{{NOME_DA_VARIAVEL}}</code>.</p>
+        <div class="settings-vars-grid">
+          <?php foreach ($acceptTermsVariables as $var => $description): ?>
+            <div class="settings-var-item">
+              <code>{{<?= h((string) $var) ?>}}</code>
+              <small><?= h((string) $description) ?></small>
+            </div>
+          <?php endforeach; ?>
+        </div>
       </div>
-    </div>
+    </details>
   </section>
 
   <section class="inline-actions">
@@ -196,5 +210,6 @@ $acceptTermsVariables = is_array($acceptTermsVariables ?? null) ? $acceptTermsVa
     });
   })();
 </script>
+
 
 

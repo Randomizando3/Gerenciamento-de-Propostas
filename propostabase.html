@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -272,6 +272,27 @@
         url('/assets/img/hero-image8.png') center/cover no-repeat;
     }
 
+    .hero.has-custom-media {
+      background: none;
+    }
+
+    .hero.has-custom-media::before {
+      background:
+        linear-gradient(165deg, rgba(0, 11, 18, 0.42) 0%, rgba(5, 36, 45, 0.3) 45%, rgba(6, 69, 82, 0.34) 100%),
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(31, 184, 160, 0.09) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(20, 145, 155, 0.07) 0%, transparent 50%);
+    }
+
+    .hero.has-custom-video::before {
+      background:
+        linear-gradient(165deg, rgba(0, 11, 18, 0.26) 0%, rgba(5, 36, 45, 0.18) 45%, rgba(6, 69, 82, 0.22) 100%);
+    }
+
+    .hero.has-custom-media .hero-grid,
+    .hero.has-custom-media .hero-orb {
+      display: none;
+    }
+
     .hero::before {
       content: '';
       position: absolute;
@@ -282,6 +303,32 @@
       background: 
         radial-gradient(ellipse 80% 50% at 20% 40%, rgba(31, 184, 160, 0.15) 0%, transparent 50%),
         radial-gradient(ellipse 60% 40% at 80% 60%, rgba(20, 145, 155, 0.1) 0%, transparent 50%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-custom-media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-custom-image,
+    .hero-custom-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .hero-custom-image {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
     }
 
     /* Sophisticated grid pattern */
@@ -297,6 +344,8 @@
       background-size: 80px 80px;
       mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
       -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+      z-index: 2;
+      pointer-events: none;
     }
 
     /* Animated gradient orbs */
@@ -305,6 +354,8 @@
       border-radius: 18px;
       filter: blur(80px);
       animation: float 20s ease-in-out infinite;
+      z-index: 2;
+      pointer-events: none;
     }
 
     .hero-orb-1 {
@@ -396,6 +447,10 @@
       margin-bottom: 2.5rem;
     }
 
+    .hero-title-group.hero-title-group-card {
+      margin-bottom: 2rem;
+    }
+
     .hero-title {
       font-family: var(--font-main);
       font-size: 5.5rem;
@@ -412,6 +467,45 @@
       color: rgba(255,255,255,0.6);
       letter-spacing: 2px;
       margin-top: 0.5rem;
+    }
+
+    .hero-aditivo-card {
+      width: min(420px, 100%);
+      padding: 2.25rem 2rem;
+      border-radius: 24px;
+      background: rgba(14, 80, 92, 0.78);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 24px 48px rgba(4, 27, 33, 0.24);
+      text-align: center;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .hero-aditivo-kicker {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-aditivo-title {
+      font-size: clamp(2rem, 5vw, 3.35rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -1px;
+      color: var(--white);
+      text-transform: uppercase;
+      white-space: pre-line;
+    }
+
+    .hero-aditivo-code {
+      margin-top: 1.35rem;
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1;
+      color: var(--white);
     }
 
     .hero-description {
@@ -533,6 +627,10 @@
 
       .hero-right {
         max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .hero-aditivo-card {
         margin: 0 auto;
       }
     }
@@ -841,20 +939,17 @@
     }
 
     .guideline-icon {
-      width: 56px;
-      height: 56px;
+      width: auto;
+      height: auto;
       margin-bottom: 1rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 12px;
-      background: rgba(31, 184, 160, 0.08);
-      border: 1px solid rgba(31, 184, 160, 0.25);
     }
 
     .guideline-icon img {
-      width: 34px;
-      height: 34px;
+      width: 42px;
+      height: 42px;
       object-fit: contain;
       display: block;
     }
@@ -952,12 +1047,25 @@
       top: 42px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 2rem;
-      font-weight: 800;
       color: var(--teal-dark);
       text-shadow: none;
       line-height: 1;
       z-index: 3;
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 0.02em;
+      font-weight: 800;
+    }
+
+    .timeline-marker-number {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .timeline-marker-ordinal {
+      font-size: 1rem;
+      line-height: 1;
+      transform: translateY(0.12rem);
     }
 
     .timeline-badge {
@@ -1020,17 +1128,23 @@
     }
 
     .quote-total {
-      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-medium) 50%, var(--teal-accent) 100%);
-      background-size: 200% 200%;
-      animation: gradientShift 8s ease infinite;
+      background:
+        linear-gradient(100deg, rgba(8, 55, 68, 0.76) 0%, rgba(10, 74, 88, 0.72) 52%, rgba(13, 95, 111, 0.7) 100%),
+        url('/assets/img/background-preco.png') center center / cover no-repeat;
       color: var(--white);
-      padding: 3.5rem;
-      border-radius: var(--radius-xl);
+      padding: 2.6rem 2rem 2.8rem;
+      border-radius: 22px;
       text-align: center;
       margin-bottom: 2rem;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 24px 64px rgba(11, 85, 99, 0.3);
+      box-shadow: 0 18px 36px rgba(11, 85, 99, 0.18);
+      min-height: 235px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      isolation: isolate;
     }
 
     @keyframes gradientShift {
@@ -1045,30 +1159,28 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+      opacity: 0.13;
+      z-index: -1;
+      pointer-events: none;
     }
 
     .quote-total-label {
-      font-size: 0.9rem;
+      font-size: 1.05rem;
       text-transform: uppercase;
-      letter-spacing: 3px;
-      opacity: 0.9;
-      margin-bottom: 0.5rem;
+      letter-spacing: 1.4px;
+      opacity: 0.96;
+      margin-bottom: 1rem;
       position: relative;
+      font-weight: 700;
     }
 
     .quote-total-value {
-      font-size: 4.5rem;
+      font-size: clamp(3rem, 8vw, 4.8rem);
       font-weight: 800;
-      letter-spacing: -2px;
+      letter-spacing: -2.5px;
       position: relative;
-    }
-
-    .quote-total-sub {
-      font-size: 1rem;
-      opacity: 0.8;
-      margin-top: 0.5rem;
-      position: relative;
+      line-height: 1;
     }
 
     .quote-breakdown {
@@ -1231,6 +1343,9 @@
       padding: 0.42rem 0.85rem;
       cursor: pointer;
       transition: var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
     }
 
     .payment-method-tab.is-active {
@@ -1264,6 +1379,20 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+    }
+
+    .payment-title-icon,
+    .pix-logo-icon {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .pix-logo-icon {
+      width: 20px;
+      height: 20px;
     }
 
     .bank-card p {
@@ -2062,12 +2191,12 @@
        MOBILE POLISH (adicionado pela Complementare)
        - evita estouro no celular
        - melhora tipografia com clamp
-       - tabelas com scroll horizontal quando necessário
+       - tabelas com scroll horizontal quando necess?rio
     ============================================================ */
     .hero-title{font-size:clamp(2.6rem, 9vw, 5.5rem);}
     .hero-subtitle{font-size:clamp(1.2rem, 5vw, 2.5rem);}
     .hero-logo-text{font-size:clamp(1.9rem, 6vw, 3rem);}
-    .quote-total-value{font-size:clamp(2.4rem, 10vw, 4.5rem);}
+    .quote-total-value{font-size:clamp(2.8rem, 10vw, 4.5rem);}
 
     @media (max-width: 480px){
       .nav-container{padding:0.8rem 1rem;}
@@ -2080,7 +2209,7 @@
       .hero-meta{flex-direction:column; gap:0.6rem;}
       .section{padding:3.5rem 1rem;}
       .quote-section{padding:3.5rem 1rem;}
-      .quote-total{padding:2.2rem 1.5rem;}
+      .quote-total{padding:2rem 1.25rem 2.2rem; min-height:210px;}
       .quote-total-label{letter-spacing:2px;}
       .quote-row{flex-direction:column; align-items:flex-start; gap:0.6rem;}
       .quote-row-value{align-self:flex-end;}
@@ -2098,11 +2227,21 @@
   
     /* ===== Complementos (Pagamento / Exclusões / Contrato) ===== */
     .quote-total-extenso{
-      margin-top:-8px;
-      text-align:right;
-      color: var(--text-muted);
-      font-size: 0.95rem;
+      margin-top:1.15rem;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:46px;
+      padding:0.7rem 1.6rem;
+      border-radius:999px;
+      background: rgba(255,255,255,0.11);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(232, 246, 245, 0.92);
+      font-size: 1.02rem;
       font-weight: 600;
+      font-style: italic;
+      letter-spacing: 0.2px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
     }
 
     .payment-lines{
@@ -2145,33 +2284,36 @@
     .exclusions-list{
       display:flex;
       flex-direction:column;
-      gap:12px;
+      gap:18px;
       margin-top:24px;
+      width:min(900px,100%);
+      max-width:900px;
+      margin-left:auto;
+      margin-right:auto;
     }
     .exclusion-line{
       display:flex;
       gap:14px;
       align-items:flex-start;
-      padding:14px 16px;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(30,58,64,0.12);
-      border-radius: 14px;
+      padding:0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
     }
     .exclusion-letter{
-      width:34px;
-      height:34px;
-      border-radius:999px;
-      background: var(--accent);
-      color:#fff;
-      display:flex;
+      width:18px;
+      color: var(--teal-medium);
+      display:inline-flex;
       align-items:center;
       justify-content:center;
-      font-weight: 900;
-      flex: 0 0 34px;
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.2;
+      flex: 0 0 18px;
     }
     .exclusion-text{
-      color: var(--text);
-      font-weight: 650;
+      color: var(--teal-dark);
+      font-weight: 600;
       line-height: 1.55;
       flex: 1;
     }
@@ -2239,7 +2381,7 @@
     }
 
 /* ============================================================
-   CONTRATO — CORREÇÃO DE BORDAS EM TABELAS (LINHA INFERIOR)
+   CONTRATO - CORREÇÃO DE BORDAS EM TABELAS (LINHA INFERIOR)
    (evita que regras globais removam a borda do último item)
 ============================================================ */
 .contract-body table{
@@ -2378,7 +2520,7 @@
             <strong>{{CODIGO_BASE}}</strong>
           </div>
                     <div class="hero-meta-item hero-meta-item-revision">
-            <span>Revisao</span>
+            <span>Revisão</span>
             <strong>{{REVISAO}}</strong>
           </div>
           <div class="hero-meta-item">
@@ -2401,7 +2543,7 @@
       <h2>Obrigado pelo convite para desenvolver os projetos de instalações da {{OBRA}}.</h2>
       <p>A Complementare Projetos é uma empresa fundada em 2014 com a missão de liderar no setor de projetos, supervisão e consultoria de instalações. Com mais de 40 anos de experiência combinada entre seus fundadores, oferecemos serviços de alta qualidade, agilidade e proatividade.</p>
       <p>Destacamo-nos pela nossa abordagem colaborativa, utilizando tecnologia de ponta e mantendo um diálogo constante com as empresas executoras de instalações. Este compromisso com a colaboração permite-nos resolver possíveis interferências de forma eficiente, garantindo o melhor resultado para cada projeto.</p>
-      <p>Nossa metodologia de trabalho é o resultado de anos de estudo e análise, permitindo-nos otimizar o tempo e reduzir os custos para nossos clientes. Cada projeto é cuidadosamente planejado, com detalhes executivos e orientações claras para minimizar as dúvidas e garantir a eficácia na execução.</p>
+        <p>Nossa metodologia de trabalho é o resultado de anos de estudo e análise, permitindo-nos otimizar o tempo e reduzir os custos para nossos clientes. Cada projeto é cuidadosamente planejado, com detalhes executivos e orientações claras para minimizar as dúvidas e garantir a eficácia na execução.</p>
       <div class="intro-highlight">
         <p>Se estiver de acordo, aceite esta proposta e começaremos o trabalho!</p>
       </div>
@@ -2411,7 +2553,7 @@
   <!-- Arquivos Recebidos -->
   <section class="section section-teal" id="arquivos">
     <div class="section-header fade-in">
-      <span class="section-number">01 — INTRODUÇÃO</span>
+      <span class="section-number">01 - INTRODUÇÃO</span>
       <h2 class="section-title">Arquivos Recebidos</h2>
       <p class="section-subtitle">A presente proposta foi elaborada utilizando arquivos enviados via WhatsApp no dia {{DATA_ARQUIVOS}}</p>
     </div>
@@ -2421,34 +2563,34 @@
           <tr>
             <th>Arquivo</th>
             <th style="text-align: center;">Revisão</th>
-            <th style="text-align: center;">Link</th>
+            <th style="text-align: center;">Data</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>{{ARQUIVO_01}}</td>
             <td style="text-align: center;">{{ARQUIVO_01_REV}}</td>
-            <td class="arquivo-link-cell" data-link="{{ARQUIVO_01_LINK}}" style="text-align: center;"></td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_01_DATA}}" style="text-align: center;"></td>
           </tr>
           <tr>
             <td>{{ARQUIVO_02}}</td>
             <td style="text-align: center;">{{ARQUIVO_02_REV}}</td>
-            <td class="arquivo-link-cell" data-link="{{ARQUIVO_02_LINK}}" style="text-align: center;"></td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_02_DATA}}" style="text-align: center;"></td>
           </tr>
           <tr>
             <td>{{ARQUIVO_03}}</td>
             <td style="text-align: center;">{{ARQUIVO_03_REV}}</td>
-            <td class="arquivo-link-cell" data-link="{{ARQUIVO_03_LINK}}" style="text-align: center;"></td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_03_DATA}}" style="text-align: center;"></td>
           </tr>
           <tr>
             <td>{{ARQUIVO_04}}</td>
             <td style="text-align: center;">{{ARQUIVO_04_REV}}</td>
-            <td class="arquivo-link-cell" data-link="{{ARQUIVO_04_LINK}}" style="text-align: center;"></td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_04_DATA}}" style="text-align: center;"></td>
           </tr>
           <tr>
             <td>{{ARQUIVO_05}}</td>
             <td style="text-align: center;">{{ARQUIVO_05_REV}}</td>
-            <td class="arquivo-link-cell" data-link="{{ARQUIVO_05_LINK}}" style="text-align: center;"></td>
+            <td class="arquivo-link-cell" data-link="{{ARQUIVO_05_DATA}}" style="text-align: center;"></td>
           </tr>
         </tbody>
       </table>
@@ -2457,7 +2599,7 @@
 
   <!-- Escopo Header -->
   <section class="scope-header" id="escopo">
-    <span class="section-number fade-in">02 — ESCOPO DE TRABALHO</span>
+    <span class="section-number fade-in">02 - ESCOPO DE TRABALHO</span>
     <h2 class="section-title fade-in">Escopo de Trabalho</h2>
     <p class="section-subtitle fade-in">Projetos de instalações prediais de apartamento a ser reformado na cidade do Rio de Janeiro</p>
   </section>
@@ -2531,7 +2673,7 @@
       <ul>
         <li>Projeto executivo e detalhes; desenvolvimento do projeto conforme NBR 5626 e 8160</li>
         <li>Detalhamento dos pontos de coleta de esgoto e dos aparelhos em plantas e cortes e detalhes gerais</li>
-        <li>Distribuição da rede interna de água fria e água quente para abastecimento dos pontos de consumo – plantas, vistas e detalhes</li>
+        <li>Distribuição da rede interna de água fria e água quente para abastecimento dos pontos de consumo, com plantas, vistas e detalhes</li>
         <li>Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra</li>
       </ul>
     </div>
@@ -2544,7 +2686,7 @@
       <ul>
         <li>Projeto executivo e detalhes; desenvolvimento do projeto conforme NBR 5626 e 8160</li>
         <li>Detalhamento dos pontos de coleta de esgoto e dos aparelhos em plantas e cortes e detalhes gerais</li>
-        <li>Distribuição da rede interna de água fria e água quente para abastecimento dos pontos de consumo – plantas, vistas e detalhes</li>
+        <li>Distribuição da rede interna de água fria e água quente para abastecimento dos pontos de consumo, com plantas, vistas e detalhes</li>
         <li>Memorial descrevendo as instalações projetadas, bem como as características dos materiais que serão utilizados na execução da obra</li>
       </ul>
     </div>
@@ -2564,7 +2706,7 @@
   <!-- Etapas -->
   <section class="section section-teal" id="etapas">
     <div class="section-header fade-in">
-      <span class="section-number">03 — ETAPAS DOS PROJETOS</span>
+      <span class="section-number">03 - ETAPAS DOS PROJETOS</span>
       <h2 class="section-title">Etapas e Prazos</h2>
       <p class="section-subtitle">Os projetos serão entregues em arquivo eletrônico via e-mail conforme cronograma</p>
     </div>
@@ -2576,7 +2718,7 @@
             <svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M0 72 H120 V38 L188 14 V72 H320" />
             </svg>
-            <span class="timeline-marker-inner">1&ordf;</span>
+            <span class="timeline-marker-inner"><span class="timeline-marker-number">1</span><span class="timeline-marker-ordinal">&ordf;</span></span>
           </div>
           <span class="timeline-badge">10 dias</span>
           <h4>Concepção</h4>
@@ -2588,7 +2730,7 @@
             <svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M0 72 H120 V38 L188 14 V72 H320" />
             </svg>
-            <span class="timeline-marker-inner">2&ordf;</span>
+            <span class="timeline-marker-inner"><span class="timeline-marker-number">2</span><span class="timeline-marker-ordinal">&ordf;</span></span>
           </div>
           <span class="timeline-badge">15 dias</span>
           <h4>Estudo Preliminar</h4>
@@ -2600,7 +2742,7 @@
             <svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M0 72 H120 V38 L188 14 V72 H320" />
             </svg>
-            <span class="timeline-marker-inner">3&ordf;</span>
+            <span class="timeline-marker-inner"><span class="timeline-marker-number">3</span><span class="timeline-marker-ordinal">&ordf;</span></span>
           </div>
           <span class="timeline-badge">10 dias</span>
           <h4>Projeto Básico</h4>
@@ -2612,7 +2754,7 @@
             <svg class="timeline-shape" viewBox="0 0 320 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M0 72 H120 V38 L188 14 V72 H320" />
             </svg>
-            <span class="timeline-marker-inner">4&ordf;</span>
+            <span class="timeline-marker-inner"><span class="timeline-marker-number">4</span><span class="timeline-marker-ordinal">&ordf;</span></span>
           </div>
           <span class="timeline-badge">Final</span>
           <h4>Projeto Executivo</h4>
@@ -2626,16 +2768,15 @@
   <section class="quote-section" id="investimento">
     <div class="quote-container">
       <div class="section-header fade-in">
-        <span class="section-number">04 — VALOR DA PROPOSTA</span>
+        <span class="section-number">04 - VALOR DA PROPOSTA</span>
         <h2 class="section-title">VALOR DA PROPOSTA</h2>
       </div>
 
       <div class="quote-total fade-in">
-        <div class="quote-total-label">Valor Total</div>
+        <div class="quote-total-label">VALOR TOTAL DA PROPOSTA</div>
         <div class="quote-total-value">{{VALOR_TOTAL}}</div>
+        <div class="quote-total-extenso">{{VALOR_TOTAL_EXTENSO_CARD}}</div>
       </div>
-
-      <div class="quote-total-extenso fade-in">{{VALOR_TOTAL_EXTENSO}}</div>
 
       <div class="quote-breakdown fade-in">
         <div class="quote-breakdown-header">
@@ -2717,29 +2858,29 @@
           </div>
         </div>
 
-        <p class="payment-note">Selecione abaixo a forma de pagamento desejada:</p>
+        <p class="payment-note" style="{{PAYMENT_NOTE_STYLE}}">Selecione abaixo a forma de pagamento desejada:</p>
       </div>
 
       <div class="payment-methods fade-in" id="payment-methods">
-        <div class="payment-method-switch" role="tablist" aria-label="Forma de pagamento">
-          <button class="payment-method-tab is-active" type="button" data-method="pix">PIX</button>
-          <button class="payment-method-tab" type="button" data-method="cartao" data-enabled="{{PAYMENT_CARD_ENABLED}}">Cartão</button>
-          <button class="payment-method-tab" type="button" data-method="boleto" data-enabled="{{PAYMENT_BOLETO_ENABLED}}">Boleto</button>
+        <div class="payment-method-switch" role="tablist" aria-label="Forma de pagamento" style="{{PAYMENT_SWITCH_STYLE}}">
+          <button class="payment-method-tab is-active" type="button" data-method="pix"><img class="pix-logo-icon" src="/assets/img/pix.png" alt="PIX"> PIX</button>
+          <button class="payment-method-tab" type="button" data-method="cartao" data-enabled="{{PAYMENT_CARD_ENABLED}}" style="{{PAYMENT_CARD_STYLE}}">Cartão</button>
+          <button class="payment-method-tab" type="button" data-method="boleto" data-enabled="{{PAYMENT_BOLETO_ENABLED}}" style="{{PAYMENT_BOLETO_STYLE}}">Boleto</button>
         </div>
 
         <div class="bank-card payment-method-card is-active" data-method="pix">
-          <h4>&#127974; DADOS BANCÁRIOS</h4>
+          <h4><img class="payment-title-icon" src="/assets/img/bank-icon.png" alt="Dados bancários"> DADOS BANCÁRIOS</h4>
           <p class="bank-line"><strong>Banco:</strong> {{BANK_NAME}}</p>
           <p class="bank-line"><strong>Agência:</strong> {{BANK_AGENCY}} — <strong>C/C:</strong> {{BANK_ACCOUNT}}</p>
           <p class="bank-line"><strong>Favorecido:</strong> {{BANK_FAVORED}}</p>
           <p class="bank-line"><strong>CNPJ:</strong> {{BANK_CNPJ}}</p>
           <p class="bank-line"><strong>Chave PIX ({{BANK_PIX_KEY_TYPE}}):</strong> {{BANK_PIX_KEY}}</p>
           <button class="pix-button pix-copy-button" data-pix-key="{{BANK_PIX_KEY}}" onclick="copyPix()">
-            &#128241; {{BANK_PIX_COPY_LABEL}}
+            <img class="pix-logo-icon" src="/assets/img/pix.png" alt="PIX"> {{BANK_PIX_COPY_LABEL}}
           </button>
         </div>
 
-        <div class="bank-card payment-method-card" data-method="cartao" data-enabled="{{PAYMENT_CARD_ENABLED}}" data-link="{{PAYMENT_CARD_LINK}}">
+        <div class="bank-card payment-method-card" data-method="cartao" data-enabled="{{PAYMENT_CARD_ENABLED}}" data-link="{{PAYMENT_CARD_LINK}}" style="{{PAYMENT_CARD_STYLE}}">
           <h4>&#128179; {{PAYMENT_CARD_TITLE}}</h4>
           <p class="payment-method-desc">{{PAYMENT_CARD_DESC}}</p>
           <a class="pix-button" href="{{PAYMENT_CARD_LINK}}" target="_blank" rel="noopener noreferrer">
@@ -2747,7 +2888,7 @@
           </a>
         </div>
 
-        <div class="bank-card payment-method-card" data-method="boleto" data-enabled="{{PAYMENT_BOLETO_ENABLED}}" data-link="{{PAYMENT_BOLETO_LINK}}">
+        <div class="bank-card payment-method-card" data-method="boleto" data-enabled="{{PAYMENT_BOLETO_ENABLED}}" data-link="{{PAYMENT_BOLETO_LINK}}" style="{{PAYMENT_BOLETO_STYLE}}">
           <h4>&#129534; {{PAYMENT_BOLETO_TITLE}}</h4>
           <p class="payment-method-desc">{{PAYMENT_BOLETO_DESC}}</p>
           <a class="pix-button" href="{{PAYMENT_BOLETO_LINK}}" target="_blank" rel="noopener noreferrer">
@@ -2761,7 +2902,7 @@
   <!-- Considerações -->
   <section class="section" id="consideracoes">
     <div class="section-header fade-in">
-      <span class="section-number">05 — CONSIDERAÇÕES</span>
+      <span class="section-number">05 - CONSIDERAÇÕES</span>
       <h2 class="section-title">Considerações Importantes</h2>
     </div>
     
@@ -2778,49 +2919,49 @@
   <!-- Exclusões -->
   <section class="section section-teal" id="exclusoes">
     <div class="section-header fade-in">
-      <span class="section-number">06 — EXCLUSÕES</span>
+      <span class="section-number">06 - EXCLUSÕES</span>
       <h2 class="section-title">ITENS FORA DO ESCOPO</h2>
     </div>
     
     <div class="exclusions-list">
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">A</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_A}}</div>
       </div>
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">B</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_B}}</div>
       </div>
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">C</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_C}}</div>
       </div>
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">D</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_D}}</div>
       </div>
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">E</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_E}}</div>
       </div>
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">F</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_F}}</div>
       </div>
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">G</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_G}}</div>
       </div>
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">H</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_H}}</div>
       </div>
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">I</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_I}}</div>
       </div>
       <div class="exclusion-line fade-in">
-        <div class="exclusion-letter">J</div>
+        <div class="exclusion-letter">&times;</div>
         <div class="exclusion-text">{{EXCLUSAO_J}}</div>
       </div>
     </div>
@@ -2843,108 +2984,27 @@
     <div class="modal">
       <div class="modal-header">
         <h2>CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE PROJETOS DE ENGENHARIA</h2>
-        <button class="modal-close" onclick="closeModal()">✕</button>
+        <button class="modal-close" onclick="closeModal()">×</button>
       </div>
       <div class="modal-body">
         <div class="contract-content contract-document">
 <div class="contract-body">
-  <p>Instrumento particular de Contrato de Prestação de Serviços de Engenharia que fazem entre si as partes abaixo qualificadas:</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">CONSIDERANDO</span> que a CONTRATADA é uma empresa de notório conhecimento técnico em projetos, supervisão e consultoria de sistemas de sistema de distribuição de força e luz, iluminação.</p>
-  <p class="contract-clause lvl1"><span class="contract-num">CONSIDERANDO</span> que a CONTRATANTE e CONTRATADA declaram que são pessoas jurídica e física paritárias e que este CONTRATO tem disposições simétricas, cujos negócios são objeto de livre estipulação das cláusulas, na forma da Lei de Liberdade Econômica (Código Civil, Art. 421-A), todas representadas por seus Administradores, que tiveram o cuidado e a diligência que todo homem ativo e probo costuma empregar na administração de seus próprios negócios (Cód. Civil, Art. 1.011).</p>
+  <p>Pré-visualização do documento de aceite vinculado à proposta comercial abaixo.</p>
 
   <table class="contract-table">
-    <tr><td><b>CONTRATANTE</b></td><td>{{CONTRATANTE_RAZAO}}, inscrito no CNPJ sob o n.º {{CONTRATANTE_CNPJ}}, com sede sito na {{CONTRATANTE_ENDERECO}} Município do {{CONTRATANTE_MUNICIPIO}}, Estado do {{CONTRATANTE_UF}}, CEP {{CONTRATANTE_CEP}}, com endereço de e-mail {{CONTRATANTE_EMAIL}}</td></tr>
-    <tr><td><b>CONTRATADA</b></td><td>COMPLEMENTARE PROJETOS DE INSTALACOES LTDA, sociedade empresária limitada, inscrita no CNPJ n.º 23.012.176/0001-69, com sede na Avenida Almirante Julio de Sá Bierrenbach, 200, Blc 1b Salas 1107b e 1108b, Barra da Tijuca, Município do Rio de Janeiro, Estado do Rio de Janeiro, CEP 22.775-028, neste ato representada pelo seu sócio, Wagner Santa Cruz da Silva, com endereço de e-mail wagner@cprojetos.com.br</td></tr>
-    <tr><td><b>OBJETO</b></td><td>Projetos elétricos, de Especiais, hidráulicos, esgoto sanitário/águas pluviais e gás canalizado e respectivas aprovações dos projetos junto aos órgãos públicos, para {{OBJETO_OBRA_DESCRICAO}} a serem construídas pela CONTRATANTE na cidade do {{OBRA_CIDADE}}.</td></tr>
-    <tr><td><b>LOCAL</b></td><td>{{OBRA_ENDERECO_COMPLETO}}</td></tr>
-    <tr><td><b>PREÇO</b></td><td>R${{PRECO_TOTAL}} ({{PRECO_TOTAL_EXTENSO}} reais)</td></tr>
-    <tr><td><b>VIGÊNCIA</b></td><td>Até {{VIGENCIA_DIAS}} ({{VIGENCIA_DIAS_EXTENSO}}) dias – {{VIGENCIA_INICIO}} a {{VIGENCIA_FIM}}.</td></tr>
+    <tr><td><b>Proposta</b></td><td>{{CODIGO_BASE}}{{REVISAO_CONTRATO}}</td></tr>
+    <tr><td><b>Cliente</b></td><td>{{CONTRATANTE_RAZAO}}</td></tr>
+    <tr><td><b>Obra</b></td><td>{{OBRA}}</td></tr>
+    <tr><td><b>Data</b></td><td>{{DATA_PROPOSTA}}</td></tr>
+    <tr><td><b>Valor total</b></td><td>R$ {{PRECO_TOTAL}}</td></tr>
   </table>
 
-  <p>As partes acima qualificadas têm, entre si, como justo e acertado o que será regido pelas cláusulas e condições nas laudas a seguir.</p>
+  <h4 class="contract-h">1. Escopo da proposta</h4>
+  <p class="contract-clause lvl1">Os serviços contemplados neste aceite seguem exatamente o escopo apresentado na proposta comercial {{PROPOSTA_NUM}}{{REVISAO_CONTRATO}}.</p>
 
-  <h4 class="contract-h">1. OBJETO DESTE CONTRATO</h4>
-
-  <p class="contract-clause lvl1"><span class="contract-num">1.1.</span> Conforme negociação e arquivos enviados via WhatsApp no dia {{DATA_ARQUIVOS}} e respectiva proposta n.º {{PROPOSTA_NUM}} {{REVISAO_CONTRATO}} enviada em {{DATA_PROPOSTA}} o escopo de trabalho da CONTRATADA compreende projetos de instalações para fins de {{FINALIDADE_OBRA}} em {{OBRA_ENDERECO_RESUMIDO}}, abrangendo:</p>
-
-  <p class="contract-clause lvl2"><span class="contract-num">1.1.1.</span> Projeto elétrico de baixa tensão que inclui:</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.1.1.</span> projeto do sistema de distribuição de força e luz das residências → quadros de força, iluminação e tomadas com apresentação dos diagramas trifilares, conforme padrão definido na NBR 5410;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.1.2.</span> Desenvolvimento e aprovação do projeto de entrada de energia elétrica → considerando demandas específicas e normas das concessionárias;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.1.3.</span> Projeto do sistema de distribuição para iluminação e tomadas → das áreas comuns e vias internas do condomínio;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.1.4.</span> Compatibilização com sistemas complementares de automação, fotovoltaico e gerador, quando aplicáveis.</p>
-
-  <p class="contract-clause lvl2"><span class="contract-num">1.1.2.</span> Projeto de especiais que inclui rede de dados, telefonia, CFTV, TV e som que inclui:</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.2.1.</span> Projeto de infraestrutura seca para redes de telefonia, dados, antena, CFTV e automação das áreas comuns, até a entrada das edificações;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.2.2.</span> A infraestrutura atenderá aos sistemas, conforme pontos e orientações de projetos/consultoria especializadas.</p>
-
-  <p class="contract-clause lvl2"><span class="contract-num">1.1.3.</span> Projeto de gás canalizado que inclui:</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.3.1.</span> Desenvolvimento do sistema de gás canalizado → abrangendo distribuição interna, ventilação, detalhamento de medidores e pontos de consumo;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.3.2.</span> Projeto em conformidade com normas específicas e exigências da concessionária pública ou outro agente fiscalizador;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.3.3.</span> Dimensionamento das tubulações e especificação dos materiais adequados (aço carbono, cobre, polietileno reticulado, entre outros), conforme normas de segurança e eficiência no transporte do gás;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.3.4.</span> Aprovação do projeto de gás da concessionária pública ou outro agente fiscalizador.</p>
-
-  <p class="contract-clause lvl2"><span class="contract-num">1.1.4.</span> Projeto esgoto sanitário e águas pluviais que inclui:</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.1.</span> Elaboração de projeto executivo para coleta e condução de esgoto sanitário (NBR 8160) e águas pluviais (NBR 10844);</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.2.</span> Dimensionamento e detalhamento das redes internas e externas de esgoto e drenagem pluvial incluindo calhas, condutores verticais e horizontais, exceto as calhas das vias públicas que serão traçadas conforme projeto de pavimentação.</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.3.</span> Representação dos pontos de coleta, plantas e cortes detalhados, com atenção às áreas comuns e vias internas;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.4.</span> Proposição de soluções para armazenamento, retardo ou infiltração de águas pluviais, considerando a eficiência do sistema e conformidade com normas aplicáveis;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.5.</span> Compatibilização com os sistemas estruturais e arquitetônicos, incluindo soluções para rebaixos e interferências;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.4.6.</span> Aprovação do projeto de esgoto perante a concessionária pública ou outro agente fiscalizador;</p>
-
-  <p class="contract-clause lvl2"><span class="contract-num">1.1.5.</span> Projeto hidráulico que inclui:</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.5.1.</span> Desenvolvimento do projeto executivo, incluindo plantas, cortes e detalhes de instalação, conforme NBR 5626;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.5.2.</span> Distribuição e dimensionamento da rede de água fria e água quente para abastecimento dos pontos de consumo;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.5.3.</span> Dimensionamento e detalhamento do sistema de pressurização e aquecimento das residências, considerando eficiência energética e compatibilidade com outros sistemas;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.5.4.</span> Compatibilização com projetos de piscina e SPA, elaborados por empresas especializadas</p>
-
-  <p class="contract-clause lvl2"><span class="contract-num">1.1.6.</span> Memorial Técnico Descritivo que inclui:</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.6.1.</span> Elaboração de um memorial técnico descritivo consolidando as informações sobre materiais, equipamentos, metodologias e normas aplicáveis a cada disciplina;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.1.6.2.</span> O documento incluirá recomendações técnicas, especificações detalhadas e orientações claras para a execução das instalações.</p>
-
-  <p class="contract-clause lvl2"><span class="contract-num">1.1.7.</span> Os projetos serão desenvolvidos por meio software CAD ("computer-aided design and drafting"), sendo que a CONTRATADA deverá possuir licenças de software de CAD para abertura e exame dos projetos;</p>
-
-  <h4 class="contract-h">1.2. ITENS FORA DO ESCOPO</h4>
-
-  <p class="contract-clause lvl2"><span class="contract-num">1.2.1.</span> Projeto luminotécnico, automação, estrutural, HVAC, piscina, sauna e gerador;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">1.2.2.</span> Acompanhamento técnico de obras ou fiscalização.</p>
-  <p class="contract-clause lvl2"><span class="contract-num">1.2.3.</span> Custos para inspeção e recomposição de elementos inspecionados;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">1.2.4.</span> Fornecimento ou relação de materiais para execução da obra;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">1.2.5.</span> Serviços de topografia, sondagem ou estudos geotécnicos;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">1.2.6.</span> Projeto de estudo de proteções ou projeto de média tensão;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">1.2.7.</span> Testes de aceitação ou comissionamento de sistemas instalados;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">1.2.8.</span> Qualquer serviços que não estiver explicitamente descrito no item 1.1, estará fora do escopo desse CONTRATO, bem como quaisquer alterações nos projetos arquitetônicos ou de engenharia e outras não elencadas solicitadas pela CONTRATANTE, devendo ser objeto de nova proposta.</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.2.8.1.</span> Caso a CONTRATANTE determine alteração arquitetônica, para que a CONTRATADA realize serão cobrados honorários adicionais para análises, consultoria e elaboração do novo projeto;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.2.8.2.</span> Alterações no escopo ou valor do projeto, por solicitação do cliente, deverão ser formalizadas por e-mail e sua realização dependerá de aditivo contratual, com ajustes nos prazos e valores previamente negociados;</p>
-  <p class="contract-clause lvl3"><span class="contract-num">1.2.8.3.</span> A compatibilização dos projetos da CONTRATADA será realizada com base nos projetos fornecidos pela CONTRATANTE, logo inconsistências, erros de cálculo, etc. nesses projetos poderão impactar o cronograma e gerar custos adicionais, que serão previamente negociados;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">1.2.9.</span> quaisquer documentos que não estejam em formato eletrônico;</p>
-
-  <h4 class="contract-h">2. FORMA E PRAZO EXECUÇÃO DESTE CONTRATO</h4>
-
-  <p class="contract-clause lvl1"><span class="contract-num">2.1.</span> Etapas dos projetos:</p>
-  <p class="contract-clause lvl2"><span class="contract-num">1ª</span> Concepção — Após a aprovação desta proposta, a concepção será feita através de uma reunião inicial no local da obra, no escritório de arquitetura, ou virtualmente, com acompanhamento da fiscalização/arquitetos, para identificação das necessidades.</p>
-  <p class="contract-clause lvl2"><span class="contract-num">2ª</span> Estudo preliminar — No Estudo preliminar contará com algumas indicações em planta baixa e será acompanhado de memorial preliminar para análise e comentários.</p>
-  <p class="contract-clause lvl2"><span class="contract-num">3ª</span> Projeto Básico — No Projeto Básico estarão marcados os pontos de utilização e tubulações para análise e comentários.</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4ª</span> Projeto Executivo — O projeto executivo será elaborado com base nos comentários do projeto básico, onde conterá todos os dimensionamentos e encaminhamentos além dos detalhes construtivos, diagramas, esquemas, vistas e memorial descritivo.</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">2.2.</span> Segue abaixo o fluxograma da prestação de serviços:</p>
-  <p class="contract-clause lvl2"><em>{{INSERIR_FLUXOGRAMA_PRESTACAO_SERVICOS}}</em></p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">2.3.</span> O prazo previsto de execução será de {{PRAZO_DIAS}} ({{PRAZO_DIAS_EXTENSO}}) dias – {{PRAZO_INICIO}} a {{PRAZO_FIM}}, independentemente de qualquer aviso, notificação ou interpelação judicial, podendo ser finalizado antes mediante cronograma de trabalho acertado entre as partes.</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">2.4.</span> Os projetos serão entregues em arquivo eletrônico, via e-mail, conforme esquema abaixo:</p>
-  <p class="contract-clause lvl2"><span class="contract-num">2.4.1.</span> Em caso de prorrogação da vigência deste CONTRATO as partes deverão negociar pagamento de valores adicionais em favor da CONTRATADA por meio de Termo(s) Aditivo(s).</p>
-  <p class="contract-clause lvl2"><em>{{CRONOGRAMA_ESQUEMA}}</em></p>
-
-  <h4 class="contract-h">3. DAS OBRIGAÇÕES DA CONTRATANTE</h4>
-
-  <p class="contract-clause lvl1"><span class="contract-num">3.1.</span> A CONTRATANTE se obriga a:</p>
-  <p class="contract-clause lvl2"><span class="contract-num">3.1.1.</span> fornecer todas as informações necessárias para a elaboração do projeto, incluindo especificações técnicas, dados normativos, projetos complementares (estrutura, arquitetura, paisagismo, automação, etc.) e documentos regulamentares;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">3.1.2.</span> Comunicar à CONTRATADA sobre as reclamações feitas contra seus empregados/prepostos, bem como com relação a danos por eles causados;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">3.1.3.</span> Evitar modificações do objeto e escopo das obras após a assinatura do contrato, mantendo fidelidade aos arquivos enviados por e-mail datado de {{DATA_EMAIL_ARQUIVOS}}, a saber:</p>
-
+  <h4 class="contract-h">2. Arquivos recebidos</h4>
   <table class="contract-table">
-    <tr><td><b>ARQUIVO</b></td><td><b>ITEM</b></td><td><b>REVISÃO</b></td></tr>
+    <tr><td><b>Arquivo</b></td><td><b>Item</b></td><td><b>Revisão</b></td></tr>
     <tr><td>{{ARQ_1_NOME}}</td><td>{{ARQ_1_ITEM}}</td><td>{{ARQ_1_REV}}</td></tr>
     <tr><td>{{ARQ_2_NOME}}</td><td>{{ARQ_2_ITEM}}</td><td>{{ARQ_2_REV}}</td></tr>
     <tr><td>{{ARQ_3_NOME}}</td><td>{{ARQ_3_ITEM}}</td><td>{{ARQ_3_REV}}</td></tr>
@@ -2952,105 +3012,18 @@
     <tr><td>{{ARQ_5_NOME}}</td><td>{{ARQ_5_ITEM}}</td><td>{{ARQ_5_REV}}</td></tr>
   </table>
 
-  <p class="contract-clause lvl2"><span class="contract-num">3.1.4.</span> Reter os tributos devidos e exibir para a CONTRATADA as guias de recolhimento quando solicitadas;</p>
+  <h4 class="contract-h">3. Condições gerais</h4>
+  <p class="contract-clause lvl1">O aceite desta proposta formaliza a contratação dos serviços apresentados, observando o cronograma, as considerações e os itens fora do escopo exibidos neste documento.</p>
+  <p class="contract-clause lvl1">Alterações relevantes de escopo, inclusão de novas disciplinas ou revisões fora das condições previstas deverão ser tratadas por novo ajuste comercial.</p>
 
-  <h4 class="contract-h">4. DAS OBRIGAÇÕES DA CONTRATADA</h4>
-
-  <p class="contract-clause lvl1"><span class="contract-num">4.1.</span> A CONTRATADA se obriga:</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4.1.1.</span> Registrar perante o órgão profissional e exibir a Anotação de Responsabilidade de Trabalho (ART);</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4.1.2.</span> Prestar os serviços contratados descritos na cláusula 1.1, modo e prazos ajustados, dentro das normas e especificações técnicas vigentes;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4.1.3.</span> Todos os projetos atenderão na integra as normas ABNT NBR vigentes, as Normas Regulamentadoras e aos Regulamentos das concessionárias atuantes no Rio de Janeiro.</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4.1.4.</span> Realizar até 2 (duas) visitas ao local da obra e até 2 (duas) reuniões com a CONTRATADA, necessárias à elaboração dos nossos trabalhos;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4.1.5.</span> Enviar todos os documentos elaborados por meio eletrônico em formatos para arquivos dos projetos gerados em programa formato AutoCAD "Drawing" (com extensão "DWG") e descritivos e outros em "Portable Document Format" (com extensão ".PDF"), cadastrados no gerenciador eletrônico da CONTRATANTE, desde que previamente autorizado o acesso da CONTRATADA;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4.1.6.</span> Garantia de atendimento aos checklists da contratante e conformidade com os padrões de qualidade definidos;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4.1.7.</span> Observar e fazer com que seus funcionários e/ou contratados respeitem as normas relativas à segurança e medicina do trabalho, fornecendo ainda Equipamento de Proteção Individual – EPI para todos;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">4.1.8.</span> Assumir a responsabilidade por qualquer indenização pleiteada por seus empregados/prepostos, principalmente no tocante a reclamações trabalhistas e acidentes do trabalho no decorrer da vigência do contrato;</p>
-
-  <h4 class="contract-h">5. PREÇO E DESPESAS NÃO INCLUÍDAS</h4>
-
-  <p class="contract-clause lvl1"><span class="contract-num">5.1.</span> O preço dos serviços enumerados acima será de R${{PRECO_TOTAL}} ({{PRECO_TOTAL_EXTENSO}} reais) que se referem aos seguintes projetos e serviços:</p>
-
-  <table class="contract-table">
-    <tr><td><b>ITEM</b></td><td><b>ÍCONE</b></td><td><b>PROJETO OU SERVIÇO</b></td><td><b>PREÇO (EM R$)</b></td></tr>
-    <tr><td>5.1.1.</td><td>âš¡</td><td>Elétrica</td><td>{{PRECO_ELETRICA}}</td></tr>
-    <tr><td>5.1.2.</td><td>&#128225;</td><td>Projeto especiais</td><td>{{PRECO_ESPECIAIS}}</td></tr>
-    <tr><td>5.1.3.</td><td>&#128688;</td><td>Projeto da parte hidráulica</td><td>{{PRECO_HIDRAULICA}}</td></tr>
-    <tr><td>5.1.4.</td><td>&#127744;</td><td>Projeto de Esgoto Sanitário/Águas Pluviais</td><td>{{PRECO_ESGOTO_PLUVIAL}}</td></tr>
-    <tr><td>5.1.5.</td><td>&#128293;</td><td>Projeto de gás canalizado</td><td>{{PRECO_GAS}}</td></tr>
-  </table>
-
-  <p class="contract-clause lvl1"><span class="contract-num">5.2.</span> Forma de pagamento → {{FORMA_PAGAMENTO_BASE}}. {{FORMA_PAGAMENTO_EXTRA}} Com as seguintes condições de pagamento:</p>
-
-  <table class="contract-table">
-    <tr><td><b>ITEM</b></td><td><b>SERVIÇO</b></td><td><b>PERCENTUAL</b></td><td><b>PREÇO (EM R$)</b></td></tr>
-    <tr><td>5.2.1.</td><td>Entrega do Estudo Preliminar</td><td>{{PCT_EP}}</td><td>{{VAL_EP}}</td></tr>
-    <tr><td>5.2.2.</td><td>Entrega do Anteprojeto</td><td>{{PCT_AP}}</td><td>{{VAL_AP}}</td></tr>
-    <tr><td>5.2.3.</td><td>Aceite do Anteprojeto</td><td>{{PCT_AA}}</td><td>{{VAL_AA}}</td></tr>
-    <tr><td>5.2.4.</td><td>Entrega do Pré-Executivo</td><td>{{PCT_PE}}</td><td>{{VAL_PE}}</td></tr>
-    <tr><td>5.2.5.</td><td>Aceite do Pré-Executivo</td><td>{{PCT_APE}}</td><td>{{VAL_APE}}</td></tr>
-    <tr><td>5.2.6.</td><td>Entrega do Projeto Executivo</td><td>{{PCT_EX}}</td><td>{{VAL_EX}}</td></tr>
-    <tr><td>5.2.7.</td><td>Aceite do Projeto Executivo</td><td>{{PCT_AEX}}</td><td>{{VAL_AEX}}</td></tr>
-    <tr><td>5.2.8.</td><td>Projeto aprovado junto às concessionárias</td><td>{{PCT_APROV}}</td><td>{{VAL_APROV}}</td></tr>
-  </table>
-
-  <p class="contract-clause lvl1"><span class="contract-num">5.3.</span> Despesas para execução do serviço → não estão inclusos nos preços dos serviços listados no item 5.1, tais como: recolhimento de taxas de licenças, emolumentos, despesas de cartório com certidões, etc., eventuais exigências adicionais ou atrasos causados pelas concessionárias não são de responsabilidade da CONTRATADA.</p>
-  <p class="contract-clause lvl2"><span class="contract-num">5.3.1.</span> O processo será conduzido de forma transparente, com a CONTRATANTE sendo informada sobre todas as movimentações relacionadas ao projeto</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">5.4.</span> Tributos → as despesas com tributação serão de responsabilidade da CONTRATADA, desde que não haja alteração da legislação tributária, em especial se houver aumento da carga tributária, caso em que poderá ser renegociado o preço.</p>
-
-  <h4 class="contract-h">6. ATRASO NO PAGAMENTO</h4>
-
-  <p class="contract-clause lvl1"><span class="contract-num">6.1.</span> Em caso de mora no pagamento dos valores relacionados na cláusula 5.2, o saldo devedor (principal) deverá ser atualizado monetariamente, pela variação do Índice Nacional de Custo da Construção Civil (INCC) e, como obrigação acessória, ainda será aplicada:</p>
-  <p class="contract-clause lvl2"><span class="contract-num">6.1.1.</span> Multa de mora diária de 0,33% (zero ponto trinta e três centésimos por cento) até um limite de 10% (dez por cento) calculados sobre o saldo devedor atualizado;</p>
-  <p class="contract-clause lvl2"><span class="contract-num">6.1.2.</span> juros simples de 1% (um por cento) ao mês de atraso, contados pro rata die calculados sobre o saldo devedor atualizado.</p>
-
-  <h4 class="contract-h">7. RESCISÃO</h4>
-
-  <p class="contract-clause lvl1"><span class="contract-num">7.1.</span> Em caso de rescisão antecipada do contrato por parte da CONTRATANTE esta deverá pagar à CONTRATADA, além de todos os valores referentes aos projetos e serviços concluídos, multa penal correspondente a 15% (quinze por cento), ao preço indicado na cláusula 5.1.</p>
-
-  <table class="contract-table">
-    <tr><td><b>ITEM</b></td><td><b>SERVIÇO</b></td><td><b>PERCENTUAL</b></td><td><b>PREÇO (EM R$)</b></td></tr>
-    <tr><td>5.2.9.</td><td>Aceite final do projeto pela contratante</td><td>{{PCT_FINAL}}</td><td>{{VAL_FINAL}}</td></tr>
-  </table>
-
-  <h4 class="contract-h">8. DISPOSIÇÕES GERAIS</h4>
-
-  <p class="contract-clause lvl1"><span class="contract-num">8.1.</span> Os direitos autorais dos projetos elaborados pela CONTRATADA permanecerão sob sua titularidade, até o pagamento integral dos valores acordados.</p>
-  <p class="contract-clause lvl2"><span class="contract-num">8.1.1.</span> Após a quitação, a CONTRATADA cederá os direitos autorais em favor da CONTRATANTE que terá direito ao uso exclusivo dos projetos para os fins descritos nesta proposta, sendo vedada sua reprodução, divulgação ou modificação sem autorização prévia por e-mail da CONTRATADA</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">8.2.</span> Anticorrupção (Lei nº 12.846/2013) → a despeito de, em princípio, este contrato não ter relação com Administração Pública direta ou indireta, a CONTRATANTE e a CONTRATADA estão cientes e se comprometem a não oferecer ou prometer vantagens a agentes públicos ou a pessoas relacionadas a eles, especialmente na vigência deste CONTRATO, declaram que seus sócios e administradores não estão envolvidos em atos de corrupção, fraude, lavagem de dinheiro, entre outros.</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">8.3.</span> LGPD (Lei nº 13.709/2018) → A CONTRATANTE e a CONTRATADA estão cientes que todas as partes deste CONTRATO devem ter o cuidado devido com os dados pessoais e eventual tratamento de seus funcionários, prepostos, colaboradores, subcontratados, sócios que devem ser orientados ao mesmo cuidado, sendo vedado o compartilhamento, com terceiros sem prévio e expresso consentimento, inclusive com a obrigação recíproca de devolver ou eliminar os dados pessoais em caso de rescisão contratual, comunicar imediatamente qualquer incidente envolvendo os dados, responder a questionamentos sobre os dados pessoais repassados, observados os princípios legais da proteção de dados (LGPD, Art. 6º).</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">8.4.</span> A renúncia, por qualquer das partes, de exercer seus direitos em relação a qualquer violação ou inadimplemento da outra parte das avenças, termos ou condições ora pactuados não constituirá a renúncia do exercício de tais direitos em relação a qualquer outra violação ou inadimplemento.</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">8.5.</span> A CONTRATADA e seu representante legal, qualificado no quadro acima, neste ato, nomeiam-se reciprocamente seus procuradores, com amplos poderes, para receber intimações, notificações, interpelações e citações judiciais ou extrajudiciais, em toda e qualquer ação referente a este contrato.</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">8.6.</span> Os valores a serem recebidos pela CONTRATADA poderão ser objeto de eventual operação de antecipação dos recebíveis, tão somente se já tiverem sido concluídos os serviços relativos aos valores cedidos.</p>
-
-  <p class="contract-clause lvl1"><span class="contract-num">8.7.</span> Esse documento será firmado através de "Assinatura Eletrônica Avançadas" ou por meio da "Assinatura Eletrônica Qualificada" (com chave/token ICP-Brasil), na forma da Lei n.º 14.063/2020, Art. 4º, II ou III, e, dessa forma, CONTRATANTE e CONTRATADA dispensam o reconhecimento de firma e testemunhas, como autoriza o CPC, Art. 784 §4º (incluído pela Lei nº 14.620, de 2023).</p>
-
-  <h4 class="contract-h">9. FORO</h4>
-
-  <p class="contract-clause lvl1"><span class="contract-num">9.1.</span> As partes elegem o Foro da cidade do Rio de Janeiro no Estado do Rio de Janeiro, para as ações que resultem do presente contrato.</p>
-
-  <div class="contract-spacer"></div>
-
-  <p>Por estarem assim justos e acordados, este instrumento particular será firmado por meio de Assinatura Eletrônica Avançada ou Qualificada o CONTRATO será gerado somente em formato eletrônico Portable Documents Format ou ".pdf".</p>
-
-  <p style="text-align:center; margin-top:18px;"><b>Rio de Janeiro, {{DATA_ASSINATURA}}.</b></p>
-
-  <table class="contract-table">
-    <tr><td style="text-align:center;"><b>{{CONTRATANTE_RAZAO}}</b><br>CONTRATANTE<br>CNPJ n.º {{CONTRATANTE_CNPJ}}</td>
-        <td style="text-align:center;"><b>COMPLEMENTARE PROJ. E INSTALACOES</b><br>CONTRATADA<br>CNPJ n.º 23.012.176/0001-69</td></tr>
-    <tr><td style="text-align:center;" colspan="2"><b>DISPENSADAS AS TESTEMUNHAS</b><br>(CPC, Art. 190 e CPC, Art. 784 §4º)</td></tr>
-  </table>
+  <h4 class="contract-h">4. Assinatura</h4>
+  <p class="contract-clause lvl1">Ao confirmar o aceite, a contratante declara estar ciente das condições comerciais apresentadas e autoriza o início dos trabalhos conforme a proposta.</p>
 </div></div>
       </div>
       <div class="modal-footer">
         <div class="modal-checkbox">
           <input type="checkbox" id="agree-terms" onchange="toggleConfirmButton()">
-          <label for="agree-terms">Li e concordo com os termos e condições apresentados acima. Autorizo o início dos trabalhos conforme proposta comercial P{{CODIGO_BASE}}.</label>
+          <label for="agree-terms">Li e concordo com os termos e condições apresentados acima. Autorizo o início dos trabalhos conforme proposta comercial {{CODIGO_BASE}}.</label>
         </div>
         <div class="modal-actions">
           <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancelar</button>

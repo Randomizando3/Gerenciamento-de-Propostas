@@ -11,7 +11,7 @@ function create_zapsign_document(array $proposal, array $settings): array
     if (!$enabled || $apiKey === '') {
         return [
             'ok' => false,
-            'message' => 'Integracao ZapSign nao configurada. Cadastre API Key em Configuracoes.',
+            'message' => 'Integração ZapSign não configurada. Cadastre API Key em Configurações.',
         ];
     }
 
@@ -41,27 +41,25 @@ function create_zapsign_document(array $proposal, array $settings): array
 
     $endpoints = zapsign_doc_endpoints($baseUrl);
     $apiTokens = zapsign_token_candidates($apiKey);
-    $printUrl = proposal_print_url($proposal);
+    $contractUrl = proposal_acceptance_document_url($proposal, $proposalPayload);
     $strategies = [];
-    $hasPublicPrintUrl = $printUrl !== null && zapsign_is_public_url($printUrl);
-    $printHost = mb_strtolower(trim((string) parse_url((string) $printUrl, PHP_URL_HOST)), 'UTF-8');
-    $isLocalPrintHost = in_array($printHost, ['localhost', '127.0.0.1', '::1'], true);
-    if ($hasPublicPrintUrl) {
-        // Prioriza o mesmo documento do "Baixar PDF" para manter fidelidade visual.
+    $hasPublicContractUrl = $contractUrl !== null && zapsign_is_public_url($contractUrl);
+    $contractHost = mb_strtolower(trim((string) parse_url((string) $contractUrl, PHP_URL_HOST)), 'UTF-8');
+    $isLocalContractHost = in_array($contractHost, ['localhost', '127.0.0.1', '::1'], true);
+    if ($hasPublicContractUrl) {
         $strategies[] = [
             'mode' => 'url_pdf',
-            'payload' => ['url_pdf' => $printUrl],
+            'payload' => ['url_pdf' => $contractUrl],
         ];
-    } elseif ($isLocalPrintHost || $printUrl === null) {
-        // Fallback somente quando nao existe URL publica do print (ex.: localhost/desenvolvimento).
+    } elseif ($isLocalContractHost || $contractUrl === null) {
         $strategies[] = [
             'mode' => 'markdown_text',
-            'payload' => ['markdown_text' => zapsign_markdown_from_proposal($proposal, $proposalPayload)],
+            'payload' => ['markdown_text' => zapsign_markdown_from_proposal($proposal, $proposalPayload, $settings)],
         ];
     } else {
         return [
             'ok' => false,
-            'message' => 'Nao foi possivel enviar o PDF da proposta ao ZapSign. Configure a URL base publica em Configuracoes para usar o mesmo arquivo do botao "Baixar PDF".',
+            'message' => 'Não foi possível enviar o documento ao ZapSign. Configure a URL base pública em Configurações para gerar o documento de aceite.',
         ];
     }
 
@@ -103,8 +101,8 @@ function create_zapsign_document(array $proposal, array $settings): array
 
     $errors = array_values(array_unique(array_filter(array_map('trim', $errors))));
 
-    if ($hasPublicPrintUrl && $errors === []) {
-        $errors[] = 'Falha ao enviar PDF via URL publica da proposta.';
+    if ($hasPublicContractUrl && $errors === []) {
+        $errors[] = 'Falha ao enviar o documento via URL pública.';
     }
 
     return [
@@ -169,7 +167,7 @@ function zapsign_post_json(array $endpoints, array $apiTokens, array $payload): 
     if (is_array($lastAuthError)) {
         return [
             'ok' => false,
-            'message' => 'Token ZapSign invalido, expirado ou sem permissao no ambiente selecionado.',
+            'message' => 'Token ZapSign inválido, expirado ou sem permissão no ambiente selecionado.',
             'raw' => $lastAuthError['raw'] ?? null,
         ];
     }
@@ -322,10 +320,16 @@ function zapsign_extract_error_message(array $json): string
     return '';
 }
 
-function zapsign_markdown_from_proposal(array $proposal, array $payload): string
+function zapsign_markdown_from_proposal(array $proposal, array $payload, array $settings): string
 {
+    $acceptance = proposal_acceptance_render_data($proposal, $payload, $settings);
+    $files = proposal_file_entries($payload);
+    $scopeEntries = proposal_scope_entries($payload);
+    $stages = proposal_timeline_entries($payload);
+    $considerations = array_values(normalize_topic_lines($payload['consideracoes'] ?? []));
+    $exclusions = array_values(normalize_topic_lines($payload['exclusoes'] ?? []));
     $lines = [];
-    $lines[] = '# Proposta Comercial';
+    $lines[] = '# ' . trim((string) ($acceptance['title'] ?? 'Documento de aceite'));
     $lines[] = '';
     $lines[] = '- Codigo: ' . (string) ($proposal['code'] ?? ($payload['codigo_base'] ?? ''));
     $revision = trim((string) ($proposal['revision'] ?? ($payload['revisao'] ?? '')));
@@ -347,22 +351,70 @@ function zapsign_markdown_from_proposal(array $proposal, array $payload): string
         $lines[] = '- Endereco: ' . $endereco;
     }
 
+    $acceptanceMode = (string) ($acceptance['mode'] ?? 'contract');
+    $documentBodyText = strip_html_to_plaintext((string) ($acceptance['body_html'] ?? ''));
+
     $lines[] = '';
-    $lines[] = '## Escopo';
-    $disciplinas = $payload['disciplinas'] ?? [];
-    $valores = $payload['valores'] ?? [];
-    $catalog = discipline_catalog();
-    if (is_array($disciplinas) && $disciplinas !== []) {
-        foreach ($disciplinas as $key) {
-            if (!is_string($key)) {
-                continue;
+    $lines[] = $acceptanceMode === 'summary' ? '## Resumo da proposta' : '## Termos do contrato';
+    if ($documentBodyText !== '') {
+        foreach (preg_split("/\n+/", $documentBodyText) ?: [] as $paragraph) {
+            $paragraph = trim((string) $paragraph);
+            if ($paragraph !== '') {
+                $lines[] = $paragraph;
             }
-            $nome = (string) ($catalog[$key]['nome'] ?? mb_convert_case($key, MB_CASE_TITLE, 'UTF-8'));
-            $valor = brl((float) ($valores[$key] ?? 0));
-            $lines[] = '- ' . $nome . ': ' . $valor;
         }
     } else {
-        $lines[] = '- Escopo conforme proposta publicada.';
+        $lines[] = $acceptanceMode === 'summary'
+            ? 'Resumo conforme configuração da proposta.'
+            : 'Contrato conforme configuração da proposta.';
+    }
+
+    if ($acceptanceMode === 'summary') {
+        $lines[] = '';
+        $lines[] = 'Ao assinar este documento, as partes concordam com o resumo desta proposta comercial.';
+        return implode("\n", $lines);
+    }
+
+    $lines[] = '';
+    $lines[] = '## Escopo da proposta';
+    foreach ($scopeEntries as $entry) {
+        $lines[] = '- ' . (string) ($entry['title'] ?? 'Disciplina');
+        foreach ((array) ($entry['topics'] ?? []) as $topic) {
+            $topic = trim((string) $topic);
+            if ($topic !== '') {
+                $lines[] = '  - ' . $topic;
+            }
+        }
+        if (((array) ($entry['topics'] ?? [])) === [] && trim((string) ($entry['summary'] ?? '')) !== '') {
+            $lines[] = '  - ' . trim((string) ($entry['summary'] ?? ''));
+        }
+    }
+
+    if ($files !== []) {
+        $lines[] = '';
+        $lines[] = '## Arquivos recebidos';
+        foreach ($files as $file) {
+            $label = trim((string) ($file['item'] ?? '') . ' ' . (string) ($file['name'] ?? ''));
+            $date = trim((string) ($file['date'] ?? ''));
+            $lines[] = '- ' . trim($label . ($date !== '' ? ' - ' . $date : ''));
+        }
+    }
+
+    if ($stages !== []) {
+        $lines[] = '';
+        $lines[] = '## Etapas e prazos';
+        foreach ($stages as $stage) {
+            $badge = trim((string) ($stage['badge'] ?? ''));
+            $line = '- ' . trim((string) ($stage['name'] ?? 'Etapa'));
+            if ($badge !== '') {
+                $line .= ' (' . $badge . ')';
+            }
+            $lines[] = $line;
+            $description = trim((string) ($stage['description'] ?? ''));
+            if ($description !== '') {
+                $lines[] = '  - ' . $description;
+            }
+        }
     }
 
     $total = proposal_total($payload);
@@ -370,11 +422,21 @@ function zapsign_markdown_from_proposal(array $proposal, array $payload): string
     $lines[] = '## Valor total';
     $lines[] = '- ' . brl($total) . ' (' . currency_to_words_ptbr($total) . ')';
 
-    $consideracoes = $payload['consideracoes'] ?? [];
-    if (is_array($consideracoes) && $consideracoes !== []) {
+    if ($considerations !== []) {
         $lines[] = '';
         $lines[] = '## Consideracoes';
-        foreach ($consideracoes as $item) {
+        foreach ($considerations as $item) {
+            $item = trim((string) $item);
+            if ($item !== '') {
+                $lines[] = '- ' . $item;
+            }
+        }
+    }
+
+    if ($exclusions !== []) {
+        $lines[] = '';
+        $lines[] = '## Itens fora do escopo';
+        foreach ($exclusions as $item) {
             $item = trim((string) $item);
             if ($item !== '') {
                 $lines[] = '- ' . $item;
@@ -383,7 +445,7 @@ function zapsign_markdown_from_proposal(array $proposal, array $payload): string
     }
 
     $lines[] = '';
-    $lines[] = 'Ao assinar este documento, as partes concordam com os termos da proposta comercial.';
+    $lines[] = 'Ao assinar este documento, as partes concordam com os termos deste contrato e com o escopo da proposta comercial.';
 
     return implode("\n", $lines);
 }

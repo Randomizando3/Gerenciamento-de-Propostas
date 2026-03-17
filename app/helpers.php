@@ -332,7 +332,9 @@ function default_settings_values(): array
         'company_bank_cnpj' => '23.012.176/0001-69',
         'company_bank_pix_key' => '23.012.176/0001-69',
         'company_bank_pix_key_type' => 'CNPJ',
-        'accept_terms_title' => 'CONTRATO DE PRESTA��O DE SERVI�OS DE PROJETOS DE ENGENHARIA',
+        'company_about_text' => 'A Complementare Projetos é uma empresa fundada em 2014 com a missão de liderar no setor de projetos, supervisão e consultoria de instalações. Com mais de 40 anos de experiência combinada entre seus fundadores, oferecemos serviços de alta qualidade, agilidade e proatividade.',
+        'company_accept_phrase' => 'Se estiver de acordo, aceite esta proposta e começaremos o trabalho!',
+        'accept_terms_title' => 'CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE PROJETOS DE ENGENHARIA',
         'accept_terms_html' => '',
         'accept_terms_checkbox_text' => 'Li e concordo com os termos e condições apresentados acima. Autorizo o início dos trabalhos conforme proposta comercial {{PROPOSTA_NUM}}.',
     ];
@@ -499,6 +501,7 @@ function parse_multilines(string $value): array
     }
     return $clean;
 }
+
 
 
 

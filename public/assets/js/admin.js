@@ -1,4 +1,231 @@
 (function () {
+  function setupSidebarToggle() {
+    const body = document.body;
+    const buttons = Array.from(document.querySelectorAll("[data-sidebar-toggle]"));
+    if (!body || buttons.length === 0) return;
+
+    const storageKey = "adminSidebarCollapsed";
+    let collapsed = false;
+
+    try {
+      const stored = window.localStorage.getItem(storageKey);
+      collapsed = stored === "1";
+    } catch (error) {
+      collapsed = false;
+    }
+
+    function syncButton(button, isCollapsed) {
+      const openLabel = button.dataset.labelOpen || "Ocultar menu";
+      const closedLabel = button.dataset.labelClosed || "Mostrar menu";
+      const label = isCollapsed ? closedLabel : openLabel;
+      button.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
+      button.setAttribute("aria-label", label);
+    }
+
+    function applySidebarState(isCollapsed) {
+      body.classList.toggle("admin-sidebar-collapsed", isCollapsed);
+      buttons.forEach((button) => syncButton(button, isCollapsed));
+    }
+
+    function persistSidebarState(isCollapsed) {
+      try {
+        window.localStorage.setItem(storageKey, isCollapsed ? "1" : "0");
+      } catch (error) {
+        return;
+      }
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        collapsed = !collapsed;
+        applySidebarState(collapsed);
+        persistSidebarState(collapsed);
+      });
+    });
+
+    applySidebarState(collapsed);
+  }
+
+  function setupPaymentFieldToggles() {
+    const toggles = Array.from(document.querySelectorAll("[data-payment-toggle]"));
+    if (toggles.length === 0) return;
+
+    const syncGroupState = (method, enabled) => {
+      const block = document.querySelector('[data-payment-fields="' + method + '"]');
+      if (!block) return;
+
+      block.classList.toggle("is-disabled", !enabled);
+      block.setAttribute("aria-disabled", enabled ? "false" : "true");
+
+      block.querySelectorAll("input, textarea, select, button").forEach((field) => {
+        if (!(field instanceof HTMLElement)) return;
+        if (field.matches('[type="hidden"]')) return;
+        field.toggleAttribute("disabled", !enabled);
+      });
+    };
+
+    toggles.forEach((toggle) => {
+      const method = toggle.getAttribute("data-payment-toggle");
+      if (!method) return;
+
+      const apply = () => syncGroupState(method, !!toggle.checked);
+      toggle.addEventListener("change", apply);
+      apply();
+    });
+  }
+
+  function setupHeaderMediaToggle() {
+    const toggle = document.querySelector("[data-header-media-toggle]");
+    const block = document.querySelector("[data-header-media-fields]");
+    if (!toggle || !block) return;
+
+    const sync = () => {
+      const enabled = !!toggle.checked;
+      block.classList.toggle("is-disabled", !enabled);
+      block.setAttribute("aria-disabled", enabled ? "false" : "true");
+
+      block.querySelectorAll("input, textarea, select, button").forEach((field) => {
+        if (!(field instanceof HTMLElement)) return;
+        if (field.matches('[type="hidden"]')) return;
+        field.toggleAttribute("disabled", !enabled);
+      });
+    };
+
+    toggle.addEventListener("change", sync);
+    sync();
+  }
+
+  function setupHeaderLayoutToggle() {
+    const select = document.querySelector("[data-header-layout-select]");
+    const block = document.querySelector("[data-header-layout-fields]");
+    if (!select || !block) return;
+
+    const sync = () => {
+      const enabled = select.value === "aditivo";
+      block.classList.toggle("is-disabled", !enabled);
+      block.setAttribute("aria-disabled", enabled ? "false" : "true");
+
+      block.querySelectorAll("input, textarea, select, button").forEach((field) => {
+        if (!(field instanceof HTMLElement)) return;
+        field.toggleAttribute("disabled", !enabled);
+      });
+    };
+
+    select.addEventListener("change", sync);
+    sync();
+  }
+
+  function setupAcceptanceModeToggle() {
+    const toggle = document.querySelector("[data-acceptance-mode-toggle]");
+    const contractBlock = document.querySelector('[data-acceptance-fields="contract"]');
+    const summaryBlock = document.querySelector('[data-acceptance-fields="summary"]');
+    if (!toggle || !contractBlock || !summaryBlock) return;
+
+    const setBlockState = (block, enabled) => {
+      block.hidden = !enabled;
+      block.classList.toggle("is-disabled", !enabled);
+      block.setAttribute("aria-disabled", enabled ? "false" : "true");
+
+      block.querySelectorAll("input, textarea, select, button").forEach((field) => {
+        if (!(field instanceof HTMLElement)) return;
+        if (field.matches('[type="hidden"]')) return;
+        field.toggleAttribute("disabled", !enabled);
+      });
+    };
+
+    const sync = () => {
+      const summaryEnabled = !!toggle.checked;
+      setBlockState(contractBlock, !summaryEnabled);
+      setBlockState(summaryBlock, summaryEnabled);
+    };
+
+    toggle.addEventListener("change", sync);
+    sync();
+  }
+
+  function setupProposalPanelCollapse() {
+    const panels = Array.from(document.querySelectorAll("section.panel, article.panel"));
+    if (panels.length === 0) return;
+
+    const storageKey = "proposalPanelCollapseState";
+    let savedState = {};
+
+    try {
+      const raw = window.localStorage.getItem(storageKey);
+      savedState = raw ? JSON.parse(raw) || {} : {};
+    } catch (error) {
+      savedState = {};
+    }
+
+    const persistState = () => {
+      try {
+        window.localStorage.setItem(storageKey, JSON.stringify(savedState));
+      } catch (error) {
+        return;
+      }
+    };
+
+    const slugify = (value) => String(value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "painel";
+
+    panels.forEach((panel, index) => {
+      if (!(panel instanceof HTMLElement)) return;
+      if (panel.classList.contains("panel-inner") || panel.classList.contains("compact")) return;
+      if (panel.classList.contains("panel-collapsible-ready")) return;
+
+      const heading = Array.from(panel.children).find((child) => child instanceof HTMLElement && child.tagName === "H2");
+      if (!(heading instanceof HTMLElement)) return;
+
+      const key = slugify(heading.textContent) + "-" + index;
+      const header = document.createElement("div");
+      const body = document.createElement("div");
+      const toggle = document.createElement("button");
+      const icon = document.createElement("span");
+
+      header.className = "panel-collapse-header";
+      body.className = "panel-collapse-body";
+      body.id = "panel-collapse-body-" + key;
+
+      toggle.type = "button";
+      toggle.className = "panel-collapse-toggle";
+      toggle.setAttribute("aria-controls", body.id);
+
+      icon.className = "panel-collapse-icon";
+      icon.setAttribute("aria-hidden", "true");
+      toggle.appendChild(icon);
+
+      panel.classList.add("panel-collapsible", "panel-collapsible-ready");
+      panel.insertBefore(header, heading);
+      header.appendChild(heading);
+      header.appendChild(toggle);
+      header.insertAdjacentElement("afterend", body);
+
+      while (body.nextSibling) {
+        body.appendChild(body.nextSibling);
+      }
+
+      const setCollapsed = (collapsed) => {
+        panel.classList.toggle("is-collapsed", collapsed);
+        body.hidden = collapsed;
+        toggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        toggle.setAttribute("aria-label", collapsed ? "Expandir painel" : "Recolher painel");
+        toggle.dataset.collapsed = collapsed ? "1" : "0";
+        savedState[key] = collapsed ? 1 : 0;
+        persistState();
+      };
+
+      toggle.addEventListener("click", () => {
+        setCollapsed(!panel.classList.contains("is-collapsed"));
+      });
+
+      setCollapsed(savedState[key] === 1);
+    });
+  }
+
   function parseMoney(value) {
     if (!value) return 0;
     const normalized = String(value)
@@ -155,9 +382,16 @@
     recalcTotal();
   });
 
+  setupSidebarToggle();
+  setupProposalPanelCollapse();
+  setupPaymentFieldToggles();
+  setupHeaderMediaToggle();
+  setupHeaderLayoutToggle();
+  setupAcceptanceModeToggle();
   bindRowInputs(document);
   setupRepeater("files-list", "add-file-row-button", "file-row-template");
   setupRepeater("stages-list", "add-stage-row-button", "stage-row-template");
+  setupRepeater("guidelines-list", "add-guideline-row-button", "guideline-row-template");
   setupRepeater("custom-disciplines-list", "add-custom-discipline-button", "custom-discipline-template");
   recalcTotal();
 })();

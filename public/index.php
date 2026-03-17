@@ -46,6 +46,31 @@ if ($path === '/admin/users' && $method === 'POST') {
     return;
 }
 
+if ($path === '/admin/models' && $method === 'GET') {
+    admin_list_models();
+    return;
+}
+
+if ($path === '/admin/models/new' && $method === 'GET') {
+    admin_show_new_model_form();
+    return;
+}
+
+if ($path === '/admin/models/save' && $method === 'POST') {
+    admin_save_model_action();
+    return;
+}
+
+if (preg_match('#^/admin/models/(\d+)/edit$#', $path, $matches) && $method === 'GET') {
+    admin_show_edit_model_form((int) $matches[1]);
+    return;
+}
+
+if (preg_match('#^/admin/models/(\d+)/delete$#', $path, $matches) && $method === 'POST') {
+    admin_delete_model_action((int) $matches[1]);
+    return;
+}
+
 if (preg_match('#^/admin/users/(\d+)/delete$#', $path, $matches) && $method === 'POST') {
     admin_delete_user_action((int) $matches[1]);
     return;
@@ -106,6 +131,11 @@ if (preg_match('#^/p/([a-zA-Z0-9]+)/print$#', $path, $matches) && $method === 'G
     return;
 }
 
+if (preg_match('#^/p/([a-zA-Z0-9]+)/contract$#', $path, $matches) && $method === 'GET') {
+    show_public_contract((string) $matches[1]);
+    return;
+}
+
 if (preg_match('#^/p/([a-zA-Z0-9]+)/sign$#', $path, $matches) && $method === 'GET') {
     redirect_to_signature((string) $matches[1]);
     return;
@@ -138,6 +168,6 @@ if (($path === '/webhooks/zapsign' || $path === '/webhook/zapsign') && $method =
 
 http_response_code(404);
 render('public/not_found', [
-    'title' => 'Rota não encontrada',
-    'message' => 'A rota solicitada não existe.',
+    'title' => 'Rota n?o encontrada',
+    'message' => 'A rota solicitada n?o existe.',
 ], 'none');

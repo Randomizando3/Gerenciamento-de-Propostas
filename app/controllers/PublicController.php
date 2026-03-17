@@ -44,11 +44,33 @@ function show_public_print(string $token): void
         return;
     }
 
+    $settings = load_settings();
     render('public/print', [
         'title' => 'PDF - Proposta ' . $proposal['code'],
         'proposal' => $proposal,
-        'payload' => $proposal['payload'],
+        'payload' => admin_proposal_payload_with_settings($proposal['payload'], $settings),
         'catalog' => discipline_catalog(),
+        'settings' => $settings,
+    ], 'none');
+}
+
+function show_public_contract(string $token): void
+{
+    $proposal = get_proposal_by_token($token);
+    if (!$proposal) {
+        http_response_code(404);
+        render('public/not_found', [
+            'title' => 'Proposta não encontrada',
+        ], 'none');
+        return;
+    }
+
+    $settings = load_settings();
+    render('public/contract', [
+        'title' => 'Contrato - Proposta ' . $proposal['code'],
+        'proposal' => $proposal,
+        'payload' => admin_proposal_payload_with_settings($proposal['payload'], $settings),
+        'settings' => $settings,
     ], 'none');
 }
 
@@ -104,3 +126,4 @@ function redirect_to_signature(string $token): void
     header('Location: ' . $signUrl);
     exit;
 }
+

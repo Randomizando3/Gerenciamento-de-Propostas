@@ -5,13 +5,13 @@ declare(strict_types=1);
 function admin_dashboard(): void
 {
     require_auth();
-
-    $stats = get_dashboard_stats();
+    $settings = load_settings();
 
     render('admin/dashboard', [
         'title' => 'Painel Administrativo',
         'admin' => current_admin(),
-        'stats' => $stats,
+        'stats' => get_dashboard_stats(),
+        'settings' => $settings,
     ]);
 }
 
@@ -19,12 +19,20 @@ function admin_list_proposals(): void
 {
     require_auth();
 
-    $proposals = list_proposals_with_metrics();
+    $filters = [
+        'query' => trim((string) request_input('query', '')),
+        'client' => trim((string) request_input('client', '')),
+        'status' => trim((string) request_input('status', '')),
+        'min_total' => trim((string) request_input('min_total', '')),
+        'max_total' => trim((string) request_input('max_total', '')),
+    ];
 
     render('admin/proposals', [
         'title' => 'Propostas',
         'admin' => current_admin(),
-        'proposals' => $proposals,
+        'proposals' => list_proposals_with_metrics($filters),
+        'filters' => $filters,
+        'statusOptions' => app_config('status_labels', []),
     ]);
 }
 
@@ -39,18 +47,101 @@ function admin_list_users(): void
     ]);
 }
 
+function admin_list_models(): void
+{
+    require_auth();
+
+    render('admin/models', [
+        'title' => 'Modelos',
+        'admin' => current_admin(),
+        'models' => list_proposal_models(),
+    ]);
+}
+
+function admin_show_new_model_form(): void
+{
+    require_auth();
+
+    $settings = load_settings();
+    $payload = proposal_payload_for_model(default_proposal_payload());
+    render('admin/model_form', [
+        'title' => 'Novo modelo',
+        'admin' => current_admin(),
+        'model' => null,
+        'payload' => $payload,
+        'catalog' => discipline_catalog(),
+        'settings' => $settings,
+        'acceptTermsVariables' => acceptance_terms_variable_catalog(),
+    ]);
+}
+
+function admin_show_edit_model_form(int $modelId): void
+{
+    require_auth();
+
+    $model = get_proposal_model($modelId);
+    if (!$model) {
+        flash('error', 'Modelo não encontrado.');
+        redirect('/admin/models');
+    }
+
+    $settings = load_settings();
+    $payload = normalize_proposal_payload((array) ($model['payload'] ?? []), (array) ($model['payload'] ?? []));
+
+    render('admin/model_form', [
+        'title' => 'Editar modelo',
+        'admin' => current_admin(),
+        'model' => $model,
+        'payload' => $payload,
+        'catalog' => discipline_catalog(),
+        'settings' => $settings,
+        'acceptTermsVariables' => acceptance_terms_variable_catalog(),
+    ]);
+}
+
+function admin_delete_model_action(int $modelId): void
+{
+    require_auth();
+    verify_csrf_or_die();
+
+    if (!delete_proposal_model_record($modelId)) {
+        flash('error', 'Modelo não encontrado.');
+        redirect('/admin/models');
+    }
+
+    flash('success', 'Modelo removido com sucesso.');
+    redirect('/admin/models');
+}
+
+function admin_proposal_payload_with_settings(array $payload, array $settings): array
+{
+    return normalize_proposal_payload($payload, $payload);
+}
+
 function admin_show_new_proposal_form(): void
 {
     require_auth();
 
-    $payload = default_proposal_payload();
+    $settings = load_settings();
+    $model = null;
+    $modelId = request_input('model');
+    if (is_numeric($modelId)) {
+        $model = get_proposal_model((int) $modelId);
+    }
+
+    $payload = $model ? proposal_payload_from_model((array) ($model['payload'] ?? [])) : default_proposal_payload();
+    $payload = admin_proposal_payload_with_settings($payload, $settings);
+
     render('admin/proposal_form', [
         'title' => 'Nova proposta',
         'admin' => current_admin(),
         'proposal' => null,
         'payload' => $payload,
         'catalog' => discipline_catalog(),
-        'settings' => load_settings(),
+        'settings' => $settings,
+        'models' => list_proposal_models(),
+        'currentModel' => $model,
+        'acceptTermsVariables' => acceptance_terms_variable_catalog(),
     ]);
 }
 
@@ -64,13 +155,19 @@ function admin_show_edit_proposal_form(int $proposalId): void
         redirect('/admin');
     }
 
+    $settings = load_settings();
+    $payload = admin_proposal_payload_with_settings($proposal['payload'], $settings);
+
     render('admin/proposal_form', [
         'title' => 'Editar proposta',
         'admin' => current_admin(),
         'proposal' => $proposal,
-        'payload' => $proposal['payload'],
+        'payload' => $payload,
         'catalog' => discipline_catalog(),
-        'settings' => load_settings(),
+        'settings' => $settings,
+        'models' => list_proposal_models(),
+        'currentModel' => null,
+        'acceptTermsVariables' => acceptance_terms_variable_catalog(),
     ]);
 }
 
@@ -96,14 +193,75 @@ function admin_save_proposal_action(): void
     $payload = normalize_proposal_payload($payloadInput, $basePayload);
     $savedId = save_proposal($payload, $proposalId, current_admin());
 
+    $saveMode = (string) request_input('save_mode', 'edit');
+    $modelName = trim((string) request_input('model_name', ''));
+    $modelDescription = trim((string) request_input('model_description', ''));
+    $modelRecordId = request_input('model_record_id');
+    $modelId = is_numeric($modelRecordId) ? (int) $modelRecordId : null;
+
+    if ($saveMode === 'model_create' || $saveMode === 'model_update') {
+        if ($modelName === '') {
+            flash('error', 'Informe um nome para o modelo.');
+            redirect('/admin/proposals/' . $savedId . '/edit');
+        }
+
+        if ($saveMode === 'model_update' && ($modelId === null || $modelId <= 0)) {
+            flash('error', 'Selecione um modelo existente para atualizar.');
+            redirect('/admin/proposals/' . $savedId . '/edit');
+        }
+
+        save_proposal_model_record(
+            $saveMode === 'model_update' ? $modelId : null,
+            $modelName,
+            $modelDescription,
+            proposal_payload_for_model($payload),
+            current_admin()
+        );
+
+        flash('success', $saveMode === 'model_update' ? 'Modelo atualizado com sucesso.' : 'Modelo salvo com sucesso.');
+        redirect('/admin/proposals/' . $savedId . '/edit');
+    }
+
     flash('success', 'Proposta salva com sucesso.');
 
-    $saveMode = (string) request_input('save_mode', 'edit');
     if ($saveMode === 'preview') {
         redirect('/admin/proposals/' . $savedId . '/preview');
     }
 
     redirect('/admin/proposals/' . $savedId . '/edit');
+}
+
+function admin_save_model_action(): void
+{
+    require_auth();
+    verify_csrf_or_die();
+
+    $id = request_input('model_id');
+    $modelId = is_numeric($id) ? (int) $id : null;
+    $basePayload = null;
+
+    if ($modelId !== null) {
+        $existing = get_proposal_model($modelId);
+        if (!$existing) {
+            flash('error', 'Modelo nao encontrado para atualizacao.');
+            redirect('/admin/models');
+        }
+        $basePayload = (array) ($existing['payload'] ?? []);
+    }
+
+    $name = trim((string) request_input('model_name', ''));
+    $description = trim((string) request_input('model_description', ''));
+    if ($name === '') {
+        flash('error', 'Informe um nome para o modelo.');
+        redirect($modelId ? '/admin/models/' . $modelId . '/edit' : '/admin/models/new');
+    }
+
+    $payloadInput = normalize_admin_payload_input($_POST, $_FILES);
+    $payload = proposal_payload_for_model(normalize_proposal_payload($payloadInput, $basePayload));
+    $saved = save_proposal_model_record($modelId, $name, $description, $payload, current_admin());
+
+    flash('success', $modelId ? 'Modelo atualizado com sucesso.' : 'Modelo criado com sucesso.');
+    redirect('/admin/models/' . (int) ($saved['id'] ?? 0) . '/edit');
 }
 
 function admin_publish_proposal_action(int $proposalId): void
@@ -117,8 +275,7 @@ function admin_publish_proposal_action(int $proposalId): void
         redirect('/admin');
     }
 
-    $url = proposal_public_url($proposal);
-    flash('success', 'Proposta publicada com sucesso. Link: ' . ($url ?? 'indisponível'));
+    flash('success', 'Proposta publicada com sucesso.');
     redirect('/admin/proposals/' . $proposalId . '/edit');
 }
 
@@ -129,7 +286,7 @@ function admin_duplicate_proposal_action(int $proposalId): void
 
     $newId = duplicate_proposal($proposalId, current_admin());
     if ($newId === null) {
-        flash('error', 'Não foi possível duplicar.');
+        flash('error', 'Nao foi possivel duplicar a proposta.');
         redirect('/admin');
     }
 
@@ -149,12 +306,12 @@ function admin_create_user_action(): void
     $passwordConfirm = (string) request_input('password_confirm', '');
 
     if ($name === '' || $email === '' || $password === '' || $passwordConfirm === '') {
-        flash('error', 'Preencha nome, e-mail, senha e confirmação.');
+        flash('error', 'Preencha nome, e-mail, senha e confirmacao.');
         redirect('/admin/users');
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        flash('error', 'Informe um e-mail válido.');
+        flash('error', 'Informe um e-mail valido.');
         redirect('/admin/users');
     }
 
@@ -164,7 +321,7 @@ function admin_create_user_action(): void
     }
 
     if (!hash_equals($password, $passwordConfirm)) {
-        flash('error', 'A confirmação de senha não confere.');
+        flash('error', 'A confirmacao de senha nao confere.');
         redirect('/admin/users');
     }
 
@@ -175,7 +332,7 @@ function admin_create_user_action(): void
         redirect('/admin/users');
     }
 
-    flash('success', 'Usuário criado com sucesso.');
+    flash('success', 'Usuario criado com sucesso.');
     redirect('/admin/users');
 }
 
@@ -186,7 +343,7 @@ function admin_delete_user_action(int $userId): void
     $currentUserId = (int) ((current_admin()['id'] ?? 0));
 
     if (!delete_admin_user($userId)) {
-        flash('error', 'Usuário não encontrado.');
+        flash('error', 'Usuario nao encontrado.');
         redirect('/admin/users');
     }
 
@@ -196,7 +353,7 @@ function admin_delete_user_action(int $userId): void
         redirect('/admin/login');
     }
 
-    flash('success', 'Usuário removido com sucesso.');
+    flash('success', 'Usuario removido com sucesso.');
     redirect('/admin/users');
 }
 
@@ -214,7 +371,7 @@ function admin_show_preview(int $proposalId): void
     render('public/proposal', [
         'title' => 'Pré-visualização - ' . $proposal['code'],
         'proposal' => $proposal,
-        'payload' => $proposal['payload'],
+        'payload' => admin_proposal_payload_with_settings($proposal['payload'], $settings),
         'catalog' => discipline_catalog(),
         'settings' => $settings,
         'previewMode' => true,
@@ -224,27 +381,26 @@ function admin_show_preview(int $proposalId): void
 function admin_show_analytics(int $proposalId): void
 {
     require_auth();
+
     $proposal = get_proposal_by_id($proposalId);
     if (!$proposal) {
         flash('error', 'Proposta não encontrada.');
         redirect('/admin');
     }
 
-    $stats = get_dashboard_stats();
-    $metrics = get_proposal_metrics($proposalId);
-
     render('admin/analytics', [
         'title' => 'Analytics',
         'admin' => current_admin(),
-        'stats' => $stats,
+        'stats' => get_dashboard_stats(),
         'focusProposal' => $proposal,
-        'focusMetrics' => $metrics,
+        'focusMetrics' => get_proposal_metrics($proposalId),
     ]);
 }
 
 function admin_show_settings(): void
 {
     require_admin();
+
     render('admin/settings', [
         'title' => 'Configurações',
         'admin' => current_admin(),
@@ -258,7 +414,7 @@ function admin_save_settings_action(): void
     require_admin();
     verify_csrf_or_die();
 
-    $data = [
+    save_settings_row([
         'clarity_enabled' => isset($_POST['clarity_enabled']) ? 1 : 0,
         'clarity_project_id' => trim((string) ($_POST['clarity_project_id'] ?? '')),
         'clarity_export_endpoint' => trim((string) ($_POST['clarity_export_endpoint'] ?? 'https://www.clarity.ms/export-data/api/v1/project-live-insights')),
@@ -280,12 +436,12 @@ function admin_save_settings_action(): void
         'company_bank_cnpj' => trim((string) ($_POST['company_bank_cnpj'] ?? '')),
         'company_bank_pix_key' => trim((string) ($_POST['company_bank_pix_key'] ?? '')),
         'company_bank_pix_key_type' => trim((string) ($_POST['company_bank_pix_key_type'] ?? '')),
+        'company_about_text' => trim((string) ($_POST['company_about_text'] ?? '')),
+        'company_accept_phrase' => trim((string) ($_POST['company_accept_phrase'] ?? '')),
         'accept_terms_title' => trim((string) ($_POST['accept_terms_title'] ?? '')),
         'accept_terms_html' => trim((string) ($_POST['accept_terms_html'] ?? '')),
         'accept_terms_checkbox_text' => trim((string) ($_POST['accept_terms_checkbox_text'] ?? '')),
-    ];
-
-    save_settings_row($data);
+    ]);
 
     flash('success', 'Configurações salvas.');
     redirect('/admin/settings');
@@ -302,10 +458,9 @@ function admin_send_to_zapsign_action(int $proposalId): void
         redirect('/admin');
     }
 
-    $settings = load_settings();
-    $result = create_zapsign_document($proposal, $settings);
+    $result = create_zapsign_document($proposal, load_settings());
     if (!$result['ok']) {
-        flash('error', $result['message']);
+        flash('error', (string) ($result['message'] ?? 'Falha ao enviar para o ZapSign.'));
         redirect('/admin/proposals/' . $proposalId . '/edit');
     }
 
@@ -316,13 +471,7 @@ function admin_send_to_zapsign_action(int $proposalId): void
         'updated_at' => now_iso(),
     ]);
 
-    $mode = trim((string) ($result['mode'] ?? ''));
-    $modeLabel = match ($mode) {
-        'url_pdf' => 'PDF da proposta',
-        'markdown_text' => 'Resumo em texto',
-        default => 'Integração padrão',
-    };
-    flash('success', 'Proposta enviada para assinatura no ZapSign. Documento usado: ' . $modeLabel . '.');
+    flash('success', 'Proposta enviada para assinatura no ZapSign.');
     redirect('/admin/proposals/' . $proposalId . '/edit');
 }
 
@@ -384,5 +533,4 @@ function save_uploaded_discipline_icon(?array $fileBag, int|string $index): ?str
 
     return '/uploads/disciplinas/' . $filename;
 }
-
 
