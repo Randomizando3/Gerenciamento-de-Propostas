@@ -394,126 +394,161 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
 
   <section class="panel">
     <h2>Pagamento e aceite</h2>
-    <div class="panel-subhead">
-      <div>
-        <h3>Forma de pagamento manual</h3>
-        <p class="muted">Monte as parcelas manualmente. Linhas com valor entram na validação da soma; subtítulos servem só para organizar o bloco.</p>
-      </div>
-      <button class="btn btn-ghost btn-sm" type="button" id="add-payment-row-button">+ Adicionar linha</button>
-    </div>
-    <div class="stack-sm" id="payment-schedule-list" data-next-index="<?= count($paymentRows) ?>">
-      <?php foreach ($paymentRows as $index => $paymentRow): ?>
-        <?php $paymentType = (($paymentRow['type'] ?? 'line') === 'subtitle') ? 'subtitle' : 'line'; ?>
-        <div class="repeater-row payment-row">
-          <div class="row-actions"><button class="btn btn-ghost btn-sm repeater-remove" type="button">Remover</button></div>
-          <div class="grid cols-3">
-            <label class="field">
-              <span>Tipo</span>
-              <select name="payment_schedule_rows[<?= (int) $index ?>][type]" data-payment-row-type>
-                <option value="line" <?= $paymentType === 'line' ? 'selected' : '' ?>>Linha com valor</option>
-                <option value="subtitle" <?= $paymentType === 'subtitle' ? 'selected' : '' ?>>Subtítulo</option>
-              </select>
-            </label>
-            <label class="field col-span-2"><span>Texto</span><input type="text" name="payment_schedule_rows[<?= (int) $index ?>][label]" value="<?= h((string) ($paymentRow['label'] ?? '')) ?>"></label>
+    <div class="proposal-subpanels">
+      <div class="proposal-subpanel">
+        <div class="proposal-subpanel-head">
+          <div>
+            <h3>Forma de pagamento</h3>
+            <p class="muted">Monte as parcelas manualmente. Linhas com valor entram na valida&ccedil;&atilde;o da soma; subt&iacute;tulos servem s&oacute; para organizar o bloco.</p>
           </div>
-          <div class="grid cols-3">
-            <label class="field payment-row-amount-field">
-              <span>Valor</span>
-              <input type="text" name="payment_schedule_rows[<?= (int) $index ?>][amount]" value="<?= h(number_format((float) ($paymentRow['amount'] ?? 0), 2, ',', '.')) ?>" data-money-input data-payment-row-amount>
-            </label>
-          </div>
+          <button class="btn btn-ghost btn-sm" type="button" id="add-payment-row-button">+ Adicionar linha</button>
         </div>
-      <?php endforeach; ?>
-    </div>
-    <template id="payment-row-template">
-      <div class="repeater-row payment-row">
-        <div class="row-actions"><button class="btn btn-ghost btn-sm repeater-remove" type="button">Remover</button></div>
-        <div class="grid cols-3">
-          <label class="field">
-            <span>Tipo</span>
-            <select name="payment_schedule_rows[__INDEX__][type]" data-payment-row-type>
-              <option value="line">Linha com valor</option>
-              <option value="subtitle">Subtítulo</option>
-            </select>
-          </label>
-          <label class="field col-span-2"><span>Texto</span><input type="text" name="payment_schedule_rows[__INDEX__][label]" value=""></label>
-        </div>
-        <div class="grid cols-3">
-          <label class="field payment-row-amount-field">
-            <span>Valor</span>
-            <input type="text" name="payment_schedule_rows[__INDEX__][amount]" value="0,00" data-money-input data-payment-row-amount>
-          </label>
-        </div>
-      </div>
-    </template>
-    <p class="muted" id="payment-schedule-summary">
-      Soma atual da forma de pagamento: <strong data-payment-schedule-total>R$ 0,00</strong> | Valor total da proposta: <strong data-payment-proposal-total><?= brl($total) ?></strong>
-    </p>
-    <div class="grid cols-2">
-      <input type="hidden" name="pagamento_cartao_ativo" value="0">
-      <label class="checkbox-inline payment-toggle">
-        <input type="checkbox" name="pagamento_cartao_ativo" value="1" <?= proposal_flag_enabled($payload['pagamento_cartao_ativo'] ?? false) ? 'checked' : '' ?> data-payment-toggle="cartao">
-        Habilitar cartão
-      </label>
-      <input type="hidden" name="pagamento_boleto_ativo" value="0">
-      <label class="checkbox-inline payment-toggle">
-        <input type="checkbox" name="pagamento_boleto_ativo" value="1" <?= proposal_flag_enabled($payload['pagamento_boleto_ativo'] ?? false) ? 'checked' : '' ?> data-payment-toggle="boleto">
-        Habilitar boleto
-      </label>
-    </div>
-    <input type="hidden" name="acceptance_mode" value="contract">
-    <label class="checkbox-inline payment-toggle">
-      <input type="checkbox" name="acceptance_mode" value="summary" <?= (($payload['acceptance_mode'] ?? 'contract') === 'summary') ? 'checked' : '' ?> data-acceptance-mode-toggle>
-      Usar resumo da proposta no aceite e na assinatura [RESUMO]
-    </label>
-    <div class="payment-config-block" data-payment-fields="cartao">
-      <div class="grid cols-2">
-        <label class="field"><span>Título (cartão)</span><input type="text" name="pagamento_cartao_titulo" value="<?= h((string) ($payload['pagamento_cartao_titulo'] ?? '')) ?>"></label>
-        <label class="field"><span>Botão (cartão)</span><input type="text" name="pagamento_cartao_botao" value="<?= h((string) ($payload['pagamento_cartao_botao'] ?? '')) ?>"></label>
-      </div>
-      <label class="field"><span>Descrição (cartão)</span><input type="text" name="pagamento_cartao_descricao" value="<?= h((string) ($payload['pagamento_cartao_descricao'] ?? '')) ?>"></label>
-      <label class="field"><span>Link do cartão</span><input type="url" name="pagamento_cartao_link" value="<?= h((string) ($payload['pagamento_cartao_link'] ?? '')) ?>" placeholder="https://..."></label>
-    </div>
-    <div class="payment-config-block" data-payment-fields="boleto">
-      <div class="grid cols-2">
-        <label class="field"><span>Título (boleto)</span><input type="text" name="pagamento_boleto_titulo" value="<?= h((string) ($payload['pagamento_boleto_titulo'] ?? '')) ?>"></label>
-        <label class="field"><span>Botão (boleto)</span><input type="text" name="pagamento_boleto_botao" value="<?= h((string) ($payload['pagamento_boleto_botao'] ?? '')) ?>"></label>
-      </div>
-      <label class="field"><span>Descrição (boleto)</span><input type="text" name="pagamento_boleto_descricao" value="<?= h((string) ($payload['pagamento_boleto_descricao'] ?? '')) ?>"></label>
-      <label class="field"><span>Link do boleto</span><input type="url" name="pagamento_boleto_link" value="<?= h((string) ($payload['pagamento_boleto_link'] ?? '')) ?>" placeholder="https://..."></label>
-    </div>
 
-    <div class="toggle-config-block" data-acceptance-fields="contract">
-      <label class="field"><span>T&iacute;tulo do contrato</span><input type="text" name="accept_terms_title" value="<?= h((string) ($payload['accept_terms_title'] ?? '')) ?>" placeholder="Se vazio, usa o t&iacute;tulo geral das configura&ccedil;&otilde;es"></label>
-      <label class="field field-top"><span>Termos do contrato por proposta (HTML opcional)</span><textarea name="accept_terms_html" rows="12" placeholder="Se este campo ficar vazio, o sistema usa automaticamente o contrato geral definido em Configura&ccedil;&otilde;es."><?= h((string) ($payload['accept_terms_html'] ?? '')) ?></textarea></label>
-      <label class="field"><span>Texto do checkbox</span><input type="text" name="accept_terms_checkbox_text" value="<?= h((string) ($payload['accept_terms_checkbox_text'] ?? '')) ?>" placeholder="Li e concordo com os termos deste contrato."></label>
-    </div>
-
-    <div class="toggle-config-block" data-acceptance-fields="summary">
-      <label class="field field-top">
-        <span>Resumo complementar do aceite (HTML opcional) [RESUMO]</span>
-        <textarea name="accept_summary_html" rows="10" placeholder="Se este campo ficar vazio, o sistema usa automaticamente o resumo gerado pela proposta."><?= h((string) ($payload['accept_summary_html'] ?? '')) ?></textarea>
-      </label>
-      <p class="muted">Quando essa op&ccedil;&atilde;o estiver ativa, o modal de aceite e o documento enviado ao ZapSign usar&atilde;o o resumo da proposta em vez do contrato.</p>
-    </div>
-
-    <details class="settings-spoiler">
-      <summary>Ver vari&aacute;veis dispon&iacute;veis</summary>
-      <div class="settings-vars">
-        <p class="muted">Use no texto com o formato <code>{{VARIAVEL}}</code>.</p>
-        <div class="settings-vars-grid">
-          <?php foreach ($acceptTermsVariables as $var => $description): ?>
-            <div class="settings-var-item">
-              <code>{{<?= h((string) $var) ?>}}</code>
-              <small><?= h((string) $description) ?></small>
+        <div class="stack-sm" id="payment-schedule-list" data-next-index="<?= count($paymentRows) ?>">
+          <?php foreach ($paymentRows as $index => $paymentRow): ?>
+            <?php $paymentType = (($paymentRow['type'] ?? 'line') === 'subtitle') ? 'subtitle' : 'line'; ?>
+            <div class="repeater-row payment-row">
+              <div class="row-actions"><button class="btn btn-ghost btn-sm repeater-remove" type="button">Remover</button></div>
+              <div class="grid cols-3">
+                <label class="field">
+                  <span>Tipo</span>
+                  <select name="payment_schedule_rows[<?= (int) $index ?>][type]" data-payment-row-type>
+                    <option value="line" <?= $paymentType === 'line' ? 'selected' : '' ?>>Linha com valor</option>
+                    <option value="subtitle" <?= $paymentType === 'subtitle' ? 'selected' : '' ?>>Subt&iacute;tulo</option>
+                  </select>
+                </label>
+                <label class="field col-span-2"><span>Texto</span><input type="text" name="payment_schedule_rows[<?= (int) $index ?>][label]" value="<?= h((string) ($paymentRow['label'] ?? '')) ?>"></label>
+              </div>
+              <div class="grid cols-3">
+                <label class="field payment-row-amount-field">
+                  <span>Valor</span>
+                  <input type="text" name="payment_schedule_rows[<?= (int) $index ?>][amount]" value="<?= h(number_format((float) ($paymentRow['amount'] ?? 0), 2, ',', '.')) ?>" data-money-input data-payment-row-amount>
+                </label>
+              </div>
             </div>
           <?php endforeach; ?>
         </div>
+
+        <template id="payment-row-template">
+          <div class="repeater-row payment-row">
+            <div class="row-actions"><button class="btn btn-ghost btn-sm repeater-remove" type="button">Remover</button></div>
+            <div class="grid cols-3">
+              <label class="field">
+                <span>Tipo</span>
+                <select name="payment_schedule_rows[__INDEX__][type]" data-payment-row-type>
+                  <option value="line">Linha com valor</option>
+                  <option value="subtitle">Subt&iacute;tulo</option>
+                </select>
+              </label>
+              <label class="field col-span-2"><span>Texto</span><input type="text" name="payment_schedule_rows[__INDEX__][label]" value=""></label>
+            </div>
+            <div class="grid cols-3">
+              <label class="field payment-row-amount-field">
+                <span>Valor</span>
+                <input type="text" name="payment_schedule_rows[__INDEX__][amount]" value="0,00" data-money-input data-payment-row-amount>
+              </label>
+            </div>
+          </div>
+        </template>
+
+        <div class="payment-summary-strip" id="payment-schedule-summary">
+          <span>Soma atual da forma de pagamento: <strong data-payment-schedule-total>R$ 0,00</strong></span>
+          <span>Valor total da proposta: <strong data-payment-proposal-total><?= brl($total) ?></strong></span>
+        </div>
+
+        <div class="payment-toggle-grid">
+          <input type="hidden" name="pagamento_cartao_ativo" value="0">
+          <label class="checkbox-inline payment-toggle">
+            <input type="checkbox" name="pagamento_cartao_ativo" value="1" <?= proposal_flag_enabled($payload['pagamento_cartao_ativo'] ?? false) ? 'checked' : '' ?> data-payment-toggle="cartao">
+            Habilitar cart&atilde;o
+          </label>
+          <input type="hidden" name="pagamento_boleto_ativo" value="0">
+          <label class="checkbox-inline payment-toggle">
+            <input type="checkbox" name="pagamento_boleto_ativo" value="1" <?= proposal_flag_enabled($payload['pagamento_boleto_ativo'] ?? false) ? 'checked' : '' ?> data-payment-toggle="boleto">
+            Habilitar boleto
+          </label>
+        </div>
+
+        <div class="payment-method-panels">
+          <div class="payment-config-block" data-payment-fields="cartao">
+            <div class="proposal-subpanel-head proposal-subpanel-head-sm">
+              <div>
+                <h3>Cart&atilde;o</h3>
+                <p class="muted">Personalize os textos e o link do pagamento por cart&atilde;o.</p>
+              </div>
+            </div>
+            <div class="grid cols-2">
+              <label class="field"><span>T&iacute;tulo (cart&atilde;o)</span><input type="text" name="pagamento_cartao_titulo" value="<?= h((string) ($payload['pagamento_cartao_titulo'] ?? '')) ?>"></label>
+              <label class="field"><span>Bot&atilde;o (cart&atilde;o)</span><input type="text" name="pagamento_cartao_botao" value="<?= h((string) ($payload['pagamento_cartao_botao'] ?? '')) ?>"></label>
+            </div>
+            <label class="field"><span>Descri&ccedil;&atilde;o (cart&atilde;o)</span><input type="text" name="pagamento_cartao_descricao" value="<?= h((string) ($payload['pagamento_cartao_descricao'] ?? '')) ?>"></label>
+            <label class="field"><span>Link do cart&atilde;o</span><input type="url" name="pagamento_cartao_link" value="<?= h((string) ($payload['pagamento_cartao_link'] ?? '')) ?>" placeholder="https://..."></label>
+          </div>
+
+          <div class="payment-config-block" data-payment-fields="boleto">
+            <div class="proposal-subpanel-head proposal-subpanel-head-sm">
+              <div>
+                <h3>Boleto</h3>
+                <p class="muted">Personalize os textos e o link do boleto quando essa op&ccedil;&atilde;o estiver ativa.</p>
+              </div>
+            </div>
+            <div class="grid cols-2">
+              <label class="field"><span>T&iacute;tulo (boleto)</span><input type="text" name="pagamento_boleto_titulo" value="<?= h((string) ($payload['pagamento_boleto_titulo'] ?? '')) ?>"></label>
+              <label class="field"><span>Bot&atilde;o (boleto)</span><input type="text" name="pagamento_boleto_botao" value="<?= h((string) ($payload['pagamento_boleto_botao'] ?? '')) ?>"></label>
+            </div>
+            <label class="field"><span>Descri&ccedil;&atilde;o (boleto)</span><input type="text" name="pagamento_boleto_descricao" value="<?= h((string) ($payload['pagamento_boleto_descricao'] ?? '')) ?>"></label>
+            <label class="field"><span>Link do boleto</span><input type="url" name="pagamento_boleto_link" value="<?= h((string) ($payload['pagamento_boleto_link'] ?? '')) ?>" placeholder="https://..."></label>
+          </div>
+        </div>
       </div>
-    </details>
+
+      <div class="proposal-subpanel">
+        <div class="proposal-subpanel-head">
+          <div>
+            <h3>Aceite e assinatura</h3>
+            <p class="muted">Defina se o aceite vai usar o contrato ou o resumo da proposta e personalize o conte&uacute;do exibido ao cliente.</p>
+          </div>
+        </div>
+
+        <input type="hidden" name="acceptance_mode" value="contract">
+        <label class="checkbox-inline payment-toggle">
+          <input type="checkbox" name="acceptance_mode" value="summary" <?= (($payload['acceptance_mode'] ?? 'contract') === 'summary') ? 'checked' : '' ?> data-acceptance-mode-toggle>
+          Usar resumo da proposta no aceite e na assinatura [RESUMO]
+        </label>
+
+        <div class="toggle-config-block" data-acceptance-fields="contract">
+          <label class="field"><span>T&iacute;tulo do contrato</span><input type="text" name="accept_terms_title" value="<?= h((string) ($payload['accept_terms_title'] ?? '')) ?>" placeholder="Se vazio, usa o t&iacute;tulo geral das configura&ccedil;&otilde;es"></label>
+          <label class="field field-top"><span>Termos do contrato por proposta (HTML opcional)</span><textarea name="accept_terms_html" rows="12" placeholder="Se este campo ficar vazio, o sistema usa automaticamente o contrato geral definido em Configura&ccedil;&otilde;es."><?= h((string) ($payload['accept_terms_html'] ?? '')) ?></textarea></label>
+          <label class="field"><span>Texto do checkbox</span><input type="text" name="accept_terms_checkbox_text" value="<?= h((string) ($payload['accept_terms_checkbox_text'] ?? '')) ?>" placeholder="Li e concordo com os termos deste contrato."></label>
+        </div>
+
+        <div class="toggle-config-block" data-acceptance-fields="summary">
+          <label class="field field-top">
+            <span>Resumo complementar do aceite (HTML opcional) [RESUMO]</span>
+            <textarea name="accept_summary_html" rows="10" placeholder="Se este campo ficar vazio, o sistema usa automaticamente o resumo gerado pela proposta."><?= h((string) ($payload['accept_summary_html'] ?? '')) ?></textarea>
+          </label>
+          <p class="muted">Quando essa op&ccedil;&atilde;o estiver ativa, o modal de aceite e o documento enviado ao ZapSign usar&atilde;o o resumo da proposta em vez do contrato.</p>
+        </div>
+
+        <details class="settings-spoiler">
+          <summary>Ver vari&aacute;veis dispon&iacute;veis</summary>
+          <div class="settings-vars">
+            <p class="muted">Use no texto com o formato <code>{{VARIAVEL}}</code>.</p>
+            <div class="settings-vars-grid">
+              <?php foreach ($acceptTermsVariables as $var => $description): ?>
+                <div class="settings-var-item">
+                  <code>{{<?= h((string) $var) ?>}}</code>
+                  <small><?= h((string) $description) ?></small>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
   </section>
   <section class="panel">
-    <h2>Considerações e exclusões</h2>
+    <h2>Considera&ccedil;&otilde;es e exclus&otilde;es</h2>
     <div class="grid cols-2">
       <label class="field"><span>Considera&ccedil;&otilde;es importantes (1 por linha)</span><textarea name="consideracoes" rows="8"><?= h(implode("\n", $payload['consideracoes'] ?? [])) ?></textarea></label>
       <label class="field"><span>Itens fora do escopo (1 por linha)</span><textarea name="exclusoes" rows="8"><?= h(implode("\n", $payload['exclusoes'] ?? [])) ?></textarea></label>
