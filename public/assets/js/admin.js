@@ -54,6 +54,7 @@
       const block = document.querySelector('[data-payment-fields="' + method + '"]');
       if (!block) return;
 
+      block.hidden = !enabled;
       block.classList.toggle("is-disabled", !enabled);
       block.setAttribute("aria-disabled", enabled ? "false" : "true");
 
@@ -72,6 +73,29 @@
       toggle.addEventListener("change", apply);
       apply();
     });
+  }
+
+  function setupPaymentManualToggle() {
+    const toggle = document.querySelector("[data-payment-manual-toggle]");
+    const block = document.querySelector("[data-payment-manual-fields]");
+    if (!toggle || !block) return;
+
+    const sync = () => {
+      const enabled = !!toggle.checked;
+      block.hidden = !enabled;
+      block.setAttribute("aria-hidden", enabled ? "false" : "true");
+
+      block.querySelectorAll("input, textarea, select, button").forEach((field) => {
+        if (!(field instanceof HTMLElement)) return;
+        if (field.matches('[type="hidden"]')) return;
+        field.toggleAttribute("disabled", !enabled);
+      });
+
+      recalcPaymentSchedule();
+    };
+
+    toggle.addEventListener("change", sync);
+    sync();
   }
 
   function setupHeaderMediaToggle() {
@@ -339,6 +363,11 @@
   }
 
   function paymentScheduleState() {
+    const manualToggle = document.querySelector("[data-payment-manual-toggle]");
+    if (manualToggle && !manualToggle.checked) {
+      return { total: 0, hasLines: false };
+    }
+
     let total = 0;
     let hasLines = false;
 
@@ -471,6 +500,7 @@
 
   setupSidebarToggle();
   setupProposalPanelCollapse();
+  setupPaymentManualToggle();
   setupPaymentFieldToggles();
   setupHeaderMediaToggle();
   setupHeaderLayoutToggle();

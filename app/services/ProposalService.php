@@ -58,6 +58,7 @@ function default_proposal_payload(): array
             ['item' => 'ARQ-02', 'nome' => 'Projeto básico', 'rev' => '00', 'data' => $today->format('d/m/Y')],
             ['item' => 'ARQ-03', 'nome' => 'Projeto executivo', 'rev' => '00', 'data' => $today->format('d/m/Y')],
         ],
+        'payment_schedule_manual_enabled' => false,
         'payment_schedule_rows' => [],
         'consideracoes' => [
             'A aprovação em concessionárias depende dos prazos de análise dos órgãos.',
@@ -286,6 +287,10 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
     $payload['pagamento_boleto_ativo'] = array_key_exists('pagamento_boleto_ativo', $input)
         ? proposal_flag_enabled($input['pagamento_boleto_ativo'])
         : false;
+    $manualPaymentProvided = array_key_exists('payment_schedule_manual_enabled', $input);
+    $manualPaymentExisting = $base !== null && array_key_exists('payment_schedule_manual_enabled', $base)
+        ? proposal_flag_enabled($base['payment_schedule_manual_enabled'])
+        : null;
     $payload['header_custom_media_enabled'] = array_key_exists('header_custom_media_enabled', $input)
         ? proposal_flag_enabled($input['header_custom_media_enabled'])
         : false;
@@ -473,6 +478,15 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
         ];
     }
     $payload['payment_schedule_rows'] = array_slice($normalizedPaymentRows, 0, 40);
+    if ($manualPaymentProvided) {
+        $payload['payment_schedule_manual_enabled'] = proposal_flag_enabled($input['payment_schedule_manual_enabled']);
+    } elseif ($manualPaymentExisting !== null) {
+        $payload['payment_schedule_manual_enabled'] = $manualPaymentExisting;
+    } else {
+        $payload['payment_schedule_manual_enabled'] = proposal_payment_schedule_manual_enabled([
+            'payment_schedule_rows' => $payload['payment_schedule_rows'],
+        ]);
+    }
 
     $payload['consideracoes'] = array_slice(normalize_topic_lines($input['consideracoes'] ?? $payload['consideracoes']), 0, 30);
     $payload['exclusoes'] = array_slice(normalize_topic_lines($input['exclusoes'] ?? $payload['exclusoes']), 0, 40);
@@ -506,6 +520,10 @@ function proposal_total(array $payload): float
 
 function proposal_payment_schedule_entries(array $payload): array
 {
+    if (!proposal_payment_schedule_manual_enabled($payload)) {
+        return [];
+    }
+
     $rows = is_array($payload['payment_schedule_rows'] ?? null) ? $payload['payment_schedule_rows'] : [];
     $entries = [];
 
@@ -532,6 +550,28 @@ function proposal_payment_schedule_entries(array $payload): array
     }
 
     return $entries;
+}
+
+function proposal_payment_schedule_manual_enabled(array $payload): bool
+{
+    if (array_key_exists('payment_schedule_manual_enabled', $payload)) {
+        return proposal_flag_enabled($payload['payment_schedule_manual_enabled']);
+    }
+
+    $rows = is_array($payload['payment_schedule_rows'] ?? null) ? $payload['payment_schedule_rows'] : [];
+    foreach ($rows as $row) {
+        if (!is_array($row)) {
+            continue;
+        }
+
+        $label = trim((string) ($row['label'] ?? ''));
+        $amount = round((float) ($row['amount'] ?? 0), 2);
+        if ($label !== '' || $amount > 0) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 function proposal_payment_schedule_total(array $payload): float
