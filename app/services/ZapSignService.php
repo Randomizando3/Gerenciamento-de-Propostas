@@ -51,6 +51,10 @@ function create_zapsign_document(array $proposal, array $settings): array
             'mode' => 'url_pdf',
             'payload' => ['url_pdf' => $contractUrl],
         ];
+        $strategies[] = [
+            'mode' => 'markdown_text',
+            'payload' => ['markdown_text' => zapsign_markdown_from_proposal($proposal, $proposalPayload, $settings)],
+        ];
     } elseif ($isLocalContractHost || $contractUrl === null) {
         $strategies[] = [
             'mode' => 'markdown_text',
@@ -326,8 +330,10 @@ function zapsign_markdown_from_proposal(array $proposal, array $payload, array $
     $files = proposal_file_entries($payload);
     $scopeEntries = proposal_scope_entries($payload);
     $stages = proposal_timeline_entries($payload);
+    $paymentSchedule = proposal_payment_schedule_entries($payload);
     $considerations = array_values(normalize_topic_lines($payload['consideracoes'] ?? []));
     $exclusions = array_values(normalize_topic_lines($payload['exclusoes'] ?? []));
+    $publicUrl = proposal_public_url($proposal);
     $lines = [];
     $lines[] = '# ' . trim((string) ($acceptance['title'] ?? 'Documento de aceite'));
     $lines[] = '';
@@ -341,6 +347,14 @@ function zapsign_markdown_from_proposal(array $proposal, array $payload, array $
     $client = trim((string) ($payload['cliente_nome'] ?? $proposal['client_name'] ?? ''));
     if ($client !== '') {
         $lines[] = '- Cliente: ' . $client;
+    }
+    $clientCompany = trim((string) ($payload['cliente_empresa'] ?? ''));
+    if ($clientCompany !== '') {
+        $lines[] = '- Empresa do cliente: ' . $clientCompany;
+    }
+    $clientCnpj = trim((string) ($payload['cliente_cnpj'] ?? ''));
+    if ($clientCnpj !== '') {
+        $lines[] = '- CNPJ do cliente: ' . $clientCnpj;
     }
     $obra = trim((string) ($payload['obra_nome'] ?? ''));
     if ($obra !== '') {
@@ -372,6 +386,10 @@ function zapsign_markdown_from_proposal(array $proposal, array $payload, array $
     if ($acceptanceMode === 'summary') {
         $lines[] = '';
         $lines[] = 'Ao assinar este documento, as partes concordam com o resumo desta proposta comercial.';
+        if ($publicUrl) {
+            $lines[] = '';
+            $lines[] = 'Link da proposta original: ' . $publicUrl;
+        }
         return implode("\n", $lines);
     }
 
@@ -422,6 +440,18 @@ function zapsign_markdown_from_proposal(array $proposal, array $payload, array $
     $lines[] = '## Valor total';
     $lines[] = '- ' . brl($total) . ' (' . currency_to_words_ptbr($total) . ')';
 
+    if ($paymentSchedule !== []) {
+        $lines[] = '';
+        $lines[] = '## Forma de pagamento';
+        foreach ($paymentSchedule as $entry) {
+            if (($entry['type'] ?? 'line') === 'subtitle') {
+                $lines[] = '- ' . trim((string) ($entry['label'] ?? 'Grupo'));
+                continue;
+            }
+            $lines[] = '- ' . trim((string) ($entry['label'] ?? 'Parcela')) . ': ' . brl((float) ($entry['amount'] ?? 0));
+        }
+    }
+
     if ($considerations !== []) {
         $lines[] = '';
         $lines[] = '## Consideracoes';
@@ -442,6 +472,12 @@ function zapsign_markdown_from_proposal(array $proposal, array $payload, array $
                 $lines[] = '- ' . $item;
             }
         }
+    }
+
+    if ($publicUrl) {
+        $lines[] = '';
+        $lines[] = '## Link da proposta original';
+        $lines[] = $publicUrl;
     }
 
     $lines[] = '';

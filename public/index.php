@@ -120,6 +120,11 @@ if (preg_match('#^/admin/proposals/(\d+)/duplicate$#', $path, $matches) && $meth
     return;
 }
 
+if (preg_match('#^/admin/proposals/(\d+)/delete$#', $path, $matches) && $method === 'POST') {
+    admin_delete_proposal_action((int) $matches[1]);
+    return;
+}
+
 if (preg_match('#^/admin/proposals/(\d+)/analytics$#', $path, $matches) && $method === 'GET') {
     admin_show_analytics((int) $matches[1]);
     return;
@@ -137,6 +142,11 @@ if (preg_match('#^/p/([a-zA-Z0-9]+)/print$#', $path, $matches) && $method === 'G
 
 if (preg_match('#^/p/([a-zA-Z0-9]+)/contract$#', $path, $matches) && $method === 'GET') {
     show_public_contract((string) $matches[1]);
+    return;
+}
+
+if (preg_match('#^/p/([a-zA-Z0-9]+)/acceptance-document$#', $path, $matches) && $method === 'GET') {
+    show_public_acceptance_document((string) $matches[1]);
     return;
 }
 

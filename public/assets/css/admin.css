@@ -539,6 +539,10 @@ body.admin-sidebar-collapsed .sidebar-toggle-button {
   grid-template-columns: repeat(5, minmax(120px, 1fr));
 }
 
+.cols-7 {
+  grid-template-columns: repeat(7, minmax(120px, 1fr));
+}
+
 .col-span-2 {
   grid-column: span 2;
 }
@@ -1217,6 +1221,8 @@ code {
   .cols-2,
   .cols-3,
   .cols-4,
+  .cols-5,
+  .cols-7,
   .users-grid,
   .discipline-grid,
   .metrics-columns,

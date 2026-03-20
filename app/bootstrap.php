@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
+if (file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
+    require dirname(__DIR__) . '/vendor/autoload.php';
+}
+
 require __DIR__ . '/helpers.php';
 require __DIR__ . '/db.php';
+require __DIR__ . '/services/PdfService.php';
 require __DIR__ . '/services/ProposalService.php';
 require __DIR__ . '/services/ZapSignService.php';
 require __DIR__ . '/controllers/AuthController.php';

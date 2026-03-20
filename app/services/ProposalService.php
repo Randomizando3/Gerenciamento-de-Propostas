@@ -58,6 +58,7 @@ function default_proposal_payload(): array
             ['item' => 'ARQ-02', 'nome' => 'Projeto básico', 'rev' => '00', 'data' => $today->format('d/m/Y')],
             ['item' => 'ARQ-03', 'nome' => 'Projeto executivo', 'rev' => '00', 'data' => $today->format('d/m/Y')],
         ],
+        'payment_schedule_rows' => [],
         'consideracoes' => [
             'A aprovação em concessionárias depende dos prazos de análise dos órgãos.',
             'Escopo considera somente disciplinas selecionadas nesta proposta.',
@@ -447,6 +448,32 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
     }
     $payload['arquivos'] = array_slice($normalizedFiles, 0, 40);
 
+    $paymentRows = $input['payment_schedule_rows'] ?? ($payload['payment_schedule_rows'] ?? []);
+    if (!is_array($paymentRows)) {
+        $paymentRows = [];
+    }
+    $normalizedPaymentRows = [];
+    foreach ($paymentRows as $row) {
+        if (!is_array($row)) {
+            continue;
+        }
+        $type = trim((string) ($row['type'] ?? 'line'));
+        $type = $type === 'subtitle' ? 'subtitle' : 'line';
+        $label = trim((string) ($row['label'] ?? ''));
+        $amountRaw = trim((string) ($row['amount'] ?? ''));
+
+        if ($label === '' && $amountRaw === '') {
+            continue;
+        }
+
+        $normalizedPaymentRows[] = [
+            'type' => $type,
+            'label' => $label,
+            'amount' => $type === 'line' ? round(to_float($amountRaw), 2) : 0.0,
+        ];
+    }
+    $payload['payment_schedule_rows'] = array_slice($normalizedPaymentRows, 0, 40);
+
     $payload['consideracoes'] = array_slice(normalize_topic_lines($input['consideracoes'] ?? $payload['consideracoes']), 0, 30);
     $payload['exclusoes'] = array_slice(normalize_topic_lines($input['exclusoes'] ?? $payload['exclusoes']), 0, 40);
 
@@ -475,6 +502,78 @@ function proposal_total(array $payload): float
     }
 
     return round($total, 2);
+}
+
+function proposal_payment_schedule_entries(array $payload): array
+{
+    $rows = is_array($payload['payment_schedule_rows'] ?? null) ? $payload['payment_schedule_rows'] : [];
+    $entries = [];
+
+    foreach ($rows as $row) {
+        if (!is_array($row)) {
+            continue;
+        }
+
+        $type = trim((string) ($row['type'] ?? 'line'));
+        $type = $type === 'subtitle' ? 'subtitle' : 'line';
+        $label = trim((string) ($row['label'] ?? ''));
+        $amount = round((float) ($row['amount'] ?? 0), 2);
+
+        if ($label === '' && ($type !== 'line' || $amount <= 0)) {
+            continue;
+        }
+
+        $entries[] = [
+            'type' => $type,
+            'label' => $label !== '' ? $label : ($type === 'subtitle' ? 'Grupo' : 'Parcela'),
+            'amount' => $type === 'line' ? $amount : 0.0,
+            'amount_label' => $type === 'line' ? brl($amount) : '',
+        ];
+    }
+
+    return $entries;
+}
+
+function proposal_payment_schedule_total(array $payload): float
+{
+    $sum = 0.0;
+    foreach (proposal_payment_schedule_entries($payload) as $entry) {
+        if (($entry['type'] ?? 'line') !== 'line') {
+            continue;
+        }
+        $sum += (float) ($entry['amount'] ?? 0);
+    }
+
+    return round($sum, 2);
+}
+
+function proposal_payment_schedule_has_lines(array $payload): bool
+{
+    foreach (proposal_payment_schedule_entries($payload) as $entry) {
+        if (($entry['type'] ?? 'line') === 'line') {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function proposal_payment_schedule_validation(array $payload): array
+{
+    if (!proposal_payment_schedule_has_lines($payload)) {
+        return ['ok' => true, 'message' => ''];
+    }
+
+    $total = proposal_total($payload);
+    $scheduleTotal = proposal_payment_schedule_total($payload);
+    if (abs($scheduleTotal - $total) < 0.01) {
+        return ['ok' => true, 'message' => ''];
+    }
+
+    return [
+        'ok' => false,
+        'message' => 'A soma da forma de pagamento (' . brl($scheduleTotal) . ') precisa ser igual ao valor total da proposta (' . brl($total) . ').',
+    ];
 }
 
 function save_proposal(array $payload, ?int $id = null, ?array $actor = null): int
@@ -657,6 +756,8 @@ function list_proposals_with_metrics(array $filters = []): array
     $minValue = round(to_float($filters['min_total'] ?? 0), 2);
     $maxValueRaw = trim((string) ($filters['max_total'] ?? ''));
     $maxValue = $maxValueRaw !== '' ? round(to_float($maxValueRaw), 2) : null;
+    $orderBy = trim((string) ($filters['order_by'] ?? 'updated_at'));
+    $orderDir = mb_strtolower(trim((string) ($filters['order_dir'] ?? 'desc')), 'UTF-8') === 'asc' ? 'asc' : 'desc';
 
     if ($query !== '' || $status !== '' || $client !== '' || $minValue > 0 || $maxValue !== null) {
         $rows = array_values(array_filter($rows, static function (array $row) use ($query, $status, $client, $minValue, $maxValue): bool {
@@ -693,10 +794,27 @@ function list_proposals_with_metrics(array $filters = []): array
         }));
     }
 
-    usort(
-        $rows,
-        static fn (array $a, array $b): int => strcmp((string) ($b['updated_at'] ?? ''), (string) ($a['updated_at'] ?? ''))
-    );
+    $sortMap = [
+        'code' => static fn (array $row): string => mb_strtolower((string) ($row['code'] ?? ''), 'UTF-8'),
+        'client' => static fn (array $row): string => mb_strtolower((string) ($row['client_name'] ?? ''), 'UTF-8'),
+        'status' => static fn (array $row): string => mb_strtolower((string) ($row['status'] ?? ''), 'UTF-8'),
+        'total_value' => static fn (array $row): float => (float) ($row['total_value'] ?? 0),
+        'total_views' => static fn (array $row): int => (int) ($row['total_views'] ?? 0),
+        'max_scroll' => static fn (array $row): float => (float) ($row['max_scroll'] ?? 0),
+        'updated_at' => static fn (array $row): string => (string) ($row['updated_at'] ?? ''),
+    ];
+    $sortResolver = $sortMap[$orderBy] ?? $sortMap['updated_at'];
+
+    usort($rows, static function (array $a, array $b) use ($sortResolver, $orderDir): int {
+        $valueA = $sortResolver($a);
+        $valueB = $sortResolver($b);
+        $result = $valueA <=> $valueB;
+        if (is_string($valueA) || is_string($valueB)) {
+            $result = strcmp((string) $valueA, (string) $valueB);
+        }
+
+        return $orderDir === 'asc' ? $result : -$result;
+    });
 
     return $rows;
 }
@@ -735,6 +853,43 @@ function duplicate_proposal(int $id, ?array $actor = null): ?int
     $newId = save_proposal($payload, null, $actor);
 
     return $newId;
+}
+
+function delete_proposal_record(int $id): bool
+{
+    $rows = db_all('proposals');
+    $filtered = [];
+    $deleted = false;
+
+    foreach ($rows as $row) {
+        if ((int) ($row['id'] ?? 0) === $id) {
+            $deleted = true;
+            continue;
+        }
+        $filtered[] = $row;
+    }
+
+    if (!$deleted) {
+        return false;
+    }
+
+    db_replace_rows('proposals', $filtered);
+    db_replace_rows(
+        'proposal_views',
+        array_values(array_filter(
+            db_all('proposal_views'),
+            static fn (array $row): bool => (int) ($row['proposal_id'] ?? 0) !== $id
+        ))
+    );
+    db_replace_rows(
+        'proposal_events',
+        array_values(array_filter(
+            db_all('proposal_events'),
+            static fn (array $row): bool => (int) ($row['proposal_id'] ?? 0) !== $id
+        ))
+    );
+
+    return true;
 }
 
 function normalize_proposal_audit_fields(array $proposal): array
@@ -808,6 +963,15 @@ function proposal_contract_url(array $proposal): ?string
     return app_url('/p/' . $proposal['token'] . '/contract');
 }
 
+function proposal_acceptance_pdf_url(array $proposal): ?string
+{
+    if (empty($proposal['token'])) {
+        return null;
+    }
+
+    return app_url('/p/' . $proposal['token'] . '/acceptance-document');
+}
+
 function proposal_acceptance_mode(array $payload): string
 {
     $mode = trim((string) ($payload['acceptance_mode'] ?? 'contract'));
@@ -816,10 +980,7 @@ function proposal_acceptance_mode(array $payload): string
 
 function proposal_acceptance_document_url(array $proposal, ?array $payload = null): ?string
 {
-    $resolvedPayload = is_array($payload) ? $payload : (is_array($proposal['payload'] ?? null) ? (array) $proposal['payload'] : []);
-    return proposal_acceptance_mode($resolvedPayload) === 'summary'
-        ? proposal_print_url($proposal)
-        : proposal_contract_url($proposal);
+    return proposal_acceptance_pdf_url($proposal);
 }
 
 function get_dashboard_stats(): array
@@ -987,7 +1148,7 @@ function render_proposal_template_html(array $proposal, array $payload, array $s
     $token = (string) ($proposal['token'] ?? '');
     $downloadUrl = $token !== '' ? '/p/' . $token . '/print' : '#';
     $signUrl = $token !== '' ? '/p/' . $token . '/sign' : '#';
-    $downloadTarget = $previewMode ? '' : ' target="_blank"';
+    $downloadTarget = '';
 
     $template = preg_replace(
         '/<a href=\"#\" class=\"download-button\">/i',
@@ -1037,6 +1198,10 @@ function acceptance_terms_variable_catalog(): array
         'NOME_CLIENTE' => 'Nome do cliente',
         'CLIENTE_NOME' => 'Nome do cliente',
         'CLIENTE_EMPRESA' => 'Empresa do cliente',
+        'CLIENTE_EMPRESA_RAW' => 'Empresa do cliente sem fallback',
+        'CLIENTE_CNPJ' => 'CNPJ do cliente',
+        'CNPJ_CLIENTE' => 'CNPJ do cliente',
+        'CNPJ' => 'CNPJ do cliente',
         'EMPRESA_CLIENTE' => 'Empresa do cliente',
         'EMPRESA' => 'Empresa do cliente',
         'CONTRATANTE_RAZAO' => 'Razão/nome do contratante',
@@ -1064,6 +1229,8 @@ function acceptance_terms_variable_catalog(): array
         'BANK_PIX_KEY_TYPE' => 'Tipo da chave PIX',
         'PAYMENT_CARD_LINK' => 'Link de pagamento no cartão',
         'PAYMENT_BOLETO_LINK' => 'Link para emissão de boleto',
+        'LINK_PROPOSTA_ORIGINAL' => 'Link público da proposta original',
+        'PROPOSTA_LINK_ORIGINAL' => 'Link público da proposta original',
         'ARQUIVO_01_DATA' => 'Data do arquivo recebido 01',
         'ARQUIVO_02_DATA' => 'Data do arquivo recebido 02',
         'ARQUIVO_03_DATA' => 'Data do arquivo recebido 03',
@@ -1191,6 +1358,7 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
     $revContract = $rev !== '' ? '(Revisão ' . $rev . ')' : '';
     $clientName = trim((string) ($payload['cliente_nome'] ?? ''));
     $clientCompany = trim((string) ($payload['cliente_empresa'] ?? ''));
+    $clientCnpj = trim((string) ($payload['cliente_cnpj'] ?? ''));
     $clientDisplay = $clientName !== '' ? $clientName : ($clientCompany !== '' ? $clientCompany : 'Cliente');
     $proposalDate = parse_ymd((string) ($payload['data_proposta'] ?? date('Y-m-d')));
 
@@ -1322,6 +1490,7 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
     $cardEnabled = proposal_flag_enabled($payload['pagamento_cartao_ativo'] ?? false);
     $boletoEnabled = proposal_flag_enabled($payload['pagamento_boleto_ativo'] ?? false);
     $paymentMethodsCount = 1 + ($cardEnabled ? 1 : 0) + ($boletoEnabled ? 1 : 0);
+    $paymentScheduleEntries = proposal_payment_schedule_entries($payload);
 
     $paymentBaseText = 'o pagamento podera ser realizado por transferencia eletronica (PIX), por meio da chave '
         . $bankPixKey
@@ -1341,6 +1510,19 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
     }
     $paymentExtraText = implode(' ', $paymentExtraParts);
 
+    if ($paymentScheduleEntries !== []) {
+        $scheduleLines = [];
+        foreach ($paymentScheduleEntries as $entry) {
+            if (($entry['type'] ?? 'line') === 'subtitle') {
+                $scheduleLines[] = trim((string) ($entry['label'] ?? ''));
+                continue;
+            }
+
+            $scheduleLines[] = trim((string) ($entry['label'] ?? 'Parcela')) . ': ' . brl((float) ($entry['amount'] ?? 0));
+        }
+        $paymentBaseText = implode(' | ', array_filter($scheduleLines));
+    }
+
     $map = [
         'CODIGO_BASE' => $code,
         'REVISAO' => $rev,
@@ -1353,10 +1535,14 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         'NOME_CLIENTE' => $clientDisplay,
         'CLIENTE_NOME' => $clientName !== '' ? $clientName : $clientDisplay,
         'CLIENTE_EMPRESA' => $clientCompany !== '' ? $clientCompany : $clientDisplay,
+        'CLIENTE_EMPRESA_RAW' => $clientCompany,
+        'CLIENTE_CNPJ' => $clientCnpj,
+        'CNPJ_CLIENTE' => $clientCnpj,
+        'CNPJ' => $clientCnpj,
         'EMPRESA_CLIENTE' => $clientCompany !== '' ? $clientCompany : $clientDisplay,
         'EMPRESA' => $clientCompany !== '' ? $clientCompany : $clientDisplay,
         'CONTRATANTE_RAZAO' => $clientCompany !== '' ? $clientCompany : $clientDisplay,
-        'CONTRATANTE_CNPJ' => (string) ($payload['cliente_cnpj'] ?? ''),
+        'CONTRATANTE_CNPJ' => $clientCnpj,
         'CONTRATANTE_EMAIL' => (string) ($payload['cliente_email'] ?? ''),
         'CONTRATANTE_ENDERECO' => (string) ($payload['cliente_endereco'] ?? ''),
         'CONTRATANTE_MUNICIPIO' => (string) ($payload['cliente_cidade'] ?? ''),
@@ -1434,6 +1620,8 @@ function build_proposal_placeholder_map(array $proposal, array $payload, array $
         'PAYMENT_BOLETO_BUTTON' => (string) ($payload['pagamento_boleto_botao'] ?? 'Abrir boleto'),
         'FORMA_PAGAMENTO_BASE' => $paymentBaseText,
         'FORMA_PAGAMENTO_EXTRA' => $paymentExtraText,
+        'LINK_PROPOSTA_ORIGINAL' => (string) (proposal_public_url($proposal) ?? ''),
+        'PROPOSTA_LINK_ORIGINAL' => (string) (proposal_public_url($proposal) ?? ''),
         'PGTO_SINAL' => brl(round($total * 0.20, 2)),
         'PGTO_BASICO_ELETRICO_ESPECIAIS' => brl(round($total * 0.30, 2)),
         'PGTO_BASICO_HIDROSSANITARIO' => brl(round($total * 0.30, 2)),
@@ -1754,13 +1942,18 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
     $code = (string) ($payload['codigo_base'] ?? ($proposal['code'] ?? ''));
     $proposalDate = parse_ymd((string) ($payload['data_proposta'] ?? date('Y-m-d')))->format('d/m/Y');
     $total = proposal_total($payload);
+    $publicUrl = proposal_public_url($proposal);
+    $paymentSchedule = proposal_payment_schedule_entries($payload);
+    $allowImages = pdf_embedded_images_available();
 
     ob_start();
     ?>
     <div class="proposal-summary-doc" style="font-family:Arial,sans-serif;color:#173942;line-height:1.6;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid #d8ecef;">
         <div style="display:flex;align-items:center;gap:16px;">
-          <img src="<?= h(app_url('/assets/img/logohorizontalbranco.png')) ?>" alt="Complementare" style="height:42px;width:auto;background:#0d4854;border-radius:10px;padding:10px 14px;">
+          <?php if ($allowImages): ?>
+            <img src="<?= h(app_url('/assets/img/logohorizontalbranco.png')) ?>" alt="Complementare" style="height:42px;width:auto;background:#0d4854;border-radius:10px;padding:10px 14px;">
+          <?php endif; ?>
           <div>
             <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#178f9c;font-weight:700;">Proposta Comercial</div>
             <h2 style="margin:4px 0 0;font-size:28px;line-height:1.1;"><?= h((string) ($payload['titulo'] ?? 'Proposta Comercial')) ?></h2>
@@ -1779,6 +1972,8 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
         <div style="background:#ffffff;border:1px solid #d5edf0;border-radius:18px;padding:18px;">
           <div style="font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:#178f9c;font-weight:700;">Cliente</div>
           <div style="margin-top:8px;font-size:18px;font-weight:700;"><?= h((string) ($payload['cliente_nome'] ?: ($payload['cliente_empresa'] ?: 'Cliente'))) ?></div>
+          <?php if (trim((string) ($payload['cliente_empresa'] ?? '')) !== ''): ?><div><?= h((string) $payload['cliente_empresa']) ?></div><?php endif; ?>
+          <?php if (trim((string) ($payload['cliente_cnpj'] ?? '')) !== ''): ?><div>CNPJ: <?= h((string) $payload['cliente_cnpj']) ?></div><?php endif; ?>
           <?php if (trim((string) ($payload['cliente_email'] ?? '')) !== ''): ?><div><?= h((string) $payload['cliente_email']) ?></div><?php endif; ?>
           <?php if (trim((string) ($payload['cliente_telefone'] ?? '')) !== ''): ?><div><?= h((string) $payload['cliente_telefone']) ?></div><?php endif; ?>
         </div>
@@ -1821,7 +2016,7 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
           <?php foreach ($scopeEntries as $entry): ?>
             <div style="border:1px solid #d5edf0;border-radius:18px;padding:18px;background:#fff;">
               <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-                <?php if ($entry['icon'] !== ''): ?><img src="<?= h(app_url($entry['icon'])) ?>" alt="<?= h($entry['title']) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
+                <?php if ($allowImages && $entry['icon'] !== ''): ?><img src="<?= h(app_url($entry['icon'])) ?>" alt="<?= h($entry['title']) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
                 <div>
                   <div style="font-size:18px;font-weight:700;"><?= h($entry['title']) ?></div>
                   <?php if ($entry['subtitle'] !== ''): ?><div style="color:#54767d;"><?= h($entry['subtitle']) ?></div><?php endif; ?>
@@ -1879,6 +2074,24 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
         </table>
       </section>
 
+      <?php if ($paymentSchedule !== []): ?>
+        <section style="margin-bottom:24px;">
+          <h3 style="margin:0 0 10px;font-size:20px;">Forma de Pagamento</h3>
+          <div style="display:grid;gap:10px;">
+            <?php foreach ($paymentSchedule as $entry): ?>
+              <?php if (($entry['type'] ?? 'line') === 'subtitle'): ?>
+                <div style="font-weight:700;color:#0d4854;margin-top:4px;"><?= h((string) $entry['label']) ?></div>
+              <?php else: ?>
+                <div style="display:flex;justify-content:space-between;gap:16px;border:1px solid #d5edf0;border-radius:16px;padding:14px;background:#fff;">
+                  <span><?= h((string) $entry['label']) ?></span>
+                  <strong><?= h((string) $entry['amount_label']) ?></strong>
+                </div>
+              <?php endif; ?>
+            <?php endforeach; ?>
+          </div>
+        </section>
+      <?php endif; ?>
+
       <?php if ($considerations !== []): ?>
         <section style="margin-bottom:24px;">
           <h3 style="margin:0 0 10px;font-size:20px;">Considerações Importantes</h3>
@@ -1890,6 +2103,15 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
         <section>
           <h3 style="margin:0 0 10px;font-size:20px;">Itens Fora do Escopo</h3>
           <ol type="A" style="margin:0;padding-left:22px;"><?php foreach ($exclusions as $item): ?><li><?= h((string) $item) ?></li><?php endforeach; ?></ol>
+        </section>
+      <?php endif; ?>
+
+      <?php if ($publicUrl): ?>
+        <section style="margin-top:24px;">
+          <h3 style="margin:0 0 10px;font-size:20px;">Link da Proposta Original</h3>
+          <p style="margin:0;">
+            <a href="<?= h($publicUrl) ?>" style="color:#0d8c98;text-decoration:none;word-break:break-all;"><?= h($publicUrl) ?></a>
+          </p>
         </section>
       <?php endif; ?>
     </div>
@@ -1919,9 +2141,12 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
     $obra = trim((string) ($payload['obra_nome'] ?: 'Não informado'));
     $files = proposal_file_entries($payload);
     $scopeEntries = proposal_scope_entries($payload);
+    $paymentSchedule = proposal_payment_schedule_entries($payload);
     $considerations = array_values(normalize_topic_lines($payload['consideracoes'] ?? []));
     $exclusions = array_values(normalize_topic_lines($payload['exclusoes'] ?? []));
     $total = proposal_total($payload);
+    $publicUrl = proposal_public_url($proposal);
+    $allowImages = pdf_embedded_images_available();
 
     ob_start();
     ?>
@@ -1960,7 +2185,9 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
       <main class="contract-page">
         <div class="contract-head">
           <div class="contract-brand">
-            <img src="<?= h(app_url('/assets/img/logohorizontalbranco.png')) ?>" alt="Complementare" style="height:42px;width:auto;background:#0d4854;border-radius:10px;padding:10px 14px;">
+            <?php if ($allowImages): ?>
+              <img src="<?= h(app_url('/assets/img/logohorizontalbranco.png')) ?>" alt="Complementare" style="height:42px;width:auto;background:#0d4854;border-radius:10px;padding:10px 14px;">
+            <?php endif; ?>
             <div>
               <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#178f9c;font-weight:700;">Documento de aceite</div>
               <h1 style="margin:4px 0 0;font-size:28px;line-height:1.1;"><?= h((string) $contract['title']) ?></h1>
@@ -1977,6 +2204,8 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
           <div class="contract-box">
             <div class="contract-box-label">Cliente</div>
             <div style="margin-top:8px;font-size:18px;font-weight:700;"><?= h($client) ?></div>
+            <?php if (trim((string) ($payload['cliente_empresa'] ?? '')) !== ''): ?><div><?= h((string) $payload['cliente_empresa']) ?></div><?php endif; ?>
+            <?php if (trim((string) ($payload['cliente_cnpj'] ?? '')) !== ''): ?><div>CNPJ: <?= h((string) $payload['cliente_cnpj']) ?></div><?php endif; ?>
           </div>
           <div class="contract-box">
             <div class="contract-box-label">Obra</div>
@@ -2016,7 +2245,7 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
                 <?php foreach ($scopeEntries as $entry): ?>
                   <article class="contract-scope-item">
                     <div class="contract-scope-head">
-                      <?php if (trim((string) ($entry['icon'] ?? '')) !== ''): ?><img src="<?= h(app_url((string) $entry['icon'])) ?>" alt="<?= h((string) ($entry['title'] ?? 'Disciplina')) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
+                      <?php if ($allowImages && trim((string) ($entry['icon'] ?? '')) !== ''): ?><img src="<?= h(app_url((string) $entry['icon'])) ?>" alt="<?= h((string) ($entry['title'] ?? 'Disciplina')) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
                       <div>
                         <div style="font-size:18px;font-weight:700;"><?= h((string) ($entry['title'] ?? 'Disciplina')) ?></div>
                         <?php if (trim((string) ($entry['subtitle'] ?? '')) !== ''): ?><div style="color:#54767d;"><?= h((string) $entry['subtitle']) ?></div><?php endif; ?>
@@ -2038,6 +2267,24 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
             <div class="contract-total"><?= h(brl($total)) ?> | <?= h(currency_to_words_ptbr($total)) ?></div>
           </section>
 
+          <?php if ($paymentSchedule !== []): ?>
+            <section>
+              <h2 style="margin:0 0 12px;">Forma de pagamento</h2>
+              <div style="display:grid;gap:10px;">
+                <?php foreach ($paymentSchedule as $entry): ?>
+                  <?php if (($entry['type'] ?? 'line') === 'subtitle'): ?>
+                    <strong><?= h((string) $entry['label']) ?></strong>
+                  <?php else: ?>
+                    <div style="display:flex;justify-content:space-between;gap:16px;border:1px solid #d5edf0;border-radius:14px;padding:12px 14px;">
+                      <span><?= h((string) $entry['label']) ?></span>
+                      <strong><?= h((string) $entry['amount_label']) ?></strong>
+                    </div>
+                  <?php endif; ?>
+                <?php endforeach; ?>
+              </div>
+            </section>
+          <?php endif; ?>
+
           <?php if ($considerations !== []): ?>
             <section>
               <h3 style="margin:0 0 10px;">Considerações importantes</h3>
@@ -2049,6 +2296,13 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
             <section>
               <h3 style="margin:0 0 10px;">Itens fora do escopo</h3>
               <ul style="margin:0;padding-left:18px;"><?php foreach ($exclusions as $item): ?><li><?= h((string) $item) ?></li><?php endforeach; ?></ul>
+            </section>
+          <?php endif; ?>
+
+          <?php if ($publicUrl): ?>
+            <section>
+              <h3 style="margin:0 0 10px;">Link da proposta original</h3>
+              <p style="margin:0;"><a href="<?= h($publicUrl) ?>" style="color:#0d8c98;text-decoration:none;word-break:break-all;"><?= h($publicUrl) ?></a></p>
             </section>
           <?php endif; ?>
         </section>
@@ -2111,6 +2365,10 @@ function proposal_public_render_data(array $proposal, array $payload, array $set
         'intro_title' => $renderText((string) ($payload['intro_title'] ?? '')),
         'company_about_text' => (string) ($settings['company_about_text'] ?? ''),
         'company_accept_phrase' => (string) ($settings['company_accept_phrase'] ?? ''),
+        'client_name' => $renderText((string) ($payload['cliente_nome'] ?? '')),
+        'client_company' => $renderText((string) ($payload['cliente_empresa'] ?? '')),
+        'client_cnpj' => $renderText((string) ($payload['cliente_cnpj'] ?? '')),
+        'public_url' => proposal_public_url($proposal) ?? '',
         'hero_header' => [
             'layout' => (string) ($payload['header_title_layout'] ?? 'default'),
             'kicker' => $renderText((string) ($payload['header_aditivo_kicker'] ?? 'PROPOSTA')),
@@ -2135,6 +2393,7 @@ function proposal_public_render_data(array $proposal, array $payload, array $set
         'scope_entries' => proposal_scope_entries($payload),
         'timeline' => proposal_timeline_entries($payload),
         'files' => proposal_file_entries($payload),
+        'payment_schedule' => proposal_payment_schedule_entries($payload),
         'considerations' => array_values(normalize_topic_lines($payload['consideracoes'] ?? [])),
         'exclusions' => array_values(normalize_topic_lines($payload['exclusoes'] ?? [])),
         'acceptance' => proposal_acceptance_render_data($proposal, $payload, $settings),
@@ -2343,6 +2602,40 @@ function proposal_runtime_script(
       '<p class="hero-subtitle">COMERCIAL</p>';
   }
 
+  function renderHeroClientMeta() {
+    const clientBox = document.querySelector('.hero-info-value.hero-info-client');
+    if (!clientBox) return;
+
+    const name = String(publicData.client_name || '').trim();
+    const company = String(publicData.client_company || '').trim();
+    const cnpj = String(publicData.client_cnpj || '').trim();
+    const nameNode = clientBox.querySelector('strong');
+    const companyNode = clientBox.querySelector('.hero-client-company');
+    const cnpjNode = clientBox.querySelector('.hero-client-cnpj');
+
+    if (nameNode && name) {
+      nameNode.textContent = name;
+    }
+    if (companyNode) {
+      if (company && company !== name) {
+        companyNode.textContent = company;
+        companyNode.style.display = '';
+      } else {
+        companyNode.textContent = '';
+        companyNode.style.display = 'none';
+      }
+    }
+    if (cnpjNode) {
+      if (cnpj) {
+        cnpjNode.textContent = 'CNPJ: ' + cnpj;
+        cnpjNode.style.display = '';
+      } else {
+        cnpjNode.textContent = '';
+        cnpjNode.style.display = 'none';
+      }
+    }
+  }
+
   function renderFilesSection() {
     const section = document.getElementById('arquivos');
     if (!section) return;
@@ -2512,6 +2805,30 @@ function proposal_runtime_script(
       )).join('');
   }
 
+  function renderPaymentSchedule() {
+    const section = document.querySelector('.payment-schedule');
+    const lines = section ? section.querySelector('.payment-lines') : null;
+    if (!section || !lines) return;
+
+    const entries = Array.isArray(publicData.payment_schedule) ? publicData.payment_schedule : [];
+    if (entries.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    section.style.display = '';
+    lines.innerHTML = entries.map((entry) => {
+      if ((entry.type || 'line') === 'subtitle') {
+        return '<div class="payment-subtitle">' + escapeHtml(entry.label || 'Grupo') + '</div>';
+      }
+
+      return '<div class="payment-line">' +
+        '<span class="payment-line-label">' + escapeHtml(entry.label || 'Parcela') + '</span>' +
+        '<span class="payment-line-value">' + escapeHtml(entry.amount_label || formatBrl(entry.amount || 0)) + '</span>' +
+      '</div>';
+    }).join('');
+  }
+
   function renderConsiderations() {
     const list = document.querySelector('.considerations-list');
     const section = document.getElementById('consideracoes');
@@ -2645,7 +2962,10 @@ function proposal_runtime_script(
   const downloadButton = document.getElementById('download-pdf-button');
   if (downloadButton) {
     downloadButton.setAttribute('href', downloadUrl);
-    if (!previewMode) downloadButton.setAttribute('target', '_blank');
+    if (!previewMode) {
+      downloadButton.removeAttribute('target');
+      downloadButton.setAttribute('download', '');
+    }
   }
 
   function postJson(url, data, keepalive) {
@@ -2780,12 +3100,14 @@ function proposal_runtime_script(
 
   setupHeroMedia();
   renderHeroHeading();
+  renderHeroClientMeta();
   renderIntro();
   renderFilesSection();
   renderGuidelines();
   renderScope();
   renderTimeline();
   renderQuoteBreakdown();
+  renderPaymentSchedule();
   renderConsiderations();
   renderExclusions();
   setupPaymentMethods();

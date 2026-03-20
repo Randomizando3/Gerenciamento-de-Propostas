@@ -16,7 +16,7 @@ $statusOptions = $statusOptions ?? [];
 
 <section class="panel">
   <h2>Filtros</h2>
-  <form method="get" action="/admin/proposals" class="grid cols-5">
+  <form method="get" action="/admin/proposals" class="grid cols-7">
     <label class="field">
       <span>Busca geral</span>
       <input type="text" name="query" value="<?= h((string) ($filters['query'] ?? '')) ?>" placeholder="Código, título ou obra">
@@ -43,6 +43,25 @@ $statusOptions = $statusOptions ?? [];
     <label class="field">
       <span>Valor máximo</span>
       <input type="text" name="max_total" value="<?= h((string) ($filters['max_total'] ?? '')) ?>" placeholder="0,00">
+    </label>
+    <label class="field">
+      <span>Ordenar por</span>
+      <select name="order_by">
+        <option value="updated_at" <?= ((string) ($filters['order_by'] ?? 'updated_at') === 'updated_at') ? 'selected' : '' ?>>Atualização</option>
+        <option value="code" <?= ((string) ($filters['order_by'] ?? '') === 'code') ? 'selected' : '' ?>>Código</option>
+        <option value="client" <?= ((string) ($filters['order_by'] ?? '') === 'client') ? 'selected' : '' ?>>Cliente</option>
+        <option value="status" <?= ((string) ($filters['order_by'] ?? '') === 'status') ? 'selected' : '' ?>>Status</option>
+        <option value="total_value" <?= ((string) ($filters['order_by'] ?? '') === 'total_value') ? 'selected' : '' ?>>Valor</option>
+        <option value="total_views" <?= ((string) ($filters['order_by'] ?? '') === 'total_views') ? 'selected' : '' ?>>Visualizações</option>
+        <option value="max_scroll" <?= ((string) ($filters['order_by'] ?? '') === 'max_scroll') ? 'selected' : '' ?>>Scroll</option>
+      </select>
+    </label>
+    <label class="field">
+      <span>Direção</span>
+      <select name="order_dir">
+        <option value="desc" <?= ((string) ($filters['order_dir'] ?? 'desc') === 'desc') ? 'selected' : '' ?>>Maior primeiro</option>
+        <option value="asc" <?= ((string) ($filters['order_dir'] ?? '') === 'asc') ? 'selected' : '' ?>>Menor primeiro</option>
+      </select>
     </label>
     <div class="inline-actions">
       <button class="btn btn-primary" type="submit">Filtrar</button>
@@ -117,6 +136,10 @@ $statusOptions = $statusOptions ?? [];
                 <form method="post" action="/admin/proposals/<?= (int) $row['id'] ?>/duplicate">
                   <?= csrf_field() ?>
                   <button class="btn btn-ghost btn-sm" type="submit">Duplicar</button>
+                </form>
+                <form method="post" action="/admin/proposals/<?= (int) $row['id'] ?>/delete" onsubmit="return confirm('Deseja excluir esta proposta? Esta ação não pode ser desfeita.');">
+                  <?= csrf_field() ?>
+                  <button class="btn btn-ghost btn-sm" type="submit">Excluir</button>
                 </form>
                 <?php if ((string) $row['status'] === 'draft'): ?>
                   <form method="post" action="/admin/proposals/<?= (int) $row['id'] ?>/publish">

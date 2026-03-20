@@ -8,6 +8,7 @@ $publicUrl = $isEdit ? proposal_public_url($proposal) : null;
 $customDisciplines = is_array($payload['disciplinas_custom'] ?? null) ? $payload['disciplinas_custom'] : [];
 $fileRows = is_array($payload['arquivos'] ?? null) && $payload['arquivos'] !== [] ? $payload['arquivos'] : [['item' => '', 'nome' => '', 'rev' => '', 'data' => '']];
 $stageRows = is_array($payload['etapas'] ?? null) && $payload['etapas'] !== [] ? $payload['etapas'] : [['nome' => '', 'prazo' => '', 'descricao' => '']];
+$paymentRows = is_array($payload['payment_schedule_rows'] ?? null) ? $payload['payment_schedule_rows'] : [];
 $guidelineRows = is_array($payload['guidelines_items'] ?? null) && $payload['guidelines_items'] !== [] ? $payload['guidelines_items'] : [['title' => '', 'content' => '', 'icon' => '']];
 $scopeItems = is_array($payload['scope_items'] ?? null) ? $payload['scope_items'] : [];
 $models = $models ?? [];
@@ -59,6 +60,10 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
       <form method="post" action="/admin/proposals/<?= (int) $proposal['id'] ?>/zapsign">
         <?= csrf_field() ?>
         <button class="btn btn-ghost" type="submit">Enviar para ZapSign</button>
+      </form>
+      <form method="post" action="/admin/proposals/<?= (int) $proposal['id'] ?>/delete" onsubmit="return confirm('Deseja excluir esta proposta? Esta ação não pode ser desfeita.');">
+        <?= csrf_field() ?>
+        <button class="btn btn-ghost" type="submit">Excluir proposta</button>
       </form>
     </div>
   </section>
@@ -199,8 +204,6 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
         <label class="field"><span>Prazo (dias)</span><input type="number" name="prazo_dias" min="1" max="365" value="<?= (int) $payload['prazo_dias'] ?>"></label>
         <label class="field"><span>Validade (dias)</span><input type="number" name="validade_dias" min="1" max="365" value="<?= (int) $payload['validade_dias'] ?>"></label>
       </div>
-      <label class="field"><span>Finalidade da obra</span><textarea name="finalidade_obra" rows="2"><?= h((string) $payload['finalidade_obra']) ?></textarea></label>
-      <label class="field"><span>Descrição do objeto</span><textarea name="descricao_objeto" rows="3"><?= h((string) $payload['descricao_objeto']) ?></textarea></label>
       <label class="field"><span>Título do texto introdutório</span><input type="text" name="intro_title" value="<?= h((string) ($payload['intro_title'] ?? '')) ?>"></label>
     </article>
   </section>
@@ -391,6 +394,61 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
 
   <section class="panel">
     <h2>Pagamento e aceite</h2>
+    <div class="panel-subhead">
+      <div>
+        <h3>Forma de pagamento manual</h3>
+        <p class="muted">Monte as parcelas manualmente. Linhas com valor entram na validação da soma; subtítulos servem só para organizar o bloco.</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" type="button" id="add-payment-row-button">+ Adicionar linha</button>
+    </div>
+    <div class="stack-sm" id="payment-schedule-list" data-next-index="<?= count($paymentRows) ?>">
+      <?php foreach ($paymentRows as $index => $paymentRow): ?>
+        <?php $paymentType = (($paymentRow['type'] ?? 'line') === 'subtitle') ? 'subtitle' : 'line'; ?>
+        <div class="repeater-row payment-row">
+          <div class="row-actions"><button class="btn btn-ghost btn-sm repeater-remove" type="button">Remover</button></div>
+          <div class="grid cols-3">
+            <label class="field">
+              <span>Tipo</span>
+              <select name="payment_schedule_rows[<?= (int) $index ?>][type]" data-payment-row-type>
+                <option value="line" <?= $paymentType === 'line' ? 'selected' : '' ?>>Linha com valor</option>
+                <option value="subtitle" <?= $paymentType === 'subtitle' ? 'selected' : '' ?>>Subtítulo</option>
+              </select>
+            </label>
+            <label class="field col-span-2"><span>Texto</span><input type="text" name="payment_schedule_rows[<?= (int) $index ?>][label]" value="<?= h((string) ($paymentRow['label'] ?? '')) ?>"></label>
+          </div>
+          <div class="grid cols-3">
+            <label class="field payment-row-amount-field">
+              <span>Valor</span>
+              <input type="text" name="payment_schedule_rows[<?= (int) $index ?>][amount]" value="<?= h(number_format((float) ($paymentRow['amount'] ?? 0), 2, ',', '.')) ?>" data-money-input data-payment-row-amount>
+            </label>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+    <template id="payment-row-template">
+      <div class="repeater-row payment-row">
+        <div class="row-actions"><button class="btn btn-ghost btn-sm repeater-remove" type="button">Remover</button></div>
+        <div class="grid cols-3">
+          <label class="field">
+            <span>Tipo</span>
+            <select name="payment_schedule_rows[__INDEX__][type]" data-payment-row-type>
+              <option value="line">Linha com valor</option>
+              <option value="subtitle">Subtítulo</option>
+            </select>
+          </label>
+          <label class="field col-span-2"><span>Texto</span><input type="text" name="payment_schedule_rows[__INDEX__][label]" value=""></label>
+        </div>
+        <div class="grid cols-3">
+          <label class="field payment-row-amount-field">
+            <span>Valor</span>
+            <input type="text" name="payment_schedule_rows[__INDEX__][amount]" value="0,00" data-money-input data-payment-row-amount>
+          </label>
+        </div>
+      </div>
+    </template>
+    <p class="muted" id="payment-schedule-summary">
+      Soma atual da forma de pagamento: <strong data-payment-schedule-total>R$ 0,00</strong> | Valor total da proposta: <strong data-payment-proposal-total><?= brl($total) ?></strong>
+    </p>
     <div class="grid cols-2">
       <input type="hidden" name="pagamento_cartao_ativo" value="0">
       <label class="checkbox-inline payment-toggle">
@@ -406,7 +464,7 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
     <input type="hidden" name="acceptance_mode" value="contract">
     <label class="checkbox-inline payment-toggle">
       <input type="checkbox" name="acceptance_mode" value="summary" <?= (($payload['acceptance_mode'] ?? 'contract') === 'summary') ? 'checked' : '' ?> data-acceptance-mode-toggle>
-      Usar resumo da proposta no aceite e na assinatura
+      Usar resumo da proposta no aceite e na assinatura [RESUMO]
     </label>
     <div class="payment-config-block" data-payment-fields="cartao">
       <div class="grid cols-2">
@@ -433,7 +491,7 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
 
     <div class="toggle-config-block" data-acceptance-fields="summary">
       <label class="field field-top">
-        <span>Resumo complementar do aceite (HTML opcional)</span>
+        <span>Resumo complementar do aceite (HTML opcional) [RESUMO]</span>
         <textarea name="accept_summary_html" rows="10" placeholder="Se este campo ficar vazio, o sistema usa automaticamente o resumo gerado pela proposta."><?= h((string) ($payload['accept_summary_html'] ?? '')) ?></textarea>
       </label>
       <p class="muted">Quando essa op&ccedil;&atilde;o estiver ativa, o modal de aceite e o documento enviado ao ZapSign usar&atilde;o o resumo da proposta em vez do contrato.</p>
@@ -455,12 +513,11 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
     </details>
   </section>
   <section class="panel">
-    <h2>Observações e exclusões</h2>
+    <h2>Considerações e exclusões</h2>
     <div class="grid cols-2">
       <label class="field"><span>Considera&ccedil;&otilde;es importantes (1 por linha)</span><textarea name="consideracoes" rows="8"><?= h(implode("\n", $payload['consideracoes'] ?? [])) ?></textarea></label>
       <label class="field"><span>Itens fora do escopo (1 por linha)</span><textarea name="exclusoes" rows="8"><?= h(implode("\n", $payload['exclusoes'] ?? [])) ?></textarea></label>
     </div>
-    <label class="field"><span>Observações finais</span><textarea name="observacoes" rows="3"><?= h((string) ($payload['observacoes'] ?? '')) ?></textarea></label>
     <label class="field"><span>Link manual de assinatura ZapSign (opcional)</span><input type="url" name="zapsign_sign_url" value="<?= h((string) ($payload['zapsign_sign_url'] ?? '')) ?>" placeholder="https://..."></label>
   </section>
 

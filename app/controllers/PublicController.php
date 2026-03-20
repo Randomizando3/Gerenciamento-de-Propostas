@@ -45,13 +45,18 @@ function show_public_print(string $token): void
     }
 
     $settings = load_settings();
-    render('public/print', [
-        'title' => 'PDF - Proposta ' . $proposal['code'],
-        'proposal' => $proposal,
-        'payload' => admin_proposal_payload_with_settings($proposal['payload'], $settings),
-        'catalog' => discipline_catalog(),
-        'settings' => $settings,
-    ], 'none');
+    $payload = admin_proposal_payload_with_settings($proposal['payload'], $settings);
+
+    if (!dompdf_available()) {
+        http_response_code(503);
+        render('public/not_found', [
+            'title' => 'PDF indisponível',
+            'message' => 'A biblioteca de PDF não está disponível neste ambiente.',
+        ], 'none');
+        return;
+    }
+
+    output_proposal_summary_pdf($proposal, $payload, $settings);
 }
 
 function show_public_contract(string $token): void
@@ -72,6 +77,36 @@ function show_public_contract(string $token): void
         'payload' => admin_proposal_payload_with_settings($proposal['payload'], $settings),
         'settings' => $settings,
     ], 'none');
+}
+
+function show_public_acceptance_document(string $token): void
+{
+    $proposal = get_proposal_by_token($token);
+    if (!$proposal) {
+        http_response_code(404);
+        render('public/not_found', [
+            'title' => 'Proposta não encontrada',
+        ], 'none');
+        return;
+    }
+
+    if (!dompdf_available()) {
+        http_response_code(503);
+        render('public/not_found', [
+            'title' => 'PDF indisponível',
+            'message' => 'A biblioteca de PDF não está disponível neste ambiente.',
+        ], 'none');
+        return;
+    }
+
+    $settings = load_settings();
+    $payload = admin_proposal_payload_with_settings($proposal['payload'], $settings);
+
+    if (proposal_acceptance_mode($payload) === 'summary') {
+        output_proposal_summary_pdf($proposal, $payload, $settings);
+    }
+
+    output_proposal_contract_pdf($proposal, $payload, $settings);
 }
 
 function redirect_to_signature(string $token): void

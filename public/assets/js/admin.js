@@ -320,6 +320,85 @@
     if (totalWordsEl) {
       totalWordsEl.textContent = numberToWords(total);
     }
+    recalcPaymentSchedule();
+  }
+
+  function syncPaymentScheduleRow(row) {
+    if (!row) return;
+    const typeField = row.querySelector("[data-payment-row-type]");
+    const amountFieldWrap = row.querySelector(".payment-row-amount-field");
+    const amountField = row.querySelector("[data-payment-row-amount]");
+    if (!typeField || !amountFieldWrap || !amountField) return;
+
+    const isSubtitle = typeField.value === "subtitle";
+    amountFieldWrap.style.display = isSubtitle ? "none" : "";
+    amountField.disabled = isSubtitle;
+    if (isSubtitle) {
+      amountField.value = "0,00";
+    }
+  }
+
+  function paymentScheduleState() {
+    let total = 0;
+    let hasLines = false;
+
+    document.querySelectorAll(".payment-row").forEach((row) => {
+      const typeField = row.querySelector("[data-payment-row-type]");
+      const amountField = row.querySelector("[data-payment-row-amount]");
+      if (!typeField || !amountField) return;
+      if (typeField.value === "subtitle") return;
+      hasLines = true;
+      total += parseMoney(amountField.value);
+    });
+
+    return { total, hasLines };
+  }
+
+  function recalcPaymentSchedule() {
+    const scheduleTotalEl = document.querySelector("[data-payment-schedule-total]");
+    const proposalTotalEl = document.querySelector("[data-payment-proposal-total]");
+    const proposalTotalSource = document.getElementById("proposal-total");
+    const state = paymentScheduleState();
+
+    document.querySelectorAll(".payment-row").forEach(syncPaymentScheduleRow);
+
+    if (scheduleTotalEl) {
+      scheduleTotalEl.textContent = formatMoney(state.total);
+    }
+    if (proposalTotalEl && proposalTotalSource) {
+      proposalTotalEl.textContent = proposalTotalSource.textContent || formatMoney(0);
+    }
+  }
+
+  function setupPaymentScheduleEditor() {
+    const form = document.getElementById("proposal-form");
+    if (!form) return;
+
+    document.querySelectorAll("[data-payment-row-type]").forEach((field) => {
+      if (field.dataset.boundPaymentType === "1") return;
+      field.dataset.boundPaymentType = "1";
+      field.addEventListener("change", () => {
+        const row = field.closest(".payment-row");
+        syncPaymentScheduleRow(row);
+        recalcPaymentSchedule();
+      });
+      syncPaymentScheduleRow(field.closest(".payment-row"));
+    });
+
+    if (form.dataset.paymentValidationBound !== "1") {
+      form.dataset.paymentValidationBound = "1";
+      form.addEventListener("submit", (event) => {
+        const proposalTotal = parseMoney((document.getElementById("proposal-total") || {}).textContent || "0");
+        const state = paymentScheduleState();
+        if (!state.hasLines) return;
+        if (Math.abs(state.total - proposalTotal) < 0.01) return;
+
+        event.preventDefault();
+        window.alert("A soma da forma de pagamento precisa ser igual ao valor total da proposta antes de salvar.");
+      });
+    }
+
+    recalcPaymentSchedule();
   }
 
   function bindMoneyInput(input) {
@@ -367,6 +446,14 @@
       list.appendChild(row);
       list.dataset.nextIndex = String(nextIndex + 1);
       bindRowInputs(row);
+      row.querySelectorAll("[data-payment-row-type]").forEach((field) => {
+        field.addEventListener("change", () => {
+          const currentRow = field.closest(".payment-row");
+          syncPaymentScheduleRow(currentRow);
+          recalcPaymentSchedule();
+        });
+      });
+      syncPaymentScheduleRow(row);
       recalcTotal();
     });
   }
@@ -393,5 +480,7 @@
   setupRepeater("stages-list", "add-stage-row-button", "stage-row-template");
   setupRepeater("guidelines-list", "add-guideline-row-button", "guideline-row-template");
   setupRepeater("custom-disciplines-list", "add-custom-discipline-button", "custom-discipline-template");
+  setupRepeater("payment-schedule-list", "add-payment-row-button", "payment-row-template");
+  setupPaymentScheduleEditor();
   recalcTotal();
 })();

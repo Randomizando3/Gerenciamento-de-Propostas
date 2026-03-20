@@ -25,6 +25,8 @@ function admin_list_proposals(): void
         'status' => trim((string) request_input('status', '')),
         'min_total' => trim((string) request_input('min_total', '')),
         'max_total' => trim((string) request_input('max_total', '')),
+        'order_by' => trim((string) request_input('order_by', 'updated_at')),
+        'order_dir' => trim((string) request_input('order_dir', 'desc')),
     ];
 
     render('admin/proposals', [
@@ -118,6 +120,21 @@ function admin_proposal_payload_with_settings(array $payload, array $settings): 
     return normalize_proposal_payload($payload, $payload);
 }
 
+function admin_render_proposal_form_state(?array $proposal, array $payload, array $settings, string $title): void
+{
+    render('admin/proposal_form', [
+        'title' => $title,
+        'admin' => current_admin(),
+        'proposal' => $proposal,
+        'payload' => $payload,
+        'catalog' => discipline_catalog(),
+        'settings' => $settings,
+        'models' => list_proposal_models(),
+        'currentModel' => null,
+        'acceptTermsVariables' => acceptance_terms_variable_catalog(),
+    ]);
+}
+
 function admin_show_new_proposal_form(): void
 {
     require_auth();
@@ -179,6 +196,7 @@ function admin_save_proposal_action(): void
     $id = request_input('id');
     $proposalId = is_numeric($id) ? (int) $id : null;
     $basePayload = null;
+    $existing = null;
 
     if ($proposalId !== null) {
         $existing = get_proposal_by_id($proposalId);
@@ -191,6 +209,14 @@ function admin_save_proposal_action(): void
 
     $payloadInput = normalize_admin_payload_input($_POST, $_FILES);
     $payload = normalize_proposal_payload($payloadInput, $basePayload);
+    $paymentValidation = proposal_payment_schedule_validation($payload);
+    if (!(bool) ($paymentValidation['ok'] ?? false)) {
+        flash('error', (string) ($paymentValidation['message'] ?? 'Revise a forma de pagamento.'));
+        $settings = load_settings();
+        admin_render_proposal_form_state($proposalId !== null ? ($existing ?? null) : null, $payload, $settings, $proposalId !== null ? 'Editar proposta' : 'Nova proposta');
+        return;
+    }
+
     $savedId = save_proposal($payload, $proposalId, current_admin());
 
     $saveMode = (string) request_input('save_mode', 'edit');
@@ -292,6 +318,20 @@ function admin_duplicate_proposal_action(int $proposalId): void
 
     flash('success', 'Proposta duplicada com sucesso.');
     redirect('/admin/proposals/' . $newId . '/edit');
+}
+
+function admin_delete_proposal_action(int $proposalId): void
+{
+    require_auth();
+    verify_csrf_or_die();
+
+    if (!delete_proposal_record($proposalId)) {
+        flash('error', 'Proposta não encontrada.');
+        redirect('/admin/proposals');
+    }
+
+    flash('success', 'Proposta excluída com sucesso.');
+    redirect('/admin/proposals');
 }
 
 function admin_create_user_action(): void
