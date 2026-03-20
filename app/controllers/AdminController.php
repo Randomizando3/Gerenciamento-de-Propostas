@@ -19,6 +19,8 @@ function admin_list_proposals(): void
 {
     require_auth();
 
+    $page = max(1, (int) request_input('page', 1));
+    $perPage = 20;
     $filters = [
         'query' => trim((string) request_input('query', '')),
         'client' => trim((string) request_input('client', '')),
@@ -28,11 +30,13 @@ function admin_list_proposals(): void
         'order_by' => trim((string) request_input('order_by', 'updated_at')),
         'order_dir' => trim((string) request_input('order_dir', 'desc')),
     ];
+    $pagination = paginate_proposals_with_metrics($filters, $page, $perPage);
 
     render('admin/proposals', [
         'title' => 'Propostas',
         'admin' => current_admin(),
-        'proposals' => list_proposals_with_metrics($filters),
+        'proposals' => $pagination['items'],
+        'pagination' => $pagination,
         'filters' => $filters,
         'statusOptions' => app_config('status_labels', []),
     ]);

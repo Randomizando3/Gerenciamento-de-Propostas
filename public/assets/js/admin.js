@@ -167,6 +167,48 @@
     sync();
   }
 
+  function setupSyncedTableScrollbars() {
+    const tableWraps = Array.from(document.querySelectorAll(".table-wrap"));
+    if (tableWraps.length === 0) return;
+
+    tableWraps.forEach((wrap) => {
+      if (!(wrap instanceof HTMLElement)) return;
+
+      const top = wrap.querySelector("[data-table-scroll-top]");
+      const topInner = wrap.querySelector("[data-table-scroll-top-inner]");
+      const bottom = wrap.querySelector("[data-table-scroll-bottom]");
+      const table = wrap.querySelector("table");
+
+      if (!(top instanceof HTMLElement) || !(topInner instanceof HTMLElement) || !(bottom instanceof HTMLElement) || !(table instanceof HTMLElement)) {
+        return;
+      }
+
+      let syncing = false;
+
+      const syncWidths = () => {
+        topInner.style.width = table.scrollWidth + "px";
+        top.hidden = bottom.scrollWidth <= bottom.clientWidth + 2;
+      };
+
+      top.addEventListener("scroll", () => {
+        if (syncing) return;
+        syncing = true;
+        bottom.scrollLeft = top.scrollLeft;
+        syncing = false;
+      });
+
+      bottom.addEventListener("scroll", () => {
+        if (syncing) return;
+        syncing = true;
+        top.scrollLeft = bottom.scrollLeft;
+        syncing = false;
+      });
+
+      window.addEventListener("resize", syncWidths);
+      syncWidths();
+    });
+  }
+
   function setupProposalPanelCollapse() {
     const panels = Array.from(document.querySelectorAll("section.panel, article.panel"));
     if (panels.length === 0) return;
@@ -505,6 +547,7 @@
   setupHeaderMediaToggle();
   setupHeaderLayoutToggle();
   setupAcceptanceModeToggle();
+  setupSyncedTableScrollbars();
   bindRowInputs(document);
   setupRepeater("files-list", "add-file-row-button", "file-row-template");
   setupRepeater("stages-list", "add-stage-row-button", "stage-row-template");

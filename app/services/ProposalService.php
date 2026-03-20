@@ -859,6 +859,27 @@ function list_proposals_with_metrics(array $filters = []): array
     return $rows;
 }
 
+function paginate_proposals_with_metrics(array $filters = [], int $page = 1, int $perPage = 20): array
+{
+    $page = max(1, $page);
+    $perPage = max(1, $perPage);
+    $rows = list_proposals_with_metrics($filters);
+    $total = count($rows);
+    $totalPages = max(1, (int) ceil($total / $perPage));
+    $page = min($page, $totalPages);
+    $offset = ($page - 1) * $perPage;
+
+    return [
+        'items' => array_slice($rows, $offset, $perPage),
+        'total' => $total,
+        'page' => $page,
+        'per_page' => $perPage,
+        'total_pages' => $totalPages,
+        'from' => $total > 0 ? $offset + 1 : 0,
+        'to' => $total > 0 ? min($offset + $perPage, $total) : 0,
+    ];
+}
+
 function publish_proposal(int $id): ?array
 {
     $proposal = get_proposal_by_id($id);

@@ -2,6 +2,31 @@
 $proposals = $proposals ?? [];
 $filters = $filters ?? [];
 $statusOptions = $statusOptions ?? [];
+$pagination = $pagination ?? [
+    'page' => 1,
+    'per_page' => 20,
+    'total' => count($proposals),
+    'total_pages' => 1,
+    'from' => $proposals ? 1 : 0,
+    'to' => count($proposals),
+];
+
+$currentPage = max(1, (int) ($pagination['page'] ?? 1));
+$totalPages = max(1, (int) ($pagination['total_pages'] ?? 1));
+$queryBase = $filters;
+
+$buildProposalPageUrl = static function (int $page) use ($queryBase): string {
+    $params = $queryBase;
+    $params['page'] = max(1, $page);
+    return '/admin/proposals?' . http_build_query($params);
+};
+
+$pageNumbers = [];
+$startPage = max(1, $currentPage - 2);
+$endPage = min($totalPages, $currentPage + 2);
+for ($pageIndex = $startPage; $pageIndex <= $endPage; $pageIndex++) {
+    $pageNumbers[] = $pageIndex;
+}
 ?>
 <section class="panel-head">
   <div>
@@ -71,10 +96,27 @@ $statusOptions = $statusOptions ?? [];
 </section>
 
 <section class="table-wrap">
-  <div class="table-head">
-    <h2>Todas as propostas</h2>
+  <div class="table-head table-head-split">
+    <div>
+      <h2>Todas as propostas</h2>
+      <p class="table-meta">
+        <?php if ((int) ($pagination['total'] ?? 0) > 0): ?>
+          Exibindo <?= (int) ($pagination['from'] ?? 0) ?>-<?= (int) ($pagination['to'] ?? 0) ?> de <?= (int) ($pagination['total'] ?? 0) ?> proposta(s).
+        <?php else: ?>
+          Nenhuma proposta encontrada com os filtros atuais.
+        <?php endif; ?>
+      </p>
+    </div>
+    <div class="table-meta-badge">
+      20 por página
+    </div>
   </div>
-  <div class="table-scroll">
+
+  <div class="table-scroll table-scroll-top" data-table-scroll-top>
+    <div class="table-scroll-top-inner" data-table-scroll-top-inner></div>
+  </div>
+
+  <div class="table-scroll" data-table-scroll-bottom>
     <table class="data-table proposal-table">
       <thead>
         <tr>
@@ -125,13 +167,13 @@ $statusOptions = $statusOptions ?? [];
             <td>
               <?= h((string) $row['updated_at']) ?><br>
               <?php if ($publicUrl): ?>
-                <a href="<?= h($publicUrl) ?>" target="_blank">Link público</a>
+                <a href="<?= h($publicUrl) ?>" target="_blank" rel="noopener noreferrer">Link público</a>
               <?php endif; ?>
             </td>
             <td>
               <div class="table-actions">
                 <a class="btn btn-ghost btn-sm" href="/admin/proposals/<?= (int) $row['id'] ?>/edit">Editar</a>
-                <a class="btn btn-ghost btn-sm" href="/admin/proposals/<?= (int) $row['id'] ?>/preview" target="_blank">Preview</a>
+                <a class="btn btn-ghost btn-sm" href="/admin/proposals/<?= (int) $row['id'] ?>/preview" target="_blank" rel="noopener noreferrer">Preview</a>
                 <a class="btn btn-ghost btn-sm" href="/admin/proposals/<?= (int) $row['id'] ?>/analytics">Analytics</a>
                 <form method="post" action="/admin/proposals/<?= (int) $row['id'] ?>/duplicate">
                   <?= csrf_field() ?>
@@ -154,5 +196,25 @@ $statusOptions = $statusOptions ?? [];
       </tbody>
     </table>
   </div>
-</section>
 
+  <?php if ($totalPages > 1): ?>
+    <div class="table-pagination">
+      <div class="table-pagination-info">
+        Página <?= $currentPage ?> de <?= $totalPages ?>
+      </div>
+      <nav class="pagination-nav" aria-label="Paginação das propostas">
+        <a class="pagination-link <?= $currentPage <= 1 ? 'is-disabled' : '' ?>" href="<?= $currentPage <= 1 ? '#' : h($buildProposalPageUrl(1)) ?>" <?= $currentPage <= 1 ? 'aria-disabled="true" tabindex="-1"' : '' ?>>Primeira</a>
+        <a class="pagination-link <?= $currentPage <= 1 ? 'is-disabled' : '' ?>" href="<?= $currentPage <= 1 ? '#' : h($buildProposalPageUrl($currentPage - 1)) ?>" <?= $currentPage <= 1 ? 'aria-disabled="true" tabindex="-1"' : '' ?>>Anterior</a>
+
+        <?php foreach ($pageNumbers as $pageNumber): ?>
+          <a class="pagination-link <?= $pageNumber === $currentPage ? 'is-current' : '' ?>" href="<?= h($buildProposalPageUrl($pageNumber)) ?>" <?= $pageNumber === $currentPage ? 'aria-current="page"' : '' ?>>
+            <?= $pageNumber ?>
+          </a>
+        <?php endforeach; ?>
+
+        <a class="pagination-link <?= $currentPage >= $totalPages ? 'is-disabled' : '' ?>" href="<?= $currentPage >= $totalPages ? '#' : h($buildProposalPageUrl($currentPage + 1)) ?>" <?= $currentPage >= $totalPages ? 'aria-disabled="true" tabindex="-1"' : '' ?>>Próxima</a>
+        <a class="pagination-link <?= $currentPage >= $totalPages ? 'is-disabled' : '' ?>" href="<?= $currentPage >= $totalPages ? '#' : h($buildProposalPageUrl($totalPages)) ?>" <?= $currentPage >= $totalPages ? 'aria-disabled="true" tabindex="-1"' : '' ?>>Última</a>
+      </nav>
+    </div>
+  <?php endif; ?>
+</section>
