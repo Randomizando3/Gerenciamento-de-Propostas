@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/app/bootstrap.php';
 
+// When Apache forwards requests through FallbackResource, it may preserve a 404
+// status code from the original path. Reset known application routes to 200.
+http_response_code(200);
+
 $method = request_method();
 $path = request_path();
 
