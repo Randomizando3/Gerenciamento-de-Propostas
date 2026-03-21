@@ -481,7 +481,7 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
     </div>
 
     <div class="payment-method-panels">
-      <div class="payment-config-block <?= $cardPaymentEnabled ? '' : 'is-disabled' ?>" data-payment-fields="cartao" aria-disabled="<?= $cardPaymentEnabled ? 'false' : 'true' ?>">
+      <div class="payment-config-block <?= $cardPaymentEnabled ? '' : 'is-disabled' ?>" data-payment-fields="cartao" aria-disabled="<?= $cardPaymentEnabled ? 'false' : 'true' ?>" style="display:grid !important;">
         <div class="proposal-subpanel-head proposal-subpanel-head-sm">
           <div>
             <h3>Cart&atilde;o</h3>
@@ -496,7 +496,7 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
         <label class="field"><span>Link do cart&atilde;o</span><input type="url" name="pagamento_cartao_link" value="<?= h((string) ($payload['pagamento_cartao_link'] ?? '')) ?>" placeholder="https://..." <?= $cardPaymentEnabled ? '' : 'disabled' ?>></label>
       </div>
 
-      <div class="payment-config-block <?= $boletoPaymentEnabled ? '' : 'is-disabled' ?>" data-payment-fields="boleto" aria-disabled="<?= $boletoPaymentEnabled ? 'false' : 'true' ?>">
+      <div class="payment-config-block <?= $boletoPaymentEnabled ? '' : 'is-disabled' ?>" data-payment-fields="boleto" aria-disabled="<?= $boletoPaymentEnabled ? 'false' : 'true' ?>" style="display:grid !important;">
         <div class="proposal-subpanel-head proposal-subpanel-head-sm">
           <div>
             <h3>Boleto</h3>
