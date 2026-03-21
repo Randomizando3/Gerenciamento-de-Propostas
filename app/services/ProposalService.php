@@ -1332,7 +1332,7 @@ function apply_accept_terms_customization(string $template, array $payload, arra
     if ($titleTpl !== '') {
         $title = $renderTokens(h($titleTpl));
         $template = preg_replace_callback(
-            '/(<div class="modal-header">\s*<h2>)(.*?)(<\/h2>)/si',
+            '/(<div class="modal-header">.*?<h2>)(.*?)(<\/h2>)/si',
             static fn (array $m): string => $m[1] . $title . $m[3],
             $template,
             1
@@ -2009,16 +2009,13 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
     $total = proposal_total($payload);
     $publicUrl = proposal_public_url($proposal);
     $paymentSchedule = proposal_payment_schedule_entries($payload);
-    $allowImages = pdf_embedded_images_available();
 
     ob_start();
     ?>
     <div class="proposal-summary-doc" style="font-family:Arial,sans-serif;color:#173942;line-height:1.6;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid #d8ecef;">
         <div style="display:flex;align-items:center;gap:16px;">
-          <?php if ($allowImages): ?>
-            <img src="<?= h(app_url('/assets/img/logo-complementare.png')) ?>" alt="Complementare" style="height:46px;width:auto;">
-          <?php endif; ?>
+          <img src="<?= h(app_url('/assets/img/logo-complementare.png')) ?>" alt="Complementare" style="height:46px;width:auto;">
           <div>
             <h2 style="margin:0;font-size:28px;line-height:1.1;"><?= h((string) ($payload['titulo'] ?? 'Proposta Comercial')) ?></h2>
           </div>
@@ -2080,7 +2077,7 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
           <?php foreach ($scopeEntries as $entry): ?>
             <div style="border:1px solid #d5edf0;border-radius:18px;padding:18px;background:#fff;">
               <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-                <?php if ($allowImages && $entry['icon'] !== ''): ?><img src="<?= h(app_url($entry['icon'])) ?>" alt="<?= h($entry['title']) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
+                <?php if (pdf_embedded_images_available() && $entry['icon'] !== ''): ?><img src="<?= h(app_url($entry['icon'])) ?>" alt="<?= h($entry['title']) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
                 <div>
                   <div style="font-size:18px;font-weight:700;"><?= h($entry['title']) ?></div>
                   <?php if ($entry['subtitle'] !== ''): ?><div style="color:#54767d;"><?= h($entry['subtitle']) ?></div><?php endif; ?>
@@ -2210,7 +2207,6 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
     $exclusions = array_values(normalize_topic_lines($payload['exclusoes'] ?? []));
     $total = proposal_total($payload);
     $publicUrl = proposal_public_url($proposal);
-    $allowImages = pdf_embedded_images_available();
 
     ob_start();
     ?>
@@ -2249,9 +2245,7 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
       <main class="contract-page">
         <div class="contract-head">
           <div class="contract-brand">
-            <?php if ($allowImages): ?>
-              <img src="<?= h(app_url('/assets/img/logohorizontalbranco.png')) ?>" alt="Complementare" style="height:42px;width:auto;background:#0d4854;border-radius:10px;padding:10px 14px;">
-            <?php endif; ?>
+            <img src="<?= h(app_url('/assets/img/logo-complementare.png')) ?>" alt="Complementare" style="height:46px;width:auto;">
             <div>
               <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#178f9c;font-weight:700;">Documento de aceite</div>
               <h1 style="margin:4px 0 0;font-size:28px;line-height:1.1;"><?= h((string) $contract['title']) ?></h1>
@@ -2309,7 +2303,7 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
                 <?php foreach ($scopeEntries as $entry): ?>
                   <article class="contract-scope-item">
                     <div class="contract-scope-head">
-                      <?php if ($allowImages && trim((string) ($entry['icon'] ?? '')) !== ''): ?><img src="<?= h(app_url((string) $entry['icon'])) ?>" alt="<?= h((string) ($entry['title'] ?? 'Disciplina')) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
+                      <?php if (pdf_embedded_images_available() && trim((string) ($entry['icon'] ?? '')) !== ''): ?><img src="<?= h(app_url((string) $entry['icon'])) ?>" alt="<?= h((string) ($entry['title'] ?? 'Disciplina')) ?>" style="width:40px;height:40px;object-fit:contain;"><?php endif; ?>
                       <div>
                         <div style="font-size:18px;font-weight:700;"><?= h((string) ($entry['title'] ?? 'Disciplina')) ?></div>
                         <?php if (trim((string) ($entry['subtitle'] ?? '')) !== ''): ?><div style="color:#54767d;"><?= h((string) $entry['subtitle']) ?></div><?php endif; ?>

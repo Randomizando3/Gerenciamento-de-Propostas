@@ -1747,12 +1747,31 @@
       color: var(--white);
       padding: 1.35rem 2rem 1.25rem;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 0.9rem;
       position: relative;
       z-index: 5;
       border-bottom: 1px solid rgba(255,255,255,0.18);
       box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    }
+
+    .modal-brand {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.7rem 1rem;
+      background: rgba(255,255,255,0.96);
+      border-radius: 16px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    }
+
+    .modal-brand img {
+      display: block;
+      width: auto;
+      height: 34px;
+      max-width: 100%;
     }
 
     .modal-header h2 {
@@ -1763,7 +1782,7 @@
       text-align: center;
       line-height: 1.25;
       margin: 0;
-      padding: 0 3.2rem;
+      padding: 0 3.2rem 0.2rem;
       color: var(--white);
       text-shadow: 0 1px 0 rgba(0,0,0,0.10);
     }
@@ -2991,6 +3010,9 @@
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal">
       <div class="modal-header">
+        <div class="modal-brand">
+          <img src="/assets/img/logo-complementare.png" alt="Complementare">
+        </div>
         <h2>CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE PROJETOS DE ENGENHARIA</h2>
         <button class="modal-close" onclick="closeModal()">×</button>
       </div>
