@@ -1181,9 +1181,6 @@ function render_proposal_template_html(array $proposal, array $payload, array $s
         $template
     );
 
-    $headPatch = '<style>.nav-logo img{filter:brightness(0) saturate(100%) invert(23%) sepia(40%) saturate(755%) hue-rotate(151deg) brightness(93%) contrast(90%);} .hero .nav-logo img{filter:none;}</style>';
-    $template = str_replace('</head>', $headPatch . '</head>', $template);
-
     $replaceMap = build_proposal_placeholder_map($proposal, $payload, $settings);
     foreach ($replaceMap as $key => $value) {
         $template = str_replace('{{' . $key . '}}', $value, $template);
@@ -2015,7 +2012,7 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
     <div class="proposal-summary-doc" style="font-family:Arial,sans-serif;color:#173942;line-height:1.6;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid #d8ecef;">
         <div style="display:flex;align-items:center;gap:16px;">
-          <img src="<?= h(app_url('/assets/img/logo-complementare.png')) ?>" alt="Complementare" style="height:46px;width:auto;">
+          <img src="<?= h(app_url('/assets/img/logo-complementare-pdf.jpg')) ?>" alt="Complementare" style="height:46px;width:auto;">
           <div>
             <h2 style="margin:0;font-size:28px;line-height:1.1;"><?= h((string) ($payload['titulo'] ?? 'Proposta Comercial')) ?></h2>
           </div>
@@ -2245,7 +2242,7 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
       <main class="contract-page">
         <div class="contract-head">
           <div class="contract-brand">
-            <img src="<?= h(app_url('/assets/img/logo-complementare.png')) ?>" alt="Complementare" style="height:46px;width:auto;">
+            <img src="<?= h(app_url('/assets/img/logo-complementare-pdf.jpg')) ?>" alt="Complementare" style="height:46px;width:auto;">
             <div>
               <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#178f9c;font-weight:700;">Documento de aceite</div>
               <h1 style="margin:4px 0 0;font-size:28px;line-height:1.1;"><?= h((string) $contract['title']) ?></h1>
