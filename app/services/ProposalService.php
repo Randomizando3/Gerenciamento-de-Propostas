@@ -2017,11 +2017,10 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid #d8ecef;">
         <div style="display:flex;align-items:center;gap:16px;">
           <?php if ($allowImages): ?>
-            <img src="<?= h(app_url('/assets/img/logohorizontalbranco.png')) ?>" alt="Complementare" style="height:42px;width:auto;background:#0d4854;border-radius:10px;padding:10px 14px;">
+            <img src="<?= h(app_url('/assets/img/logo-complementare.png')) ?>" alt="Complementare" style="height:46px;width:auto;">
           <?php endif; ?>
           <div>
-            <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#178f9c;font-weight:700;">Proposta Comercial</div>
-            <h2 style="margin:4px 0 0;font-size:28px;line-height:1.1;"><?= h((string) ($payload['titulo'] ?? 'Proposta Comercial')) ?></h2>
+            <h2 style="margin:0;font-size:28px;line-height:1.1;"><?= h((string) ($payload['titulo'] ?? 'Proposta Comercial')) ?></h2>
           </div>
         </div>
         <div style="display:grid;gap:8px;min-width:220px;">

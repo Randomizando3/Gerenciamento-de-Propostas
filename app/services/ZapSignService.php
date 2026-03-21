@@ -47,13 +47,11 @@ function create_zapsign_document(array $proposal, array $settings): array
     $contractHost = mb_strtolower(trim((string) parse_url((string) $contractUrl, PHP_URL_HOST)), 'UTF-8');
     $isLocalContractHost = in_array($contractHost, ['localhost', '127.0.0.1', '::1'], true);
     if ($hasPublicContractUrl) {
+        // In produção, o ZapSign deve receber exatamente o mesmo documento
+        // público exibido no aceite, sem fallback para um conteúdo alternativo.
         $strategies[] = [
             'mode' => 'url_pdf',
             'payload' => ['url_pdf' => $contractUrl],
-        ];
-        $strategies[] = [
-            'mode' => 'markdown_text',
-            'payload' => ['markdown_text' => zapsign_markdown_from_proposal($proposal, $proposalPayload, $settings)],
         ];
     } elseif ($isLocalContractHost || $contractUrl === null) {
         $strategies[] = [
