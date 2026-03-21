@@ -54,7 +54,7 @@
       const block = document.querySelector('[data-payment-fields="' + method + '"]');
       if (!block) return;
 
-      block.hidden = !enabled;
+      block.hidden = false;
       block.classList.toggle("is-disabled", !enabled);
       block.setAttribute("aria-disabled", enabled ? "false" : "true");
 

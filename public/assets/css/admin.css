@@ -902,7 +902,10 @@ input[type="radio"]:focus {
   background: linear-gradient(180deg, rgba(244, 247, 248, 0.94), rgba(238, 242, 244, 0.94));
 }
 
-.payment-config-block.is-disabled .field span {
+.payment-config-block.is-disabled .field span,
+.payment-config-block.is-disabled .proposal-subpanel-head h3,
+.payment-config-block.is-disabled .proposal-subpanel-head p,
+.payment-config-block.is-disabled .muted {
   color: #7a8f98;
 }
 
@@ -948,8 +951,19 @@ input[type="radio"]:focus {
 
 [data-payment-manual-fields].is-disabled .field span,
 [data-payment-manual-fields].is-disabled .proposal-subpanel-head p,
-[data-payment-manual-fields].is-disabled .proposal-subpanel-head h3 {
+[data-payment-manual-fields].is-disabled .proposal-subpanel-head h3,
+[data-payment-manual-fields].is-disabled .muted {
   color: #7a8f98;
+}
+
+[data-payment-manual-fields].is-disabled .payment-summary-strip {
+  background: rgba(122, 143, 152, 0.12);
+  border-color: rgba(122, 143, 152, 0.2);
+  color: #738891;
+}
+
+[data-payment-manual-fields].is-disabled .btn {
+  opacity: 0.72;
 }
 
 .proposal-subpanel-head {
