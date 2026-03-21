@@ -10,6 +10,8 @@ $fileRows = is_array($payload['arquivos'] ?? null) && $payload['arquivos'] !== [
 $stageRows = is_array($payload['etapas'] ?? null) && $payload['etapas'] !== [] ? $payload['etapas'] : [['nome' => '', 'prazo' => '', 'descricao' => '']];
 $paymentRows = is_array($payload['payment_schedule_rows'] ?? null) ? $payload['payment_schedule_rows'] : [];
 $manualPaymentEnabled = proposal_payment_schedule_manual_enabled($payload);
+$cardPaymentEnabled = proposal_flag_enabled($payload['pagamento_cartao_ativo'] ?? false);
+$boletoPaymentEnabled = proposal_flag_enabled($payload['pagamento_boleto_ativo'] ?? false);
 $guidelineRows = is_array($payload['guidelines_items'] ?? null) && $payload['guidelines_items'] !== [] ? $payload['guidelines_items'] : [['title' => '', 'content' => '', 'icon' => '']];
 $scopeItems = is_array($payload['scope_items'] ?? null) ? $payload['scope_items'] : [];
 $models = $models ?? [];
@@ -403,13 +405,13 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
       Usar forma de pagamento manual
     </label>
 
-    <div class="proposal-subpanel" data-payment-manual-fields>
+    <div class="proposal-subpanel <?= $manualPaymentEnabled ? '' : 'is-disabled' ?>" data-payment-manual-fields aria-disabled="<?= $manualPaymentEnabled ? 'false' : 'true' ?>">
       <div class="proposal-subpanel-head">
         <div>
           <h3>Forma de pagamento manual</h3>
           <p class="muted">Monte as parcelas manualmente. Linhas com valor entram na valida&ccedil;&atilde;o da soma; subt&iacute;tulos servem s&oacute; para organizar o bloco.</p>
         </div>
-        <button class="btn btn-ghost btn-sm" type="button" id="add-payment-row-button">+ Adicionar linha</button>
+        <button class="btn btn-ghost btn-sm" type="button" id="add-payment-row-button" <?= $manualPaymentEnabled ? '' : 'disabled' ?>>+ Adicionar linha</button>
       </div>
 
       <div class="stack-sm" id="payment-schedule-list" data-next-index="<?= count($paymentRows) ?>">
@@ -420,17 +422,17 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
             <div class="grid cols-3">
               <label class="field">
                 <span>Tipo</span>
-                <select name="payment_schedule_rows[<?= (int) $index ?>][type]" data-payment-row-type>
+                <select name="payment_schedule_rows[<?= (int) $index ?>][type]" data-payment-row-type <?= $manualPaymentEnabled ? '' : 'disabled' ?>>
                   <option value="line" <?= $paymentType === 'line' ? 'selected' : '' ?>>Linha com valor</option>
                   <option value="subtitle" <?= $paymentType === 'subtitle' ? 'selected' : '' ?>>Subt&iacute;tulo</option>
                 </select>
               </label>
-              <label class="field col-span-2"><span>Texto</span><input type="text" name="payment_schedule_rows[<?= (int) $index ?>][label]" value="<?= h((string) ($paymentRow['label'] ?? '')) ?>"></label>
+              <label class="field col-span-2"><span>Texto</span><input type="text" name="payment_schedule_rows[<?= (int) $index ?>][label]" value="<?= h((string) ($paymentRow['label'] ?? '')) ?>" <?= $manualPaymentEnabled ? '' : 'disabled' ?>></label>
             </div>
             <div class="grid cols-3">
               <label class="field payment-row-amount-field">
                 <span>Valor</span>
-                <input type="text" name="payment_schedule_rows[<?= (int) $index ?>][amount]" value="<?= h(number_format((float) ($paymentRow['amount'] ?? 0), 2, ',', '.')) ?>" data-money-input data-payment-row-amount>
+                <input type="text" name="payment_schedule_rows[<?= (int) $index ?>][amount]" value="<?= h(number_format((float) ($paymentRow['amount'] ?? 0), 2, ',', '.')) ?>" data-money-input data-payment-row-amount <?= $manualPaymentEnabled ? '' : 'disabled' ?>>
               </label>
             </div>
           </div>
@@ -479,7 +481,7 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
     </div>
 
     <div class="payment-method-panels">
-      <div class="payment-config-block" data-payment-fields="cartao">
+      <div class="payment-config-block <?= $cardPaymentEnabled ? '' : 'is-disabled' ?>" data-payment-fields="cartao" aria-disabled="<?= $cardPaymentEnabled ? 'false' : 'true' ?>">
         <div class="proposal-subpanel-head proposal-subpanel-head-sm">
           <div>
             <h3>Cart&atilde;o</h3>
@@ -487,14 +489,14 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
           </div>
         </div>
         <div class="grid cols-2">
-          <label class="field"><span>T&iacute;tulo (cart&atilde;o)</span><input type="text" name="pagamento_cartao_titulo" value="<?= h((string) ($payload['pagamento_cartao_titulo'] ?? '')) ?>"></label>
-          <label class="field"><span>Bot&atilde;o (cart&atilde;o)</span><input type="text" name="pagamento_cartao_botao" value="<?= h((string) ($payload['pagamento_cartao_botao'] ?? '')) ?>"></label>
+          <label class="field"><span>T&iacute;tulo (cart&atilde;o)</span><input type="text" name="pagamento_cartao_titulo" value="<?= h((string) ($payload['pagamento_cartao_titulo'] ?? '')) ?>" <?= $cardPaymentEnabled ? '' : 'disabled' ?>></label>
+          <label class="field"><span>Bot&atilde;o (cart&atilde;o)</span><input type="text" name="pagamento_cartao_botao" value="<?= h((string) ($payload['pagamento_cartao_botao'] ?? '')) ?>" <?= $cardPaymentEnabled ? '' : 'disabled' ?>></label>
         </div>
-        <label class="field"><span>Descri&ccedil;&atilde;o (cart&atilde;o)</span><input type="text" name="pagamento_cartao_descricao" value="<?= h((string) ($payload['pagamento_cartao_descricao'] ?? '')) ?>"></label>
-        <label class="field"><span>Link do cart&atilde;o</span><input type="url" name="pagamento_cartao_link" value="<?= h((string) ($payload['pagamento_cartao_link'] ?? '')) ?>" placeholder="https://..."></label>
+        <label class="field"><span>Descri&ccedil;&atilde;o (cart&atilde;o)</span><input type="text" name="pagamento_cartao_descricao" value="<?= h((string) ($payload['pagamento_cartao_descricao'] ?? '')) ?>" <?= $cardPaymentEnabled ? '' : 'disabled' ?>></label>
+        <label class="field"><span>Link do cart&atilde;o</span><input type="url" name="pagamento_cartao_link" value="<?= h((string) ($payload['pagamento_cartao_link'] ?? '')) ?>" placeholder="https://..." <?= $cardPaymentEnabled ? '' : 'disabled' ?>></label>
       </div>
 
-      <div class="payment-config-block" data-payment-fields="boleto">
+      <div class="payment-config-block <?= $boletoPaymentEnabled ? '' : 'is-disabled' ?>" data-payment-fields="boleto" aria-disabled="<?= $boletoPaymentEnabled ? 'false' : 'true' ?>">
         <div class="proposal-subpanel-head proposal-subpanel-head-sm">
           <div>
             <h3>Boleto</h3>
@@ -502,11 +504,11 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
           </div>
         </div>
         <div class="grid cols-2">
-          <label class="field"><span>T&iacute;tulo (boleto)</span><input type="text" name="pagamento_boleto_titulo" value="<?= h((string) ($payload['pagamento_boleto_titulo'] ?? '')) ?>"></label>
-          <label class="field"><span>Bot&atilde;o (boleto)</span><input type="text" name="pagamento_boleto_botao" value="<?= h((string) ($payload['pagamento_boleto_botao'] ?? '')) ?>"></label>
+          <label class="field"><span>T&iacute;tulo (boleto)</span><input type="text" name="pagamento_boleto_titulo" value="<?= h((string) ($payload['pagamento_boleto_titulo'] ?? '')) ?>" <?= $boletoPaymentEnabled ? '' : 'disabled' ?>></label>
+          <label class="field"><span>Bot&atilde;o (boleto)</span><input type="text" name="pagamento_boleto_botao" value="<?= h((string) ($payload['pagamento_boleto_botao'] ?? '')) ?>" <?= $boletoPaymentEnabled ? '' : 'disabled' ?>></label>
         </div>
-        <label class="field"><span>Descri&ccedil;&atilde;o (boleto)</span><input type="text" name="pagamento_boleto_descricao" value="<?= h((string) ($payload['pagamento_boleto_descricao'] ?? '')) ?>"></label>
-        <label class="field"><span>Link do boleto</span><input type="url" name="pagamento_boleto_link" value="<?= h((string) ($payload['pagamento_boleto_link'] ?? '')) ?>" placeholder="https://..."></label>
+        <label class="field"><span>Descri&ccedil;&atilde;o (boleto)</span><input type="text" name="pagamento_boleto_descricao" value="<?= h((string) ($payload['pagamento_boleto_descricao'] ?? '')) ?>" <?= $boletoPaymentEnabled ? '' : 'disabled' ?>></label>
+        <label class="field"><span>Link do boleto</span><input type="url" name="pagamento_boleto_link" value="<?= h((string) ($payload['pagamento_boleto_link'] ?? '')) ?>" placeholder="https://..." <?= $boletoPaymentEnabled ? '' : 'disabled' ?>></label>
       </div>
     </div>
   </section>

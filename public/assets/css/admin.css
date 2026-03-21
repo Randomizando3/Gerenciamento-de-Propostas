@@ -909,6 +909,14 @@ input[type="radio"]:focus {
   color: #7a8f98;
 }
 
+.payment-config-block.is-disabled input,
+.payment-config-block.is-disabled textarea,
+.payment-config-block.is-disabled select {
+  background: #edf2f4;
+  border-color: #d5e0e5;
+  color: #7a8f98;
+}
+
 .toggle-config-block {
   display: grid;
   gap: 14px;
@@ -953,6 +961,14 @@ input[type="radio"]:focus {
 [data-payment-manual-fields].is-disabled .proposal-subpanel-head p,
 [data-payment-manual-fields].is-disabled .proposal-subpanel-head h3,
 [data-payment-manual-fields].is-disabled .muted {
+  color: #7a8f98;
+}
+
+[data-payment-manual-fields].is-disabled input,
+[data-payment-manual-fields].is-disabled textarea,
+[data-payment-manual-fields].is-disabled select {
+  background: #edf2f4;
+  border-color: #d5e0e5;
   color: #7a8f98;
 }
 
