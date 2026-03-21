@@ -72,6 +72,13 @@ function create_zapsign_document(array $proposal, array $settings): array
         $requestPayload = array_replace($basePayload, $strategy['payload']);
         $response = zapsign_post_json($endpoints, $apiTokens, $requestPayload);
 
+        if ((int) ($response['http_code'] ?? 0) === 402) {
+            return [
+                'ok' => false,
+                'message' => zapsign_human_error_message($response),
+            ];
+        }
+
         if ($response['ok']) {
             $json = $response['json'];
             $docId = (string) ($json['id'] ?? $json['token'] ?? '');
@@ -210,10 +217,13 @@ function zapsign_single_post(string $endpoint, array $headers, array $payload, b
 
     $json = json_decode($response, true);
     if (!is_array($json)) {
+        $plainMessage = zapsign_extract_plain_error_message($response);
         return [
             'ok' => false,
             'http_code' => $httpCode,
-            'message' => 'Resposta invalida da API ZapSign. HTTP ' . $httpCode . '.',
+            'message' => $httpCode >= 400
+                ? 'HTTP ' . $httpCode . ($plainMessage !== '' ? ' - ' . $plainMessage : '.')
+                : 'Resposta invalida da API ZapSign. HTTP ' . $httpCode . '.',
             'raw' => $response,
         ];
     }
@@ -322,6 +332,30 @@ function zapsign_extract_error_message(array $json): string
     }
 
     return '';
+}
+
+function zapsign_extract_plain_error_message(string $response): string
+{
+    $text = trim(strip_tags(html_entity_decode($response, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')));
+    if ($text === '') {
+        return '';
+    }
+
+    $normalized = preg_replace('/\s+/u', ' ', $text);
+    return trim((string) ($normalized ?? $text));
+}
+
+function zapsign_human_error_message(array $response): string
+{
+    $httpCode = (int) ($response['http_code'] ?? 0);
+    $message = trim((string) ($response['message'] ?? 'Falha sem detalhe.'));
+    $messageLower = mb_strtolower($message, 'UTF-8');
+
+    if ($httpCode === 402 && str_contains($messageLower, 'plano de api')) {
+        return 'Nao foi possivel criar o documento no ZapSign. A conta/token informados ainda nao possuem Plano de API ativo no ambiente de producao da ZapSign. Para testes, use token + endpoint sandbox; para producao, a conta precisa ter o Plano de API habilitado.';
+    }
+
+    return 'Nao foi possivel criar o documento no ZapSign. ' . $message;
 }
 
 function zapsign_markdown_from_proposal(array $proposal, array $payload, array $settings): string
