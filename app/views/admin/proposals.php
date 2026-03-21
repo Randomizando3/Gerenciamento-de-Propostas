@@ -13,6 +13,7 @@ $pagination = $pagination ?? [
 
 $currentPage = max(1, (int) ($pagination['page'] ?? 1));
 $totalPages = max(1, (int) ($pagination['total_pages'] ?? 1));
+$perPage = max(1, (int) ($pagination['per_page'] ?? 10));
 $queryBase = $filters;
 
 $buildProposalPageUrl = static function (int $page) use ($queryBase): string {
@@ -108,7 +109,7 @@ for ($pageIndex = $startPage; $pageIndex <= $endPage; $pageIndex++) {
       </p>
     </div>
     <div class="table-meta-badge">
-      20 por página
+      <?= $perPage ?> por página
     </div>
   </div>
 

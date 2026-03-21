@@ -861,16 +861,20 @@ function list_proposals_with_metrics(array $filters = []): array
 
 function paginate_proposals_with_metrics(array $filters = [], int $page = 1, int $perPage = 20): array
 {
+    return paginate_items(list_proposals_with_metrics($filters), $page, $perPage);
+}
+
+function paginate_items(array $items, int $page = 1, int $perPage = 10): array
+{
     $page = max(1, $page);
     $perPage = max(1, $perPage);
-    $rows = list_proposals_with_metrics($filters);
-    $total = count($rows);
+    $total = count($items);
     $totalPages = max(1, (int) ceil($total / $perPage));
     $page = min($page, $totalPages);
     $offset = ($page - 1) * $perPage;
 
     return [
-        'items' => array_slice($rows, $offset, $perPage),
+        'items' => array_slice($items, $offset, $perPage),
         'total' => $total,
         'page' => $page,
         'per_page' => $perPage,

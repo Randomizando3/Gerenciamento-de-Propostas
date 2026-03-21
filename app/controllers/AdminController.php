@@ -20,7 +20,7 @@ function admin_list_proposals(): void
     require_auth();
 
     $page = max(1, (int) request_input('page', 1));
-    $perPage = 20;
+    $perPage = 10;
     $filters = [
         'query' => trim((string) request_input('query', '')),
         'client' => trim((string) request_input('client', '')),
@@ -57,10 +57,15 @@ function admin_list_models(): void
 {
     require_auth();
 
+    $page = max(1, (int) request_input('page', 1));
+    $perPage = 10;
+    $pagination = paginate_items(list_proposal_models(), $page, $perPage);
+
     render('admin/models', [
         'title' => 'Modelos',
         'admin' => current_admin(),
-        'models' => list_proposal_models(),
+        'models' => $pagination['items'],
+        'pagination' => $pagination,
     ]);
 }
 

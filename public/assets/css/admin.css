@@ -324,13 +324,15 @@ body.admin-sidebar-collapsed .sidebar-toggle-button {
 }
 
 .table-scroll-top {
+  overflow-x: scroll;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   background: #f8fbfb;
+  scrollbar-gutter: stable both-edges;
 }
 
 .table-scroll-top-inner {
-  height: 16px;
+  height: 20px;
 }
 
 .table-head {
@@ -938,6 +940,18 @@ input[type="radio"]:focus {
   background: linear-gradient(180deg, rgba(250, 253, 253, 0.98), rgba(243, 249, 250, 0.98));
 }
 
+[data-payment-manual-fields].is-disabled {
+  opacity: 0.58;
+  filter: saturate(0.55);
+  background: linear-gradient(180deg, rgba(244, 247, 248, 0.94), rgba(238, 242, 244, 0.94));
+}
+
+[data-payment-manual-fields].is-disabled .field span,
+[data-payment-manual-fields].is-disabled .proposal-subpanel-head p,
+[data-payment-manual-fields].is-disabled .proposal-subpanel-head h3 {
+  color: #7a8f98;
+}
+
 .proposal-subpanel-head {
   display: flex;
   justify-content: space-between;
@@ -987,7 +1001,7 @@ input[type="radio"]:focus {
 .payment-method-panels {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
   align-items: start;
 }
 

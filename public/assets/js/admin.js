@@ -82,8 +82,9 @@
 
     const sync = () => {
       const enabled = !!toggle.checked;
-      block.hidden = !enabled;
-      block.setAttribute("aria-hidden", enabled ? "false" : "true");
+      block.hidden = false;
+      block.classList.toggle("is-disabled", !enabled);
+      block.setAttribute("aria-disabled", enabled ? "false" : "true");
 
       block.querySelectorAll("input, textarea, select, button").forEach((field) => {
         if (!(field instanceof HTMLElement)) return;
@@ -186,8 +187,8 @@
       let syncing = false;
 
       const syncWidths = () => {
-        topInner.style.width = table.scrollWidth + "px";
-        top.hidden = bottom.scrollWidth <= bottom.clientWidth + 2;
+        const width = Math.max(table.scrollWidth, bottom.scrollWidth, bottom.clientWidth + 1);
+        topInner.style.width = width + "px";
       };
 
       top.addEventListener("scroll", () => {
@@ -206,6 +207,8 @@
 
       window.addEventListener("resize", syncWidths);
       syncWidths();
+      window.requestAnimationFrame(syncWidths);
+      window.setTimeout(syncWidths, 120);
     });
   }
 
