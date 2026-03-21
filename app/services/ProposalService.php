@@ -1169,14 +1169,14 @@ function render_proposal_template_html(array $proposal, array $payload, array $s
         [
             "fonts/Ethnocentric-Regular.otf",
             "fonts/Conthrax-SemiBold.otf",
-            "logo-complementare.png",
-            "empresa.png",
+            'src="logo-complementare.png"',
+            'src="empresa.png"',
         ],
         [
             "/assets/fonts/ethnocentric.otf",
             "/assets/fonts/conthrax-sb.otf",
-            "/assets/img/logo-complementare.png",
-            "/assets/img/empresa.png",
+            'src="/assets/img/logo-complementare.png"',
+            'src="/assets/img/empresa.png"',
         ],
         $template
     );
@@ -2011,11 +2011,8 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
     ?>
     <div class="proposal-summary-doc" style="font-family:Arial,sans-serif;color:#173942;line-height:1.6;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid #d8ecef;">
-        <div style="display:flex;align-items:center;gap:16px;">
-          <img src="<?= h(app_url('/assets/img/logo-complementare-pdf.jpg')) ?>" alt="Complementare" style="height:46px;width:auto;">
-          <div>
-            <h2 style="margin:0;font-size:28px;line-height:1.1;"><?= h((string) ($payload['titulo'] ?? 'Proposta Comercial')) ?></h2>
-          </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;">
+          <img src="<?= h(app_url('/assets/img/logo-complementare-pdf.jpg')) ?>" alt="Complementare" style="height:48px;width:auto;display:block;">
         </div>
         <div style="display:grid;gap:8px;min-width:220px;">
           <div style="background:#f3fbfc;border:1px solid #d5edf0;border-radius:14px;padding:12px 14px;"><strong>Proposta:</strong> <?= h($code) ?></div>
@@ -2024,6 +2021,10 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
           <?php endif; ?>
           <div style="background:#f3fbfc;border:1px solid #d5edf0;border-radius:14px;padding:12px 14px;"><strong>Data:</strong> <?= h($proposalDate) ?></div>
         </div>
+      </div>
+
+      <div style="margin:0 0 20px;">
+        <h2 style="margin:0;font-size:28px;line-height:1.12;"><?= h((string) ($payload['titulo'] ?? 'Proposta Comercial')) ?></h2>
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:24px;">
@@ -2241,11 +2242,11 @@ function render_proposal_contract_page(array $proposal, array $payload, array $s
     <body>
       <main class="contract-page">
         <div class="contract-head">
-          <div class="contract-brand">
-            <img src="<?= h(app_url('/assets/img/logo-complementare-pdf.jpg')) ?>" alt="Complementare" style="height:46px;width:auto;">
+          <div class="contract-brand" style="display:flex;flex-direction:column;align-items:flex-start;gap:18px;">
+            <img src="<?= h(app_url('/assets/img/logo-complementare-pdf.jpg')) ?>" alt="Complementare" style="height:48px;width:auto;display:block;">
             <div>
               <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#178f9c;font-weight:700;">Documento de aceite</div>
-              <h1 style="margin:4px 0 0;font-size:28px;line-height:1.1;"><?= h((string) $contract['title']) ?></h1>
+              <h1 style="margin:6px 0 0;font-size:28px;line-height:1.1;"><?= h((string) $contract['title']) ?></h1>
             </div>
           </div>
           <div class="contract-meta">
