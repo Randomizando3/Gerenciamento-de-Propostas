@@ -1016,7 +1016,10 @@ input[type="radio"]:focus {
   font-weight: 800;
 }
 
-.payment-config-block[hidden],
+[data-payment-fields][hidden] {
+  display: grid !important;
+}
+
 .toggle-config-block[hidden],
 [data-payment-manual-fields][hidden] {
   display: none !important;
