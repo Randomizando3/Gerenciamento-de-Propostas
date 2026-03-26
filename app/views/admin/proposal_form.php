@@ -213,6 +213,10 @@ $formAction = $isModelEditor ? '/admin/models/save' : '/admin/proposals/save';
   <section class="panel">
     <h2>Escopo e investimento por disciplina</h2>
     <p class="muted">O título de cada disciplina será usado no escopo e também na parte de valores.</p>
+    <label class="field" style="margin-top:16px;">
+      <span>Subtítulo do escopo</span>
+      <input type="text" name="scope_section_subtitle" value="<?= h((string) ($payload['scope_section_subtitle'] ?? '')) ?>">
+    </label>
     <div class="discipline-grid">
       <?php foreach ($catalog as $key => $info): ?>
         <?php $checked = in_array($key, $payload['disciplinas'], true); ?>

@@ -33,6 +33,7 @@ function default_proposal_payload(): array
         'files_section_subtitle' => 'A presente proposta foi elaborada utilizando arquivos enviados via WhatsApp no dia {{DATA_ARQUIVOS}}.',
         'guidelines_title' => 'Diretrizes Gerais',
         'guidelines_subtitle' => '',
+        'scope_section_subtitle' => 'Projetos de instalações prediais de apartamento a ser reformado na cidade do Rio de Janeiro',
         'guidelines_items' => default_guidelines_items(),
         'scope_items' => default_scope_blueprints(),
         'prazo_dias' => 7,
@@ -270,6 +271,7 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
         'codigo_base', 'revisao', 'titulo', 'data_proposta', 'cliente_nome', 'cliente_empresa', 'cliente_cnpj', 'cliente_email', 'cliente_telefone',
         'cliente_endereco', 'cliente_cidade', 'cliente_uf', 'cliente_cep', 'obra_nome', 'obra_endereco', 'obra_cidade', 'obra_uf', 'finalidade_obra',
         'descricao_objeto', 'intro_title', 'files_section_label', 'files_section_title', 'files_section_subtitle', 'guidelines_title', 'guidelines_subtitle',
+        'scope_section_subtitle',
         'pagamento_cartao_titulo', 'pagamento_cartao_descricao', 'pagamento_cartao_link', 'pagamento_cartao_botao', 'pagamento_boleto_titulo',
         'pagamento_boleto_descricao', 'pagamento_boleto_link', 'pagamento_boleto_botao', 'header_title_layout',
         'header_aditivo_kicker', 'header_aditivo_title', 'header_custom_media_url', 'acceptance_mode', 'accept_terms_title',
@@ -2446,6 +2448,9 @@ function proposal_public_render_data(array $proposal, array $payload, array $set
             'subtitle' => (string) ($payload['guidelines_subtitle'] ?? ''),
             'items' => proposal_guideline_entries($payload),
         ],
+        'scope_section' => [
+            'subtitle' => $renderText((string) ($payload['scope_section_subtitle'] ?? '')),
+        ],
         'scope_entries' => proposal_scope_entries($payload),
         'timeline' => proposal_timeline_entries($payload),
         'files' => proposal_file_entries($payload),
@@ -2790,6 +2795,26 @@ function proposal_runtime_script(
   function renderScope() {
     const etapasSection = document.getElementById('etapas');
     if (!etapasSection) return;
+
+    const scopeHeader = document.querySelector('.scope-header');
+    if (scopeHeader) {
+      const titleEl = scopeHeader.querySelector('.section-title');
+      let subtitleEl = scopeHeader.querySelector('.section-subtitle');
+      const subtitle = String((publicData.scope_section && publicData.scope_section.subtitle) || '').trim();
+
+      if (subtitle !== '') {
+        if (!subtitleEl && titleEl) {
+          subtitleEl = document.createElement('p');
+          subtitleEl.className = 'section-subtitle fade-in visible';
+          titleEl.insertAdjacentElement('afterend', subtitleEl);
+        }
+        if (subtitleEl) {
+          subtitleEl.textContent = subtitle;
+        }
+      } else if (subtitleEl) {
+        subtitleEl.remove();
+      }
+    }
 
     document.querySelectorAll('.scope-item').forEach((item) => item.remove());
     const entries = Array.isArray(publicData.scope_entries) ? publicData.scope_entries : [];
