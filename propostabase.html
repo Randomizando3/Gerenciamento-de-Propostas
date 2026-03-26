@@ -801,9 +801,10 @@
     }
 
     .scope-header .section-subtitle {
-      width: min(100%, 1240px);
+      width: 100%;
+      max-width: calc(1400px - (var(--space-md) * 2));
       margin: 0 auto;
-      padding: 0 3rem;
+      padding: 0;
       text-wrap: balance;
     }
 
@@ -900,7 +901,7 @@
     @media (max-width: 768px) {
       .scope-header .section-subtitle {
         width: 100%;
-        padding: 0 1rem;
+        max-width: 100%;
       }
 
       .scope-item {
