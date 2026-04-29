@@ -304,7 +304,16 @@ function normalize_proposal_payload(array $input, ?array $base = null): array
     $payload['validade_dias'] = (int) clamp((int) ($input['validade_dias'] ?? $payload['validade_dias']), 1, 365);
 
     $catalog = discipline_catalog();
-    $disciplines = $input['disciplinas'] ?? $payload['disciplinas'];
+    $isProposalFormSubmission = array_key_exists('scope_items', $input)
+        || array_key_exists('disciplinas_custom', $input)
+        || array_key_exists('cliente_nome', $input);
+    if (array_key_exists('disciplinas', $input)) {
+        $disciplines = $input['disciplinas'];
+    } elseif ($isProposalFormSubmission) {
+        $disciplines = [];
+    } else {
+        $disciplines = $payload['disciplinas'];
+    }
     if (!is_array($disciplines)) {
         $disciplines = [];
     }
@@ -2112,7 +2121,7 @@ function render_proposal_summary_fragment(array $proposal, array $payload, array
 
       <section style="margin-bottom:24px;">
         <h3 style="margin:0 0 10px;font-size:20px;">Valor da Proposta</h3>
-        <div style="background:linear-gradient(135deg,#0d8c98,#18b5af);color:#fff;border-radius:18px;padding:18px;margin-bottom:12px;">
+        <div style="background:linear-gradient(135deg,#0d8c98,#18b5af);color:#173942;border-radius:18px;padding:18px;margin-bottom:12px;">
           <div style="font-size:12px;text-transform:uppercase;letter-spacing:1.2px;">Total</div>
           <div style="font-size:34px;font-weight:800;margin-top:4px;"><?= h(brl($total)) ?></div>
           <div style="margin-top:6px;opacity:.9;"><?= h(currency_to_words_ptbr($total)) ?></div>
