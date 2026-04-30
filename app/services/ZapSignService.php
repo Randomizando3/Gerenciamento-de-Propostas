@@ -24,20 +24,24 @@ function create_zapsign_document(array $proposal, array $settings): array
 
     $proposalPayload = is_array($proposal['payload'] ?? null) ? $proposal['payload'] : [];
     $clientName = trim((string) ($proposal['client_name'] ?? ($proposalPayload['cliente_nome'] ?? '')));
+    $clientCompany = trim((string) ($proposal['client_company'] ?? ($proposalPayload['cliente_empresa'] ?? '')));
     $clientEmail = trim((string) ($proposal['client_email'] ?? ($proposalPayload['cliente_email'] ?? '')));
+    $clientPhone = trim((string) ($proposal['client_phone'] ?? ($proposalPayload['cliente_telefone'] ?? '')));
+    $signerName = $clientName !== '' ? $clientName : ($clientCompany !== '' ? $clientCompany : 'Cliente');
+    $signerPayload = zapsign_build_signer_payload($signerName, $clientEmail, $clientPhone);
+
+    if ($signerPayload === null) {
+        return [
+            'ok' => false,
+            'message' => 'Para enviar ao ZapSign, preencha pelo menos o nome e um contato do cliente na proposta: e-mail ou telefone.',
+        ];
+    }
 
     $basePayload = [
         'name' => 'Proposta ' . (string) ($proposal['code'] ?? ''),
         'external_id' => 'proposal-' . (int) ($proposal['id'] ?? 0),
+        'signers' => [$signerPayload],
     ];
-    if ($clientName !== '' && $clientEmail !== '') {
-        $basePayload['signers'] = [
-            [
-                'name' => $clientName,
-                'email' => $clientEmail,
-            ],
-        ];
-    }
 
     $endpoints = zapsign_doc_endpoints($baseUrl);
     $apiTokens = zapsign_token_candidates($apiKey);
@@ -117,6 +121,65 @@ function create_zapsign_document(array $proposal, array $settings): array
     return [
         'ok' => false,
         'message' => 'Nao foi possivel criar o documento no ZapSign. ' . implode(' | ', $errors),
+    ];
+}
+
+function zapsign_build_signer_payload(string $name, string $email, string $phone): ?array
+{
+    $signerName = trim($name);
+    if ($signerName === '') {
+        return null;
+    }
+
+    $normalizedEmail = trim($email);
+    if ($normalizedEmail !== '' && filter_var($normalizedEmail, FILTER_VALIDATE_EMAIL) === false) {
+        $normalizedEmail = '';
+    }
+
+    $phoneData = zapsign_normalize_phone($phone);
+    $hasEmail = $normalizedEmail !== '';
+    $hasPhone = $phoneData !== null;
+    if (!$hasEmail && !$hasPhone) {
+        return null;
+    }
+
+    $payload = [
+        'name' => $signerName,
+        'send_automatic_email' => false,
+        'blank_email' => !$hasEmail,
+        'blank_phone' => !$hasPhone,
+    ];
+
+    if ($hasEmail) {
+        $payload['email'] = $normalizedEmail;
+    }
+
+    if ($hasPhone) {
+        $payload['phone_country'] = $phoneData['country'];
+        $payload['phone_number'] = $phoneData['number'];
+    }
+
+    return $payload;
+}
+
+function zapsign_normalize_phone(string $rawPhone): ?array
+{
+    $digits = preg_replace('/\D+/', '', $rawPhone) ?? '';
+    if ($digits === '') {
+        return null;
+    }
+
+    if (str_starts_with($digits, '55') && strlen($digits) > 11) {
+        $digits = substr($digits, 2);
+    }
+
+    if (strlen($digits) < 10) {
+        return null;
+    }
+
+    return [
+        'country' => '55',
+        'number' => $digits,
     ];
 }
 
